@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CS332_VR_Village_God", "CS332_VR_Village_God.csproj", "{5517DC44-320B-7D4C-0484-36BB991F2C6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CS332_VR_Village_God.Editor", "CS332_VR_Village_God.Editor.csproj", "{668AB949-4973-DBA8-AB45-F7956C629650}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5517DC44-320B-7D4C-0484-36BB991F2C6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5517DC44-320B-7D4C-0484-36BB991F2C6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5517DC44-320B-7D4C-0484-36BB991F2C6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5517DC44-320B-7D4C-0484-36BB991F2C6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{668AB949-4973-DBA8-AB45-F7956C629650}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{668AB949-4973-DBA8-AB45-F7956C629650}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{668AB949-4973-DBA8-AB45-F7956C629650}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{668AB949-4973-DBA8-AB45-F7956C629650}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

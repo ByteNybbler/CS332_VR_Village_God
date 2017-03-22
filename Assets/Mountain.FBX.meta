@@ -1,17 +1,16 @@
 fileFormatVersion: 2
-guid: 5a5393914b3097643b56eaa0e223af13
-timeCreated: 1469087502
-licenseType: Store
+guid: 4e9b332d94110da4bb588574548e697d
+timeCreated: 1490141661
+licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: prism
     400000: //RootNode
-    400002: prism
-    2300000: prism
-    3300000: prism
-    4300000: prism
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Plane001
+    9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
@@ -19,7 +18,7 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    resampleRotations: 1
+    resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
     animationImportErrors: 
@@ -58,6 +57,7 @@ ModelImporter:
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
+    serializedVersion: 2
     human: []
     skeleton: []
     armTwist: 0.5
@@ -68,9 +68,12 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

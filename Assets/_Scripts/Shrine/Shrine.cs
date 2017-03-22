@@ -25,7 +25,8 @@ public class Shrine : MonoBehaviour
     private float chargeSeconds;
 
     // Use this public function to add charge seconds to the shrine.
-    public void IncreaseChargeSeconds(float amount)
+    // rootPosition is the spawn position of the +1.
+    public void IncreaseChargeSeconds(float amount, Vector3 rootPosition)
     {
         chargeSeconds += amount;
         while (chargeSeconds > chargeSecondsPerPoint)
@@ -33,7 +34,7 @@ public class Shrine : MonoBehaviour
             chargeSeconds -= chargeSecondsPerPoint;
             points += 1;
             // Instantiate the +1 canvas.
-            Instantiate(plusOnePrefab, transform.position + plusOneSpawnOffset, Quaternion.identity);
+            Instantiate(plusOnePrefab, rootPosition + plusOneSpawnOffset, Quaternion.identity);
 
 #if DEBUG_SHRINE_POINTS
             Debug.Log("Shrine points: " + points);

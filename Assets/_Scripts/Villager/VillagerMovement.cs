@@ -59,7 +59,7 @@ public class VillagerMovement : MonoBehaviour
                 // Increase the idle time.
                 timeIdled += Time.deltaTime;
                 // Charge up the shrine.
-                shrine.IncreaseChargeSeconds(Time.deltaTime);
+                shrine.IncreaseChargeSeconds(Time.deltaTime, transform.position);
             }
             // If the villager has idled at the shrine for long enough...
             if (timeIdled > shrineIdleTime)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class sun : MonoBehaviour {
+public class Sun : MonoBehaviour {
 
 	public Transform center;
 	public float speed;

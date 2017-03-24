@@ -9,6 +9,11 @@ using VRTK;
 
 public class VillagerInteract : VRTK_InteractableObject
 {
+    // How many seconds to wait between each loop of TryToEnableAgent()
+    public float enableAgentFrequency;
+    // How far away the agent can be from the navmesh before being enabled again.
+    public float enableAgentDistance;
+
     // Component references.
     private NavMeshAgent agent;
     private VillagerMovement vm;
@@ -23,14 +28,40 @@ public class VillagerInteract : VRTK_InteractableObject
     public override void Grabbed(GameObject currentGrabbingObject)
     {
         base.Grabbed(currentGrabbingObject);
-        agent.enabled = false;
-        vm.enabled = false;
+        SetBehavior(false);
+        StopAllCoroutines();
     }
 
     public override void Ungrabbed(GameObject previousGrabbingObject)
     {
         base.Ungrabbed(previousGrabbingObject);
-        agent.enabled = true;
-        vm.enabled = true;
+        StartCoroutine(TryToEnableAgent());
+    }
+
+    private void SetBehavior(bool isEnabled)
+    {
+        agent.enabled = isEnabled;
+        vm.enabled = isEnabled;
+    }
+
+    // Coroutine to try to turn the agent and villager movement components back on.
+    // The components will only be enabled if...
+    // The villager is a certain distance from the navmesh.
+    IEnumerator TryToEnableAgent()
+    {
+        while (true)
+        {
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(transform.position, out hit, enableAgentDistance, NavMesh.AllAreas))
+            {
+                transform.position = hit.position;
+                SetBehavior(true);
+                break;
+            }
+            else
+            {
+                yield return new WaitForSeconds(enableAgentFrequency);
+            }
+        }
     }
 }

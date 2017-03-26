@@ -96,6 +96,7 @@ namespace VRTK
                     pointerBeam.GetComponentInChildren<Renderer>().enabled = storedBeamState;
                     pointerTip.GetComponentInChildren<Renderer>().enabled = storedTipState;
                 }
+
             }
         }
 

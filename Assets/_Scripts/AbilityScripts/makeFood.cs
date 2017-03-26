@@ -2,16 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using VRTK;
 
 public class makeFood : MonoBehaviour {
 
-	public Button yourButton;
-	// Use this for initialization
+	public GameObject controller;
+	public Vector3 destination;
 
-	
-	public void TaskOnClick(){
-		Debug.Log ("You have clicked the button!");
-	
+	void Start(){
+		
+
+ 	}
+
+	public void getPosition(){
+
 	}
+
 
 }

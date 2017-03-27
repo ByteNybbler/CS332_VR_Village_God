@@ -22,18 +22,8 @@ public class KeyPoints : MonoBehaviour
 
     // List of the key points.
     private List<Transform> keyPoints = new List<Transform>();
-
-    private void Start()
-    {
-        Transform[] allPoints = pointsContainer.GetComponentsInChildren<Transform>();
-        foreach (Transform trans in allPoints)
-        {
-            if (trans.gameObject != pointsContainer)
-            {
-                keyPoints.Add(trans);
-            }
-        }
-    }
+    // Whether the list of key points has been populated yet.
+    private bool hasCalculatedKeyPoints = false;
 
     // Helpful editor visuals.
     private void OnDrawGizmos()
@@ -52,9 +42,27 @@ public class KeyPoints : MonoBehaviour
         }
     }
 
+    // Calculate the list of transforms.
+    private void CalculateKeyPoints()
+    {
+        Transform[] allPoints = pointsContainer.GetComponentsInChildren<Transform>();
+        foreach (Transform trans in allPoints)
+        {
+            if (trans.gameObject != pointsContainer)
+            {
+                keyPoints.Add(trans);
+            }
+        }
+        hasCalculatedKeyPoints = true;
+    }
+
     // Get the list of transforms.
     public List<Transform> GetKeyPoints()
     {
+        if (!hasCalculatedKeyPoints)
+        {
+            CalculateKeyPoints();
+        }
         return keyPoints;
     }
 }

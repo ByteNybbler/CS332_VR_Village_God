@@ -7,11 +7,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent (typeof (KeyPoints))]
 public class Village : MonoBehaviour
 {
-    // Reference to the shrine GameObject.
+    [Tooltip("Reference to the shrine GameObject.")]
     public GameObject shrineObject;
-    // Reference to the villager prefab.
+    [Tooltip("Reference to the villager prefab.")]
     public GameObject villagerPrefab;
 
     // A list of villagers.
@@ -24,6 +25,9 @@ public class Village : MonoBehaviour
     {
         kp = GetComponent<KeyPoints>();
         List<Transform> housePositions = kp.GetKeyPoints();
+
+        Debug.Log("Number of houses: " + housePositions.Count);
+
         // Loop for each transform.
         foreach (Transform trans in housePositions)
         {

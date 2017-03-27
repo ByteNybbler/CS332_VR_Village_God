@@ -8,18 +8,18 @@ using UnityEngine.AI;
 
 public class VillagerMovement : MonoBehaviour
 {
-    // The number of seconds to stay at the house.
+    [Tooltip("The number of seconds to stay at the house.")]
     public float houseIdleTime;
-    // The number of seconds to stay at the shrine.
+    [Tooltip("The number of seconds to stay at the shrine.")]
     public float shrineIdleTime;
-    // How close the villager must be to the shrine in order to charge it.
+    [Tooltip("How close the villager must be to the shrine in order to charge it.")]
     public float shrineChargeDistance;
-    // How close the villager must be to the house to be considered idling.
+    [Tooltip("How close the villager must be to the house to be considered idling.")]
     public float houseDestinationDistance;
-    // The transform of the villager's house.
+    [Tooltip("The transform of the villager's house.")]
     public Transform houseTransform;
-    // Reference to the shrine object.
-    // This reference is populated automatically by the Village class.
+    [Tooltip("Reference to the shrine object.\n" +
+    "This reference is populated automatically by the Village class.")]
     public GameObject shrineObject;
 
     // How many seconds the villager has spent idling.

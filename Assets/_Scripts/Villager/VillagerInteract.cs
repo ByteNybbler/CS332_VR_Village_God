@@ -9,9 +9,9 @@ using VRTK;
 
 public class VillagerInteract : VRTK_InteractableObject
 {
-    // How many seconds to wait between each loop of TryToEnableAgent()
+    [Tooltip("How many seconds to wait between each attempt to snap to the navmesh.")]
     public float enableAgentFrequency;
-    // How far away the agent can be from the navmesh before being enabled again.
+    [Tooltip("How close the agent must be to the navmesh before being snapped to it and enabled again.")]
     public float enableAgentDistance;
 
     // Component references.

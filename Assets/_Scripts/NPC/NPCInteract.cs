@@ -7,22 +7,23 @@ using UnityEngine;
 using UnityEngine.AI;
 using VRTK;
 
-public class VillagerInteract : VRTK_InteractableObject
+public class NPCInteract : VRTK_InteractableObject
 {
-    // How many seconds to wait between each loop of TryToEnableAgent()
+    [Tooltip("How many seconds to wait between each attempt to snap to the navmesh.")]
     public float enableAgentFrequency;
-    // How far away the agent can be from the navmesh before being enabled again.
+    [Tooltip("How close the agent must be to the navmesh before being snapped to it and enabled again.")]
     public float enableAgentDistance;
+    [Tooltip("Reference to the NPC's movement component.\n" + 
+        "This component is enabled and disabled based on whether the NPC is currently being grabbed.")]
+    public MonoBehaviour movementComponent;
 
     // Component references.
     private NavMeshAgent agent;
-    private VillagerMovement vm;
 
     protected override void Awake()
     {
         base.Awake();
         agent = GetComponent<NavMeshAgent>();
-        vm = GetComponent<VillagerMovement>();
     }
 
     public override void Grabbed(GameObject currentGrabbingObject)
@@ -41,12 +42,11 @@ public class VillagerInteract : VRTK_InteractableObject
     private void SetBehavior(bool isEnabled)
     {
         agent.enabled = isEnabled;
-        vm.enabled = isEnabled;
+        movementComponent.enabled = isEnabled;
     }
 
-    // Coroutine to try to turn the agent and villager movement components back on.
-    // The components will only be enabled if...
-    // The villager is a certain distance from the navmesh.
+    // Coroutine to try to turn the agent and NPC movement components back on.
+    // The components will only be enabled if the agent is a certain distance from the navmesh.
     IEnumerator TryToEnableAgent()
     {
         while (true)

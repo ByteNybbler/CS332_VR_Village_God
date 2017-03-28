@@ -3,15 +3,19 @@
 // The GameObject reference in the KeyPoints component will determine the house idle positions.
 // One villager will be spawned at each of these house idle positions.
 
+// Comment out the following line to prevent the house count from being printed.
+#define PRINT_HOUSE_COUNT
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent (typeof (KeyPoints))]
 public class Village : MonoBehaviour
 {
-    // Reference to the shrine GameObject.
+    [Tooltip("Reference to the shrine GameObject.")]
     public GameObject shrineObject;
-    // Reference to the villager prefab.
+    [Tooltip("Reference to the villager prefab.")]
     public GameObject villagerPrefab;
 
     // A list of villagers.
@@ -24,6 +28,11 @@ public class Village : MonoBehaviour
     {
         kp = GetComponent<KeyPoints>();
         List<Transform> housePositions = kp.GetKeyPoints();
+
+#if PRINT_HOUSE_COUNT
+        Debug.Log("Number of houses: " + housePositions.Count);
+#endif
+
         // Loop for each transform.
         foreach (Transform trans in housePositions)
         {

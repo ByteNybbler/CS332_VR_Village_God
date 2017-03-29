@@ -20,6 +20,7 @@ public class PlantFood : VRTK_SimplePointer
 			Debug.Log ("Placed food at " + foodPosition);
 			Instantiate (foodPrefab, foodPosition, Quaternion.identity);
 		}
+
 	}
 
 	/*

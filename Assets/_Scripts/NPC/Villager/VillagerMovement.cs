@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent (typeof (NavMeshAgent))]
 public class VillagerMovement : MonoBehaviour
 {
     [Tooltip("The number of seconds to stay at the house.")]
@@ -30,6 +31,9 @@ public class VillagerMovement : MonoBehaviour
     private Vector3 shrinePosition;
     // Whether the agent's current destination is the shrine.
     private bool destinationIsShrine = true;
+    // Whether the agent is currently heading towards food.
+    // Overrides the other destinations.
+    private bool destinationIsFood = false;
 
     // Component references.
     private NavMeshAgent agent;
@@ -50,43 +54,71 @@ public class VillagerMovement : MonoBehaviour
     private void Update()
     {
         float destinationDistance = Vector3.Distance(transform.position, agent.destination);
-        // If the villager is targeting the shrine...
-        if (destinationIsShrine)
+        // If the villager is heading towards food...
+        if (destinationIsFood)
         {
-            // If the villager is within shrine charging distance...
-            if (destinationDistance < shrineChargeDistance)
-            {
-                // Increase the idle time.
-                timeIdled += Time.deltaTime;
-                // Charge up the shrine.
-                shrine.IncreaseChargeSeconds(Time.deltaTime, transform.position);
-            }
-            // If the villager has idled at the shrine for long enough...
-            if (timeIdled > shrineIdleTime)
-            {
-                // Reset the idle time and start heading to the house.
-                timeIdled = 0f;
-                destinationIsShrine = false;
-                agent.destination = housePosition;
-            }
+            // TODO: GET TO THE FOOD ROY
         }
-        // If the villager is targeting the house...
+        // If the villager is NOT heading towards food, head towards other things.
         else
         {
-            // If the villager is close enough to the house destination to be considered idling...
-            if (destinationDistance < houseDestinationDistance)
+            // If the villager is targeting the shrine...
+            if (destinationIsShrine)
             {
-                // Increase the idle time.
-                timeIdled += Time.deltaTime;
+                // If the villager is within shrine charging distance...
+                if (destinationDistance < shrineChargeDistance)
+                {
+                    // Increase the idle time.
+                    timeIdled += Time.deltaTime;
+                    // Charge up the shrine.
+                    shrine.IncreaseChargeSeconds(Time.deltaTime, transform.position);
+                }
+                // If the villager has idled at the shrine for long enough...
+                if (timeIdled > shrineIdleTime)
+                {
+                    // Reset the idle time and start heading to the house.
+                    timeIdled = 0f;
+                    destinationIsShrine = false;
+                    agent.destination = housePosition;
+                }
             }
-            // If the villager has idled at the house for long enough...
-            if (timeIdled > houseIdleTime)
+            // If the villager is targeting the house...
+            else
             {
-                // Reset the idle time and start heading to the shrine.
-                timeIdled = 0f;
-                destinationIsShrine = true;
-                agent.destination = shrinePosition;
+                // If the villager is close enough to the house destination to be considered idling...
+                if (destinationDistance < houseDestinationDistance)
+                {
+                    // Increase the idle time.
+                    timeIdled += Time.deltaTime;
+                }
+                // If the villager has idled at the house for long enough...
+                if (timeIdled > houseIdleTime)
+                {
+                    // Reset the idle time and start heading to the shrine.
+                    timeIdled = 0f;
+                    destinationIsShrine = true;
+                    agent.destination = shrinePosition;
+                }
             }
+        }
+    }
+
+    private void OnEnable()
+    {
+        Health.OnDeath += SomeoneDied;
+    }
+    private void OnDisable()
+    {
+        Health.OnDeath -= SomeoneDied;
+    }
+
+    private void SomeoneDied(GameObject victim)
+    {
+        // If the villager is the victim...
+        if (victim == gameObject)
+        {
+            // Destroy it.
+            Destroy(gameObject);
         }
     }
 }

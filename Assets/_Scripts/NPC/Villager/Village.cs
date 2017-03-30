@@ -4,7 +4,7 @@
 // One villager will be spawned at each of these house idle positions.
 
 // Comment out the following line to prevent the house count from being printed.
-#define PRINT_HOUSE_COUNT
+//#define PRINT_HOUSE_COUNT
 
 using System.Collections;
 using System.Collections.Generic;
@@ -49,8 +49,59 @@ public class Village : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        Health.OnDeath += SomeoneDied;
+    }
+    private void OnDisable()
+    {
+        Health.OnDeath -= SomeoneDied;
+    }
+
     public GameObject GetRandomVillager()
     {
-        return villagers[Random.Range(0, villagers.Count)];
+        if (villagers.Count == 0)
+        {
+            return null;
+        }
+        else
+        {
+            return villagers[Random.Range(0, villagers.Count)];
+        }
+    }
+
+    // Return true if obj is a villager.
+    public bool IsVillager(GameObject obj)
+    {
+        foreach (GameObject villager in villagers)
+        {
+            if (obj == villager)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void GameOver()
+    {
+        Debug.Log("Game over, baby.");
+        // TODO: Stuff happens when you lose.
+    }
+
+    // Event payload.
+    private void SomeoneDied(GameObject victim)
+    {
+        // If the victim is a villager...
+        if (IsVillager(victim))
+        {
+            // Remove the villager from the villagers list.
+            villagers.Remove(victim);
+            // If there are no villagers left, game over.
+            if (villagers.Count == 0)
+            {
+                GameOver();
+            }
+        }
     }
 }

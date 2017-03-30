@@ -13,11 +13,11 @@ using UnityEngine;
 
 public class KeyPoints : MonoBehaviour
 {
-    // Reference to the GameObject that has all of the positions as children.
+    [Tooltip("Reference to the GameObject that has all of the positions as children.")]
     public GameObject pointsContainer;
-    // The color of the sphere Gizmos in the scene view.
+    [Tooltip("The color of the sphere Gizmos in the scene view.")]
     public Color editorGizmoColor = Color.red;
-    // The radius of the sphere Gizmos in the scene view.
+    [Tooltip("The radius of the sphere Gizmos in the scene view.")]
     public float editorGizmoRadius = 0.2f;
 
     // List of the key points.

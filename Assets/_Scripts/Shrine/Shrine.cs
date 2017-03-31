@@ -41,4 +41,20 @@ public class Shrine : MonoBehaviour
 #endif
         }
     }
+
+    // This function is used for buying stuff with the shrine's points.
+    // If the player has enough points, those points will be spent and true will be returned.
+    // Otherwise, return false.
+    public bool SpendPoints(int amount)
+    {
+        if (points >= amount)
+        {
+            points -= amount;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

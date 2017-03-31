@@ -93,7 +93,7 @@ namespace DigitalRuby.LightningBolt
         private int animationOffsetIndex;
         private int animationPingPongDirection = 1;
         private bool orthographic;
-		public GameObject castRayObj;
+		public GameObject location;
 
         private void GetPerpendicularVector(ref Vector3 directionNormalized, out Vector3 side)
         {
@@ -313,26 +313,27 @@ namespace DigitalRuby.LightningBolt
         /// </summary>
         public void Trigger()
         {
+			gameObject.GetComponent<soundArray> ().playRandomSound ();
             Vector3 start, end;
             timer = Duration + Mathf.Min(0.0f, timer);
-            if (StartObject == null)
-            {
-				start = castRayObj.GetComponent<castRay>().location;
-            }
+			if (StartObject == null) {
+				start = location.GetComponent<castRay> ().location + new Vector3 (0, 100, 0);
+			}
             else
             {
-				start = castRayObj.GetComponent<castRay>().location;
+				start = location.GetComponent<castRay>().location + new Vector3(0, 100, 0);
             }
             if (EndObject == null)
             {
-				end = castRayObj.GetComponent<castRay>().location + new Vector3(0, 1000, 0);
+					end = location.GetComponent<castRay>().location;
             }
             else
             {
-				end = castRayObj.GetComponent<castRay>().location + new Vector3(0, 1000, 0);
+					end = location.GetComponent<castRay>().location;
             }
             startIndex = 0;
             GenerateLightningBolt(start, end, Generations, Generations, 0.0f);
+
             UpdateLineRenderer();
         }
 

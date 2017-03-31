@@ -1,26 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using VRTK;
 
-public class PlantFood : VRTK_SimplePointer
+
+public class PlantFood : MonoBehaviour
 {
-	[Tooltip("The food prefab.")]
-	public GameObject foodPrefab;
+	private int cropCount;
+	public GameObject crop;
+	public GameObject shrine;
+	private Shrine shrineComponent;
+	public Vector3 location;
+	public GameObject locationObj;
 
-	public void TryToPlaceFood()
+	void start (){
+		//shrineComponent = shrine.GetComponent<Shrine> ();
+		cropCount = 0;
+	}
+
+	public void MakeFood ()
 	{
-		// Attempt to raycast.
-		Ray pointerRaycast = new Ray(GetOriginPosition(), GetOriginForward());
-		RaycastHit hit;
-		if (Physics.Raycast (pointerRaycast, out hit, pointerLength, ~layersToIgnore))
-		{
-			// Place the food at the hit.
-			Vector3 foodPosition = hit.transform.position;
-			Debug.Log ("Placed food at " + foodPosition);
-			Instantiate (foodPrefab, foodPosition, Quaternion.identity);
+		shrineComponent = shrine.GetComponent<Shrine> ();
+		location = locationObj.GetComponent<castRay> ().location;
+		if (cropCount < 10) {
+			if (shrineComponent.SpendPoints (10)) {
+				GameObject cropInstance = Instantiate (crop, location, Quaternion.identity);
+				cropInstance.GetComponent<plantHealth> ().OnDeath += OnCropDeath;
+				cropCount++;
+			}
 		}
+	}
 
+	public void OnCropDeath()
+	{
+		cropCount--;
+	}
 	}
 
 	/*
@@ -29,4 +42,5 @@ public class PlantFood : VRTK_SimplePointer
 		TryToPlaceFood ();
 	}
 	*/
-}
+
+

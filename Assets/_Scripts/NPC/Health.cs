@@ -8,39 +8,38 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [Tooltip("The maximum health the object can have.")]
-    public float hpMax;
+    public int healthMax;
+    [Tooltip("The current health the object has.")]
+    public int healthCurrent;
 
-    public delegate void DieAction(GameObject victim);
-    public static event DieAction OnDeath;
-
-    // The current amount of HP the NPC has.
-    private float hpCurrent;
+    public delegate void DieAction();
+    public event DieAction OnDeath;
 
     private void Awake()
     {
-        hpCurrent = hpMax;
+        healthCurrent = healthMax;
     }
 
-    public void Damage(float amount)
+    public void Damage(int amount)
     {
-        hpCurrent -= amount;
+        healthCurrent -= amount;
         // Check if the HP has run out, and if so, DIE!!!
-        if (hpCurrent <= 0)
+        if (healthCurrent <= 0)
         {
             if (OnDeath != null)
             {
-                OnDeath(gameObject);
+                OnDeath();
             }
         }
     }
 
-    public void Heal(float amount)
+    public void Heal(int amount)
     {
-        hpCurrent += amount;
+        healthCurrent += amount;
         // Cap the HP.
-        if (amount > hpMax)
+        if (amount > healthMax)
         {
-            amount = hpMax;
+            amount = healthMax;
         }
     }
 }

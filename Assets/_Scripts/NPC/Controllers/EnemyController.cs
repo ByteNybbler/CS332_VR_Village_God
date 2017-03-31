@@ -2,6 +2,9 @@
 // Enemy controller class.
 // The key points are the enemy spawn points.
 
+// Comment out the following line to prevent the current wave from being printed to the console.
+#define PRINT_WAVE_COUNTER
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,8 +14,8 @@ public class EnemyController : MonoBehaviour
 {
     [Tooltip("Prefab of the enemies to be spawned.")]
     public GameObject enemyPrefab;
-    [Tooltip("Reference to the village GameObject's Village component.")]
-    public Village village;
+    [Tooltip("Reference to the village GameObject.")]
+    public GameObject villageInstance;
     [Tooltip("The total number of enemies to spawn in the wave.")]
     public int enemiesPerWave = 15;
     [Tooltip("After each wave, the current enemiesPerWave is multiplied by this quantity.")]
@@ -24,20 +27,30 @@ public class EnemyController : MonoBehaviour
     [Tooltip("Number of seconds between each wave.")]
     public float timeBetweenWaves;
 
+    public delegate void EnemyDeathAction(GameObject enemy, int xp);
+    public event EnemyDeathAction OnEnemyDeath;
+
     // List of the transforms of the enemy spawn points.
     private List<Transform> spawnPoints;
     // The current wave.
     private int wave = 0;
     // The current spawn point.
     private Transform currentSpawnPoint;
-    // Component references.
-    private KeyPoints kp;
     // How many enemies have been spawned so far in this wave.
     private int enemiesSpawnedThisWave = 0;
-    
-    private void Start()
+
+    // Component references.
+    private KeyPoints kp;
+    private Village villageComponent;
+
+    private void Awake()
     {
         kp = GetComponent<KeyPoints>();
+        villageComponent = GetComponent<Village>();
+    }
+
+    private void Start()
+    {
         // Get the enemy spawn points.
         spawnPoints = kp.GetKeyPoints();
         // Start the countdown for the first wave.
@@ -57,9 +70,19 @@ public class EnemyController : MonoBehaviour
         // Instantiate an enemy.
         GameObject enemy = Instantiate(enemyPrefab, currentSpawnPoint.position, currentSpawnPoint.rotation);
         // Pass the village component to the spawned enemy.
-        enemy.GetComponent<EnemyMovement>().village = village;
+        EnemyStatus en = enemy.GetComponent<EnemyStatus>();
+        en.village = villageComponent;
+        en.OnDeath += EnemyDie;
         // Increment the number of enemies spawned this wave.
         enemiesSpawnedThisWave += 1;
+    }
+
+    private void EnemyDie(GameObject enemy, int xp)
+    {
+        if (OnEnemyDeath != null)
+        {
+            OnEnemyDeath(enemy, xp);
+        }
     }
 
     // Returns the current wave ID.
@@ -78,6 +101,9 @@ public class EnemyController : MonoBehaviour
     {
         // Increment the wave counter.
         wave += 1;
+#if PRINT_WAVE_COUNTER
+        Debug.Log("Wave " + wave + " has begun!");
+#endif
         // Start the coroutine to begin spawning the enemies.
         StartCoroutine(WaveCoroutine());
     }

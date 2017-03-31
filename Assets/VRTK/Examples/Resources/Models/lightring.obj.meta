@@ -1,68 +1,17 @@
 fileFormatVersion: 2
-guid: a6d857e90456c4b409911171666ca04b
-timeCreated: 1490983910
-licenseType: Free
+guid: 42da832a76eaae14b85df110b8ce28ce
+timeCreated: 1469087502
+licenseType: Store
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: group
-    100004: group3
-    100006: group4
-    100008: pasted__pCube2
-    100010: pasted__pCube2 1
-    100012: pasted__pCube5
-    100014: pasted__pCube8
-    100016: pasted__pCylinder1
-    100018: pasted__pCylinder1 1
-    100020: pCube1
-    100022: pCube2
-    100024: pCube3
-    100026: pCube4
-    100028: pCube5
-    100030: pCylinder1
-    100032: transform1
-    100034: transform2
-    100036: transform3
-    100038: transform32
-    100040: transform33
-    100042: transform4
-    100044: transform5
-    100046: transform6
-    100048: transform7
-    100050: transform8
-    100052: transform9
+    100002: TexturedDisk
     400000: //RootNode
-    400002: group
-    400004: group3
-    400006: group4
-    400008: pasted__pCube2
-    400010: pasted__pCube2 1
-    400012: pasted__pCube5
-    400014: pasted__pCube8
-    400016: pasted__pCylinder1
-    400018: pasted__pCylinder1 1
-    400020: pCube1
-    400022: pCube2
-    400024: pCube3
-    400026: pCube4
-    400028: pCube5
-    400030: pCylinder1
-    400032: transform1
-    400034: transform2
-    400036: transform3
-    400038: transform32
-    400040: transform33
-    400042: transform4
-    400044: transform5
-    400046: transform6
-    400048: transform7
-    400050: transform8
-    400052: transform9
-    2300000: pasted__pCube8
-    3300000: pasted__pCube8
-    4300000: pasted__pCube8
-    9500000: //RootNode
+    400002: TexturedDisk
+    2300000: TexturedDisk
+    3300000: TexturedDisk
+    4300000: TexturedDisk
   materials:
     importMaterials: 1
     materialName: 0
@@ -123,9 +72,9 @@ ModelImporter:
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
-    skeletonHasParents: 1
+    skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

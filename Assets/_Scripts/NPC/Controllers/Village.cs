@@ -18,6 +18,11 @@ public class Village : MonoBehaviour
     [Tooltip("Reference to the villager prefab.")]
     public GameObject villagerPrefab;
 
+    public delegate void AllVillagersDeadAction();
+    public event AllVillagersDeadAction OnAllVillagersDead;
+    public delegate void VillagerListUpdateAction(GameObject villagerRemoved);
+    public event VillagerListUpdateAction OnVillagerListUpdate;
+
     // A list of villagers.
     private List<GameObject> villagers = new List<GameObject>();
     // Component references.
@@ -43,19 +48,13 @@ public class Village : MonoBehaviour
             // Assign the house to the villager.
             vm.houseTransform = trans;
             // Assign the shrine to the villager.
+            //Debug.Log("Shrine object: " + shrineObject);
             vm.shrineObject = shrineObject;
             // Add the villager to the list of existing villagers.
             villagers.Add(newVillager);
+            // Subscribe to the villager's death event.
+            newVillager.GetComponent<VillagerStatus>().OnDeath += VillagerDie;
         }
-    }
-
-    private void OnEnable()
-    {
-        Health.OnDeath += SomeoneDied;
-    }
-    private void OnDisable()
-    {
-        Health.OnDeath -= SomeoneDied;
     }
 
     public GameObject GetRandomVillager()
@@ -70,6 +69,7 @@ public class Village : MonoBehaviour
         }
     }
 
+    /*
     // Return true if obj is a villager.
     public bool IsVillager(GameObject obj)
     {
@@ -82,25 +82,23 @@ public class Village : MonoBehaviour
         }
         return false;
     }
+    */
 
-    private void GameOver()
+    // Villager death event payload.
+    private void VillagerDie(GameObject victim)
     {
-        Debug.Log("Game over, baby.");
-        // TODO: Stuff happens when you lose.
-    }
-
-    // Event payload.
-    private void SomeoneDied(GameObject victim)
-    {
-        // If the victim is a villager...
-        if (IsVillager(victim))
+        // Remove the villager from the villagers list.
+        villagers.Remove(victim);
+        if (OnVillagerListUpdate != null)
         {
-            // Remove the villager from the villagers list.
-            villagers.Remove(victim);
-            // If there are no villagers left, game over.
-            if (villagers.Count == 0)
+            OnVillagerListUpdate(victim);
+        }
+        // If there are no villagers left, game over.
+        if (villagers.Count == 0)
+        {
+            if (OnAllVillagersDead != null)
             {
-                GameOver();
+                OnAllVillagersDead();
             }
         }
     }

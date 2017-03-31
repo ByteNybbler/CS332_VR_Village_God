@@ -1,42 +1,17 @@
 fileFormatVersion: 2
-guid: 22faeafa933e4074ead2e62762c79a6f
-timeCreated: 1490983910
-licenseType: Free
+guid: 5a5393914b3097643b56eaa0e223af13
+timeCreated: 1469087502
+licenseType: Store
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: group5
-    100002: group6
-    100004: group7
-    100006: //RootNode
-    100008: pasted__group6
-    100010: pasted__pasted__pCube6
-    100012: pasted__pasted__pCube6 1
-    100014: pasted__pCube6
-    100016: pasted__pCube6 1
-    100018: pCube6
-    100020: transform10
-    100022: transform11
-    100024: transform12
-    100026: transform13
-    400000: group5
-    400002: group6
-    400004: group7
-    400006: //RootNode
-    400008: pasted__group6
-    400010: pasted__pasted__pCube6
-    400012: pasted__pasted__pCube6 1
-    400014: pasted__pCube6
-    400016: pasted__pCube6 1
-    400018: pCube6
-    400020: transform10
-    400022: transform11
-    400024: transform12
-    400026: transform13
-    2300000: pasted__pasted__pCube6
-    3300000: pasted__pasted__pCube6
-    4300000: pasted__pasted__pCube6
-    9500000: //RootNode
+    100000: //RootNode
+    100002: prism
+    400000: //RootNode
+    400002: prism
+    2300000: prism
+    3300000: prism
+    4300000: prism
   materials:
     importMaterials: 1
     materialName: 0
@@ -97,9 +72,9 @@ ModelImporter:
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
-    skeletonHasParents: 1
+    skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

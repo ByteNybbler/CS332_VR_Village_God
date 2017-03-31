@@ -39,10 +39,14 @@ public class VillagerMovement : MonoBehaviour
     private NavMeshAgent agent;
     private Shrine shrine;
 
+    private void Awake()
+    {
+        agent = GetComponent<NavMeshAgent>();
+    }
+
     private void Start()
     {
-        // Fetch relevant components.
-        agent = GetComponent<NavMeshAgent>();
+        // Now that we are in the Start event, we can safely fetch the shrine's component.
         shrine = shrineObject.GetComponent<Shrine>();
         // Get the house and shrine positions.
         housePosition = houseTransform.position;
@@ -100,25 +104,6 @@ public class VillagerMovement : MonoBehaviour
                     agent.destination = shrinePosition;
                 }
             }
-        }
-    }
-
-    private void OnEnable()
-    {
-        Health.OnDeath += SomeoneDied;
-    }
-    private void OnDisable()
-    {
-        Health.OnDeath -= SomeoneDied;
-    }
-
-    private void SomeoneDied(GameObject victim)
-    {
-        // If the villager is the victim...
-        if (victim == gameObject)
-        {
-            // Destroy it.
-            Destroy(gameObject);
         }
     }
 }

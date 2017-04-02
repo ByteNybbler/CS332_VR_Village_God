@@ -95,7 +95,7 @@ namespace DigitalRuby.LightningBolt
         private bool orthographic;
 		public GameObject location;
 		public GameObject shrine;
-		private Shrine shrineComponents = shrine.GetComponent<Shrine>();
+		public Shrine shrineComponents;
 
         private void GetPerpendicularVector(ref Vector3 directionNormalized, out Vector3 side)
         {
@@ -286,6 +286,7 @@ namespace DigitalRuby.LightningBolt
 
         private void Start()
         {
+			shrineComponents = shrine.GetComponent<Shrine> ();
             orthographic = (Camera.main != null && Camera.main.orthographic);
             lineRenderer = GetComponent<LineRenderer>();
             lineRenderer.numPositions = 0;

@@ -94,6 +94,8 @@ namespace DigitalRuby.LightningBolt
         private int animationPingPongDirection = 1;
         private bool orthographic;
 		public GameObject location;
+		public GameObject shrine;
+		//public Shrine shrineComponents = shrine.getComponent<Shrine>();
 
         private void GetPerpendicularVector(ref Vector3 directionNormalized, out Vector3 side)
         {

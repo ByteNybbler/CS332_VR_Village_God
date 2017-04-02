@@ -94,6 +94,8 @@ namespace DigitalRuby.LightningBolt
         private int animationPingPongDirection = 1;
         private bool orthographic;
 		public GameObject location;
+		public GameObject shrine;
+		private Shrine shrineComponents = shrine.GetComponent<Shrine>();
 
         private void GetPerpendicularVector(ref Vector3 directionNormalized, out Vector3 side)
         {
@@ -312,30 +314,29 @@ namespace DigitalRuby.LightningBolt
         /// Trigger a lightning bolt. Use this if ManualMode is true.
         /// </summary>
         public void Trigger()
-        {
-			gameObject.GetComponent<soundArray> ().playRandomSound ();
-            Vector3 start, end;
-            timer = Duration + Mathf.Min(0.0f, timer);
-			if (StartObject == null) {
-				start = location.GetComponent<castRay> ().location + new Vector3 (0, 100, 0);
-			}
-            else
-            {
-				start = location.GetComponent<castRay>().location + new Vector3(0, 100, 0);
-            }
-            if (EndObject == null)
-            {
-					end = location.GetComponent<castRay>().location;
-            }
-            else
-            {
-					end = location.GetComponent<castRay>().location;
-            }
-            startIndex = 0;
-            GenerateLightningBolt(start, end, Generations, Generations, 0.0f);
+		{
 
-            UpdateLineRenderer();
-        }
+			if (shrineComponents.SpendPoints (10)) {
+				gameObject.GetComponent<soundArray> ().playRandomSound ();
+				Vector3 start, end;
+				timer = Duration + Mathf.Min (0.0f, timer);
+				if (StartObject == null) {
+					start = location.GetComponent<castRay> ().location + new Vector3 (0, 100, 0);
+				} else {
+					start = location.GetComponent<castRay> ().location + new Vector3 (0, 100, 0);
+				}
+				if (EndObject == null) {
+					end = location.GetComponent<castRay> ().location;
+				} else {
+					end = location.GetComponent<castRay> ().location;
+				}
+				startIndex = 0;
+				GenerateLightningBolt (start, end, Generations, Generations, 0.0f);
+
+				UpdateLineRenderer ();
+
+			}
+		}
 
         /// <summary>
         /// Call this method if you change the material on the line renderer

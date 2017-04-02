@@ -35,12 +35,16 @@ public class EnemyStatus : MonoBehaviour
     private void OnEnable()
     {
         health.OnDeath += Die;
-        village.OnVillagerListUpdate += VillagerRemovedFromList;
+
+        village.OnVillagerDie += VillagerRemovedFromList;
+        //cmpEnemyMovement.target.GetComponent<VillagerStatus>().OnDeath -= TargetDie;
     }
     private void OnDisable()
     {
         health.OnDeath -= Die;
-        village.OnVillagerListUpdate -= VillagerRemovedFromList;
+
+        village.OnVillagerDie -= VillagerRemovedFromList;
+        //cmpEnemyMovement.target.GetComponent<VillagerStatus>().OnDeath -= TargetDie;
     }
 
     // Health death event payload.
@@ -52,7 +56,7 @@ public class EnemyStatus : MonoBehaviour
         Destroy(gameObject);
     }
 
-    // Villager removed from list payload.
+    // Event payload for when the target villager dies.
     private void VillagerRemovedFromList(GameObject victim)
     {
         // If the current target was removed from the villager list...
@@ -66,7 +70,14 @@ public class EnemyStatus : MonoBehaviour
     // Choose a certain villager to target.
     public void SetTarget(GameObject newTarget)
     {
+        /*
+        if (cmpEnemyMovement.target != null)
+        {
+            cmpEnemyMovement.target.GetComponent<VillagerStatus>().OnDeath -= TargetDie;
+        }
+        */
         cmpEnemyMovement.target = newTarget;
+        //newTarget.GetComponent<VillagerStatus>().OnDeath += TargetDie;
     }
 
     // Choose a random villager to target.

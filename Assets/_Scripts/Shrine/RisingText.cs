@@ -1,14 +1,14 @@
 ﻿// Author(s): Paul Calande
-// Script that deals with the +1 text that rises up from the shrine.
+// Rising text script. To be attached to a worldspace canvas with a text object as a child.
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlusOne : MonoBehaviour
+public class RisingText : MonoBehaviour
 {
-    // The speed at which the +1 is rising.
+    // The speed at which the canvas is rising.
     // The value in the Inspector determines the initial rising speed.
     public float risingSpeed;
     // The rate at which the rising speed decays.

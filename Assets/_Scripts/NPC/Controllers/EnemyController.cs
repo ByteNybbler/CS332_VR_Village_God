@@ -38,6 +38,8 @@ public class EnemyController : MonoBehaviour
     private Transform currentSpawnPoint;
     // How many enemies have been spawned so far in this wave.
     private int enemiesSpawnedThisWave = 0;
+    // List of living enemies.
+    private List<GameObject> enemies = new List<GameObject>();
 
     // Component references.
     private KeyPoints kp;
@@ -75,6 +77,8 @@ public class EnemyController : MonoBehaviour
         en.OnDeath += EnemyDie;
         // Increment the number of enemies spawned this wave.
         enemiesSpawnedThisWave += 1;
+        // Add the enemy to the list.
+        enemies.Add(enemy);
     }
 
     private void EnemyDie(GameObject enemy, int xp)

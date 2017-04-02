@@ -15,6 +15,8 @@ public class GameController : MonoBehaviour
 
     // Component references.
     private XPLevels levels;
+    private Village compVillage;
+    private EnemyController compEnemyController;
 
     private void Awake()
     {
@@ -23,8 +25,11 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        village.GetComponent<Village>().OnAllVillagersDead += GameOver;
-        enemyController.GetComponent<EnemyController>().OnEnemyDeath += EnemyDied;
+        compVillage = village.GetComponent<Village>();
+        compEnemyController = enemyController.GetComponent<EnemyController>();
+
+        compVillage.OnAllVillagersDead += GameOver;
+        compEnemyController.OnEnemyDeath += EnemyDied;
     }
 
     // Enemy death event payload.

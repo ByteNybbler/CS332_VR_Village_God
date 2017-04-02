@@ -20,8 +20,8 @@ public class Village : MonoBehaviour
 
     public delegate void AllVillagersDeadAction();
     public event AllVillagersDeadAction OnAllVillagersDead;
-    public delegate void VillagerListUpdateAction(GameObject villagerRemoved);
-    public event VillagerListUpdateAction OnVillagerListUpdate;
+    public delegate void VillagerDieAction(GameObject victim);
+    public event VillagerDieAction OnVillagerDie;
 
     // A list of villagers.
     private List<GameObject> villagers = new List<GameObject>();
@@ -69,29 +69,15 @@ public class Village : MonoBehaviour
         }
     }
 
-    /*
-    // Return true if obj is a villager.
-    public bool IsVillager(GameObject obj)
-    {
-        foreach (GameObject villager in villagers)
-        {
-            if (obj == villager)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-    */
-
     // Villager death event payload.
     private void VillagerDie(GameObject victim)
     {
         // Remove the villager from the villagers list.
         villagers.Remove(victim);
-        if (OnVillagerListUpdate != null)
+        // Notify subscribers about the villager's death.
+        if (OnVillagerDie != null)
         {
-            OnVillagerListUpdate(victim);
+            OnVillagerDie(victim);
         }
         // If there are no villagers left, game over.
         if (villagers.Count == 0)

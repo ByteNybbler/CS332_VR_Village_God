@@ -14,7 +14,6 @@ public class EnemyMovement : MonoBehaviour
 
     // Component references.
     private NavMeshAgent agent;
-    private EnemyStatus enemyStatusComponent;
 
     private void Awake()
     {

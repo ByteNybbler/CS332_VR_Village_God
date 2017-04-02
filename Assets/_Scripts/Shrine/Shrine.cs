@@ -17,9 +17,11 @@ public class Shrine : MonoBehaviour
     // Change this quantity in the inspector to change how many points the shrine starts off with.
     public int points = 0;
     // Prefab for the +1 UI canvas.
-    public GameObject plusOnePrefab;
+    public GameObject risingTextPrefab;
     // The offset for the +1's spawning position.
     public Vector3 plusOneSpawnOffset;
+    // The color of the rising text.
+    public Color plusOneTextColor;
 
     // The quantity of charge (in charge seconds) that the shrine has yet to convert into points.
     private float chargeSeconds;
@@ -34,7 +36,10 @@ public class Shrine : MonoBehaviour
             chargeSeconds -= chargeSecondsPerPoint;
             points += 1;
             // Instantiate the +1 canvas.
-            Instantiate(plusOnePrefab, rootPosition + plusOneSpawnOffset, Quaternion.identity);
+            GameObject plusOne = Instantiate(risingTextPrefab, rootPosition + plusOneSpawnOffset, Quaternion.identity);
+            RisingText rt = plusOne.GetComponent<RisingText>();
+            rt.SetTextString("+1");
+            rt.SetTextColor(plusOneTextColor);
 
 #if DEBUG_SHRINE_POINTS
             Debug.Log("Shrine points: " + points);

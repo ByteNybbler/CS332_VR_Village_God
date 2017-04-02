@@ -57,4 +57,14 @@ public class RisingText : MonoBehaviour
             timePassed += Time.deltaTime;
         }
     }
+
+    public void SetTextString(string str)
+    {
+        text.text = str;
+    }
+
+    public void SetTextColor(Color col)
+    {
+        text.color = col;
+    }
 }

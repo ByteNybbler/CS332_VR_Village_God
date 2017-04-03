@@ -7,15 +7,15 @@ using UnityEngine;
 
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(EnemyMovement))]
-public class EnemyStatus : MonoBehaviour
+public class EnemyStatus : LateInit
 {
     [Tooltip("Reference to the village component so the enemy can keep track of villagers.")]
     public Village village;
     [Tooltip("How much XP is rewarded when the enemy is killed.")]
     public int xpOnKill = 5;
 
-    public delegate void DieAction(GameObject victim, int xp);
-    public event DieAction OnDeath;
+    public delegate void DiedHandler(GameObject victim, int xp);
+    public event DiedHandler Died;
 
     // Component references.
     private Health health;
@@ -27,37 +27,42 @@ public class EnemyStatus : MonoBehaviour
         cmpEnemyMovement = GetComponent<EnemyMovement>();
     }
 
-    private void Start()
+    public override void Init()
     {
         SetRandomTarget();
+        base.Init();
     }
 
-    private void OnEnable()
+    protected override void EventsSubscribe()
     {
-        health.OnDeath += Die;
-
-        village.OnVillagerDie += VillagerRemovedFromList;
-        //cmpEnemyMovement.target.GetComponent<VillagerStatus>().OnDeath -= TargetDie;
+        health.Died += Health_Died;
+        village.VillagerDied += Village_VillagerDied;
     }
-    private void OnDisable()
+    protected override void EventsUnsubscribe()
     {
-        health.OnDeath -= Die;
+        health.Died -= Health_Died;
+        village.VillagerDied -= Village_VillagerDied;
+    }
 
-        village.OnVillagerDie -= VillagerRemovedFromList;
-        //cmpEnemyMovement.target.GetComponent<VillagerStatus>().OnDeath -= TargetDie;
+    private void OnDied(GameObject obj, int xp)
+    {
+        if (Died != null)
+        {
+            Died(obj, xp);
+        }
     }
 
     // Health death event payload.
-    private void Die()
+    private void Health_Died()
     {
         // Invoke this enemy's death event.
-        OnDeath(gameObject, xpOnKill);
+        OnDied(gameObject, xpOnKill);
         // Destroy the enemy.
         Destroy(gameObject);
     }
 
     // Event payload for when the target villager dies.
-    private void VillagerRemovedFromList(GameObject victim)
+    private void Village_VillagerDied(GameObject victim)
     {
         // If the current target was removed from the villager list...
         if (victim == cmpEnemyMovement.target)
@@ -70,14 +75,7 @@ public class EnemyStatus : MonoBehaviour
     // Choose a certain villager to target.
     public void SetTarget(GameObject newTarget)
     {
-        /*
-        if (cmpEnemyMovement.target != null)
-        {
-            cmpEnemyMovement.target.GetComponent<VillagerStatus>().OnDeath -= TargetDie;
-        }
-        */
         cmpEnemyMovement.target = newTarget;
-        //newTarget.GetComponent<VillagerStatus>().OnDeath += TargetDie;
     }
 
     // Choose a random villager to target.

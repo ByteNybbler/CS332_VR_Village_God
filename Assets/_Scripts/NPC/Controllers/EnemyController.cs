@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent (typeof (KeyPoints))]
-public class EnemyController : MonoBehaviour
+public class EnemyController : LateInit
 {
     [Tooltip("Prefab of the enemies to be spawned.")]
     public GameObject enemyPrefab;
@@ -27,8 +27,8 @@ public class EnemyController : MonoBehaviour
     [Tooltip("Number of seconds between each wave.")]
     public float timeBetweenWaves;
 
-    public delegate void EnemyDeathAction(GameObject enemy, int xp);
-    public event EnemyDeathAction OnEnemyDeath;
+    public delegate void EnemyDiedHandler(GameObject enemy, int xp);
+    public event EnemyDiedHandler EnemyDied;
 
     // List of the transforms of the enemy spawn points.
     private List<Transform> spawnPoints;
@@ -48,15 +48,16 @@ public class EnemyController : MonoBehaviour
     private void Awake()
     {
         kp = GetComponent<KeyPoints>();
-        villageComponent = GetComponent<Village>();
     }
 
-    private void Start()
+    public override void Init()
     {
+        villageComponent = villageInstance.GetComponent<Village>();
         // Get the enemy spawn points.
         spawnPoints = kp.GetKeyPoints();
         // Start the countdown for the first wave.
         StartNextWaveTimer();
+        base.Init();
     }
 
     // Choose a random spawn point.
@@ -68,24 +69,54 @@ public class EnemyController : MonoBehaviour
     // Spawn an enemy.
     public void SpawnEnemy()
     {
+        // Choose a spawn point at which to spawn an enemy.
         ChooseRandomSpawnPoint();
+
         // Instantiate an enemy.
         GameObject enemy = Instantiate(enemyPrefab, currentSpawnPoint.position, currentSpawnPoint.rotation);
         // Pass the village component to the spawned enemy.
-        EnemyStatus en = enemy.GetComponent<EnemyStatus>();
-        en.village = villageComponent;
-        en.OnDeath += EnemyDie;
+        EnemyStatus es = enemy.GetComponent<EnemyStatus>();
+        es.village = villageComponent;
+        es.Died += EnemyStatus_Died;
         // Increment the number of enemies spawned this wave.
         enemiesSpawnedThisWave += 1;
         // Add the enemy to the list.
         enemies.Add(enemy);
+        // Initialize the enemy.
+        es.Init();
     }
 
-    private void EnemyDie(GameObject enemy, int xp)
+    private void EnemyStatus_Died(GameObject enemy, int xp)
     {
-        if (OnEnemyDeath != null)
+        OnEnemyDied(enemy, xp);
+    }
+
+    private void OnEnemyDied(GameObject enemy, int xp)
+    {
+        if (EnemyDied != null)
         {
-            OnEnemyDeath(enemy, xp);
+            EnemyDied(enemy, xp);
+        }
+    }
+
+    protected override void EventsSubscribe()
+    {
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy != null)
+            {
+                enemy.GetComponent<EnemyStatus>().Died += EnemyStatus_Died;
+            }
+        }
+    }
+    protected override void EventsUnsubscribe()
+    {
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy != null)
+            {
+                enemy.GetComponent<EnemyStatus>().Died -= EnemyStatus_Died;
+            }
         }
     }
 

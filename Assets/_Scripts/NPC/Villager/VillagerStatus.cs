@@ -8,8 +8,8 @@ using UnityEngine;
 [RequireComponent (typeof (Health))]
 public class VillagerStatus : MonoBehaviour
 {
-    public delegate void DieAction(GameObject victim);
-    public event DieAction OnDeath;
+    public delegate void DiedHandler(GameObject victim);
+    public event DiedHandler Died;
 
     // Component references.
     private Health health;
@@ -21,22 +21,27 @@ public class VillagerStatus : MonoBehaviour
 
     private void OnEnable()
     {
-        health.OnDeath += Die;
+        health.Died += Health_Died;
     }
     private void OnDisable()
     {
-        health.OnDeath -= Die;
+        health.Died -= Health_Died;
     }
 
     // Health death event payload.
-    private void Die()
+    private void Health_Died()
     {
         // Call the villager death event.
-        if (OnDeath != null)
-        {
-            OnDeath(gameObject);
-        }
+        OnDied(gameObject);
         // Destroy this villager.
         Destroy(gameObject);
+    }
+
+    private void OnDied(GameObject obj)
+    {
+        if (Died != null)
+        {
+            Died(obj);
+        }
     }
 }

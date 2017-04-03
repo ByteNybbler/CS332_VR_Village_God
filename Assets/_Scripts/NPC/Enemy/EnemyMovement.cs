@@ -22,7 +22,11 @@ public class EnemyMovement : MonoBehaviour
 
     private void Update()
     {
-        // Move towards the target.
-        agent.destination = target.transform.position;
+        // If the target exists...
+        if (target != null)
+        {
+            // Move towards the target.
+            agent.destination = target.transform.position;
+        }
     }
 }

@@ -11,33 +11,37 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent (typeof (KeyPoints))]
-public class Village : MonoBehaviour
+public class Village : LateInit
 {
     [Tooltip("Reference to the shrine GameObject.")]
     public GameObject shrineObject;
     [Tooltip("Reference to the villager prefab.")]
     public GameObject villagerPrefab;
 
-    public delegate void AllVillagersDeadAction();
-    public event AllVillagersDeadAction OnAllVillagersDead;
-    public delegate void VillagerDieAction(GameObject victim);
-    public event VillagerDieAction OnVillagerDie;
+    public delegate void VillagerDiedHandler(GameObject victim);
+    public event VillagerDiedHandler VillagerDied;
+    public delegate void AllVillagersDiedHandler();
+    public event AllVillagersDiedHandler AllVillagersDied;
 
     // A list of villagers.
     private List<GameObject> villagers = new List<GameObject>();
     // Component references.
     private KeyPoints kp;
 
-    // All of the villagers are spawned from the Start method.
-    private void Start()
+    private void Awake()
     {
         kp = GetComponent<KeyPoints>();
+    }
+
+    public override void Init()
+    {
         List<Transform> housePositions = kp.GetKeyPoints();
 
 #if PRINT_HOUSE_COUNT
         Debug.Log("Number of houses: " + housePositions.Count);
 #endif
 
+        // All of the villagers are spawned here.
         // Loop for each transform.
         foreach (Transform trans in housePositions)
         {
@@ -53,8 +57,10 @@ public class Village : MonoBehaviour
             // Add the villager to the list of existing villagers.
             villagers.Add(newVillager);
             // Subscribe to the villager's death event.
-            newVillager.GetComponent<VillagerStatus>().OnDeath += VillagerDie;
+            newVillager.GetComponent<VillagerStatus>().Died += VillagerStatus_Died;
         }
+
+        base.Init();
     }
 
     public GameObject GetRandomVillager()
@@ -70,21 +76,52 @@ public class Village : MonoBehaviour
     }
 
     // Villager death event payload.
-    private void VillagerDie(GameObject victim)
+    private void VillagerStatus_Died(GameObject victim)
     {
         // Remove the villager from the villagers list.
         villagers.Remove(victim);
         // Notify subscribers about the villager's death.
-        if (OnVillagerDie != null)
-        {
-            OnVillagerDie(victim);
-        }
+        OnVillagerDied(victim);
         // If there are no villagers left, game over.
         if (villagers.Count == 0)
         {
-            if (OnAllVillagersDead != null)
+            OnAllVillagersDied();
+        }
+    }
+
+    private void OnVillagerDied(GameObject victim)
+    {
+        if (VillagerDied != null)
+        {
+            VillagerDied(victim);
+        }
+    }
+
+    private void OnAllVillagersDied()
+    {
+        if (AllVillagersDied != null)
+        {
+            AllVillagersDied();
+        }
+    }
+    
+    protected override void EventsSubscribe()
+    {
+        foreach (GameObject villager in villagers)
+        {
+            if (villager != null)
             {
-                OnAllVillagersDead();
+                villager.GetComponent<VillagerStatus>().Died += VillagerStatus_Died;
+            }
+        }
+    }
+    protected override void EventsUnsubscribe()
+    {
+        foreach (GameObject villager in villagers)
+        {
+            if (villager != null)
+            {
+                villager.GetComponent<VillagerStatus>().Died -= VillagerStatus_Died;
             }
         }
     }

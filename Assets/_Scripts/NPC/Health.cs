@@ -12,8 +12,8 @@ public class Health : MonoBehaviour
     [Tooltip("The current health the object has.")]
     public int healthCurrent;
 
-    public delegate void DieAction();
-    public event DieAction OnDeath;
+    public delegate void DiedHandler();
+    public event DiedHandler Died;
 
     private void Awake()
     {
@@ -26,10 +26,7 @@ public class Health : MonoBehaviour
         // Check if the HP has run out, and if so, DIE!!!
         if (healthCurrent <= 0)
         {
-            if (OnDeath != null)
-            {
-                OnDeath();
-            }
+            OnDied();
         }
     }
 
@@ -40,6 +37,14 @@ public class Health : MonoBehaviour
         if (amount > healthMax)
         {
             amount = healthMax;
+        }
+    }
+
+    private void OnDied()
+    {
+        if (Died != null)
+        {
+            Died();
         }
     }
 }

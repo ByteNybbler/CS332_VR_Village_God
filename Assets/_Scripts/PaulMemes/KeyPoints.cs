@@ -28,16 +28,19 @@ public class KeyPoints : MonoBehaviour
     // Helpful editor visuals.
     private void OnDrawGizmos()
     {
-        // Draw a Gizmo at each key point, marking the transform.
-        Transform[] allPoints = pointsContainer.GetComponentsInChildren<Transform>();
-        foreach (Transform trans in allPoints)
+        if (pointsContainer != null)
         {
-            if (trans.gameObject != pointsContainer)
+            // Draw a Gizmo at each key point, marking the transform.
+            Transform[] allPoints = pointsContainer.GetComponentsInChildren<Transform>();
+            foreach (Transform trans in allPoints)
             {
-                Gizmos.color = new Color(editorGizmoColor.r, editorGizmoColor.g, editorGizmoColor.b, 0.2f);
-                Gizmos.DrawSphere(trans.position, editorGizmoRadius);
-                Gizmos.color = editorGizmoColor;
-                Gizmos.DrawWireSphere(trans.position, editorGizmoRadius);
+                if (trans.gameObject != pointsContainer)
+                {
+                    Gizmos.color = new Color(editorGizmoColor.r, editorGizmoColor.g, editorGizmoColor.b, 0.2f);
+                    Gizmos.DrawSphere(trans.position, editorGizmoRadius);
+                    Gizmos.color = editorGizmoColor;
+                    Gizmos.DrawWireSphere(trans.position, editorGizmoRadius);
+                }
             }
         }
     }

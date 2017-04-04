@@ -1,30 +1,37 @@
-﻿using System.Collections;
+﻿// Author(s): Hunter Golden, Paul Calande
+// Crop growing script.
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Crops : MonoBehaviour {
-	//how fast the plants will grow
+public class Crops : MonoBehaviour
+{
+	[Tooltip("The speed at which the plants grow.")]
 	public float rate;
-	//maximum size of the plant
+	[Tooltip("The maximum size of the plant.")]
 	public float maxSize;
 	public float scale;
-	//checks if the plant is fully grown
+	[Tooltip("Whether the plant is fully grown.")]
 	public bool isGrown;
 
-	// Use this for initialization
-	void Start () {
-		scale = 0;
+	void Awake()
+    {
+		scale = 0f;
 		isGrown = false;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-				
-		if (scale < maxSize) {
-			gameObject.transform.localScale += Vector3.up * rate;
-			gameObject.transform.position += (Vector3.up * rate)/2;
-			scale += rate * Time.deltaTime;
-		} else {
+
+	void Update()
+    {
+		if (scale < maxSize)
+        {
+            float increase = rate * Time.deltaTime;
+			gameObject.transform.localScale += Vector3.up * increase;
+			gameObject.transform.position += (Vector3.up * increase)/2;
+			scale += increase;
+		}
+        else
+        {
 			isGrown = true;
 		}
 	}

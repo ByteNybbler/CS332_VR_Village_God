@@ -2,21 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class resourceManager : MonoBehaviour {
+public class ResourceManager : MonoBehaviour
+{
+	public int faith;
+	public int wood;
+	public int food;
 
-	public int Faith;
-	public int Wood;
-	public int Food;
-	Shrine shrineScript;
-	void Start () {
-		shrineScript = GameObject.Find ("Shrine").GetComponent<Shrine> ();
-		Faith = 0;
-		Wood = 0;
-		Food = 0;
+    public GameObject shrineInstance;
+
+	private Shrine shrineScript;
+
+	void Start ()
+    {
+		shrineScript = shrineInstance.GetComponent<Shrine> ();
+		faith = 0;
+		wood = 0;
+		food = 0;
 	}
 
-	void Update () {
-		Faith = shrineScript.points;
+	void Update ()
+    {
+		faith = shrineScript.points;
 	}
-
 }

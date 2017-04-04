@@ -1,29 +1,38 @@
-﻿using System.Collections;
+﻿// Author(s): Hunter Golden, Paul Calande
+// Plant health script.
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class plantHealth : MonoBehaviour {
+public class PlantHealth : MonoBehaviour
+{
+    [Tooltip("The current health of the plant.")]
+    public int health = 10;
 
-	public delegate void DeathAction();
-	public event DeathAction OnDeath;
+    public delegate void DiedHandler(GameObject victim);
+    public event DiedHandler Died;
 
-	private int health;
+    public void DecreaseHealth()
+    {
+        health--;
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
 
-	void Start () {
-		health = 10;
-	}
+    private void Die()
+    {
+        OnDied(gameObject);
+        Destroy(gameObject);
+    }
 
-	public void DecreaseHealth(){
-		health--;
-		if (health == 10) {
-			
-			if (OnDeath != null) {
-				// Call the death event.
-				OnDeath ();
-			}
-
-			Destroy (gameObject);
-
-		}
-	}
+    private void OnDied(GameObject obj)
+    {
+        if (Died != null)
+        {
+            Died(obj);
+        }
+    }
 }

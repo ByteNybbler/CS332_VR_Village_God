@@ -93,9 +93,15 @@ namespace DigitalRuby.LightningBolt
         private int animationOffsetIndex;
         private int animationPingPongDirection = 1;
         private bool orthographic;
-		public GameObject location;
+
+        [Tooltip("Reference to the controller scripts object to raycast from.")]
+		public GameObject controller;
+        [Tooltip("Reference to the shrine instance.")]
 		public GameObject shrine;
-		public Shrine shrineComponents;
+        
+        // Component references.
+		private Shrine compShrine;
+        private CastRay compCastRay;
 
         private void GetPerpendicularVector(ref Vector3 directionNormalized, out Vector3 side)
         {
@@ -286,11 +292,13 @@ namespace DigitalRuby.LightningBolt
 
         private void Start()
         {
-			shrineComponents = shrine.GetComponent<Shrine> ();
             orthographic = (Camera.main != null && Camera.main.orthographic);
             lineRenderer = GetComponent<LineRenderer>();
             lineRenderer.numPositions = 0;
             UpdateFromMaterialChange();
+
+            compShrine = shrine.GetComponent<Shrine>();
+            compCastRay = controller.GetComponent<CastRay>();
         }
 
         private void Update()
@@ -316,26 +324,24 @@ namespace DigitalRuby.LightningBolt
         /// </summary>
         public void Trigger()
 		{
-
-			if (shrineComponents.SpendPoints (10)) {
-				gameObject.GetComponent<soundArray> ().playRandomSound ();
+			if (compShrine.SpendPoints (10))
+            {
+				gameObject.GetComponent<SoundArray>().PlayRandomSound();
 				Vector3 start, end;
 				timer = Duration + Mathf.Min (0.0f, timer);
-				if (StartObject == null) {
-					start = location.GetComponent<castRay> ().location + new Vector3 (0, 100, 0);
-				} else {
-					start = location.GetComponent<castRay> ().location + new Vector3 (0, 100, 0);
-				}
-				if (EndObject == null) {
-					end = location.GetComponent<castRay> ().location;
-				} else {
-					end = location.GetComponent<castRay> ().location;
-				}
-				startIndex = 0;
-				GenerateLightningBolt (start, end, Generations, Generations, 0.0f);
 
-				UpdateLineRenderer ();
+                Vector3 additionalY = new Vector3(0, 100, 0);
+                Vector3 location;
+                if (compCastRay.Cast(out location))
+                {
+                    start = location + additionalY;
+                    end = location;
 
+                    startIndex = 0;
+                    GenerateLightningBolt(start, end, Generations, Generations, 0.0f);
+
+                    UpdateLineRenderer();
+                }
 			}
 		}
 

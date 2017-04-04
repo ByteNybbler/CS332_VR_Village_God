@@ -100,10 +100,20 @@ public class VillagerMovement : LateInit
         }
     }
 
-    // Get the closest crop to the villager.
-    private void SetCropTargetToClosest()
+    // Set the closest crop to the villager as the target.
+    public void SetCropTargetToClosest()
     {
-        cropTarget = compPlantFood.GetClosestCrop(transform.position);
+        cropTarget = compPlantFood.GetClosestViableCrop(transform.position);
+        if (cropTarget == null)
+        {
+            StopHuntingForFood();
+        }
+    }
+
+    private void StopHuntingForFood()
+    {
+        destinationIsFood = false;
+        timeIdled = 0f;
     }
 
     // Get the distance away from the agent's destination.
@@ -118,24 +128,25 @@ public class VillagerMovement : LateInit
         if (destinationIsFood)
         {
             // GET TO THE FOOD ROY
+            /*
             if (cropTarget == null)
             {
                 SetCropTargetToClosest();
             }
             else
             {
-                agent.destination = cropTarget.transform.position;
-                if (GetDestinationDistance() < cropEatDistance)
-                {
-                    // Eat a bit of the crop.
-                    cropTarget.GetComponent<PlantHealth>().DecreaseHealth();
-                    // Restore all health.
-                    compHealth.FullHeal();
-                    // Return to normal activities.
-                    destinationIsFood = false;
-                    timeIdled = 0f;
-                }
+            */
+            agent.destination = cropTarget.transform.position;
+            if (GetDestinationDistance() < cropEatDistance)
+            {
+                // Eat a bit of the crop.
+                cropTarget.GetComponent<PlantHealth>().DecreaseHealth();
+                // Restore all health.
+                compHealth.FullHeal();
+                // Return to normal activities.
+                StopHuntingForFood();
             }
+            //}
         }
         // If the villager is NOT heading towards food, head towards other things.
         else

@@ -43,9 +43,26 @@ public class VillagerStatus : LateInit
     private void Update()
     {
         health.Damage(Time.deltaTime * hungerRate);
+        if (compVillagerMovement.destinationIsFood == false)
+        {
+            if (health.healthCurrent < fleeToCropAtThisHealth && compPlantFood.GetViableCropCount() != 0)
+            {
+                compVillagerMovement.destinationIsFood = true;
+                compVillagerMovement.SetCropTargetToClosest();
+            }
+        }
+
+
         if (health.healthCurrent < fleeToCropAtThisHealth)
         {
-            compVillagerMovement.destinationIsFood = true;
+            if (compPlantFood.GetViableCropCount() != 0)
+            {
+                compVillagerMovement.destinationIsFood = true;
+            }
+            else
+            {
+                compVillagerMovement.destinationIsFood = false;
+            }
         }
         else
         {

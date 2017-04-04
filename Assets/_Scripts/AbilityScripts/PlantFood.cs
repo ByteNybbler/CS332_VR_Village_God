@@ -66,20 +66,36 @@ public class PlantFood : LateInit
     }
 
     // Get the crop that's closest to a certain position.
-    public GameObject GetClosestCrop(Vector3 position)
+    public GameObject GetClosestViableCrop(Vector3 position)
     {
         GameObject closestObject = null;
         float closestDistance = Mathf.Infinity;
         foreach (GameObject crop in crops)
         {
-            float distance = Vector3.Distance(position, crop.transform.position);
-            if (distance < closestDistance)
+            if (crop.GetComponent<PlantHealth>().GetIsGrown())
             {
-                closestDistance = distance;
-                closestObject = crop;
+                float distance = Vector3.Distance(position, crop.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestObject = crop;
+                }
             }
         }
         return closestObject;
+    }
+
+    public int GetViableCropCount()
+    {
+        int count = 0;
+        foreach (GameObject crop in crops)
+        {
+            if (crop.GetComponent<PlantHealth>().GetIsGrown())
+            {
+                count += 1;
+            }
+        }
+        return count;
     }
 
     protected override void EventsSubscribe()

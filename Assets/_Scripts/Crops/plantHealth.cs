@@ -13,6 +13,7 @@ public class PlantHealth : MonoBehaviour
     public delegate void DiedHandler(GameObject victim);
     public event DiedHandler Died;
 
+    // Decrease plant health. This function is called each time a villager eats the crop.
     public void DecreaseHealth()
     {
         health--;

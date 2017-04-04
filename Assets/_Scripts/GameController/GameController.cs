@@ -14,13 +14,15 @@ public class GameController : LateInit
     public GameObject village;
 
     // Component references.
-    private XPLevels levels;
+    private XPLevels compLevels;
     private Village compVillage;
     private EnemyController compEnemyController;
+    private RisingTextCreator compRisingTextCreatorXP;
 
     private void Awake()
     {
-        levels = GetComponent<XPLevels>();
+        compLevels = GetComponent<XPLevels>();
+        compRisingTextCreatorXP = GetComponent<RisingTextCreator>();
     }
 
     public override void Init()
@@ -45,7 +47,10 @@ public class GameController : LateInit
     private void EnemyController_EnemyDied(GameObject enemy, int xp)
     {
         // Increment XP.
-        levels.AddXP(xp);
+        compLevels.AddXP(xp);
+        // Spawn XP text at the enemy position.
+        compRisingTextCreatorXP.message = "+" + xp + " XP";
+        compRisingTextCreatorXP.CreateRisingText(enemy.transform.position);
     }
 
     // Village "no more villagers" event payload.

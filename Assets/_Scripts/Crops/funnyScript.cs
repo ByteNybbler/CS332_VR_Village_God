@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class funnyScript : MonoBehaviour {
+public class FunnyScript : MonoBehaviour {
 	public float pokeForce;
 
 	void Update() {

@@ -2,18 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Plantation : MonoBehaviour {
+public class Plantation : MonoBehaviour
+{
+    public GameObject meter;
 
-
-
-	public GameObject meter;
-
-	void Start () {
-		Instantiate (meter, gameObject.transform.position, gameObject.transform.rotation);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    void Start()
+    {
+        Instantiate(meter, gameObject.transform.position, gameObject.transform.rotation);
+    }
 }

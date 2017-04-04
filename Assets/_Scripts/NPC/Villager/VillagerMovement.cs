@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent (typeof (NavMeshAgent))]
-public class VillagerMovement : MonoBehaviour
+public class VillagerMovement : LateInit
 {
     [Tooltip("The number of seconds to stay at the house.")]
     public float houseIdleTime;
@@ -44,7 +44,7 @@ public class VillagerMovement : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
-    private void Start()
+    public override void Init()
     {
         // Now that we are in the Start event, we can safely fetch the shrine's component.
         shrine = shrineObject.GetComponent<Shrine>();
@@ -53,6 +53,24 @@ public class VillagerMovement : MonoBehaviour
         shrinePosition = shrineObject.transform.position;
         // Set the agent's destination to the shrine first.
         agent.destination = shrinePosition;
+
+        base.Init();
+    }
+
+    protected override void OnEnable()
+    {
+        if (isInitialized)
+        {
+            if (destinationIsShrine)
+            {
+                agent.destination = shrinePosition;
+            }
+            else
+            {
+                agent.destination = housePosition;
+            }
+        }
+        base.OnEnable();
     }
 
     private void Update()

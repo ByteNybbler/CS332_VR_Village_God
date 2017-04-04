@@ -8,9 +8,9 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [Tooltip("The maximum health the object can have.")]
-    public int healthMax;
+    public float healthMax;
     [Tooltip("The current health the object has.")]
-    public int healthCurrent;
+    public float healthCurrent;
 
     public delegate void DiedHandler();
     public event DiedHandler Died;
@@ -20,23 +20,40 @@ public class Health : MonoBehaviour
         healthCurrent = healthMax;
     }
 
-    public void Damage(int amount)
+    public void Damage(float amount)
     {
         healthCurrent -= amount;
-        // Check if the HP has run out, and if so, DIE!!!
-        if (healthCurrent <= 0)
+        CheckIfDead();
+    }
+
+    public void Heal(float amount)
+    {
+        healthCurrent += amount;
+        CapHealth();
+    }
+
+    public void SetHealth(float amount)
+    {
+        healthCurrent = amount;
+        CheckIfDead();
+        CapHealth();
+    }
+
+    // Check if the health has run out, and if so, DIE!!!
+    private void CheckIfDead()
+    {
+        if (healthCurrent <= 0f)
         {
             OnDied();
         }
     }
 
-    public void Heal(int amount)
+    // Cap the health.
+    private void CapHealth()
     {
-        healthCurrent += amount;
-        // Cap the HP.
-        if (amount > healthMax)
+        if (healthCurrent > healthMax)
         {
-            amount = healthMax;
+            healthCurrent = healthMax;
         }
     }
 

@@ -10,21 +10,23 @@ using UnityEngine;
 
 public class Shrine : MonoBehaviour
 {
-    // How many charge seconds it takes to gain 1 point.
-    // One villager idling at the shrine for one second = one charge second.
+    [Tooltip("How many charge seconds it takes to gain 1 point.\n" +
+    "One villager idling at the shrine for one second = one charge second.")]
     public float chargeSecondsPerPoint;
-    // How many points the shrine currently has.
-    // Change this quantity in the inspector to change how many points the shrine starts off with.
+    [Tooltip("How many points the shrine currently has.\n" +
+    "Change this quantity in the inspector to change how many points the shrine starts off with.")]
     public int points = 0;
-    // Prefab for the +1 UI canvas.
-    public GameObject risingTextPrefab;
-    // The offset for the +1's spawning position.
-    public Vector3 plusOneSpawnOffset;
-    // The color of the rising text.
-    public Color plusOneTextColor;
 
     // The quantity of charge (in charge seconds) that the shrine has yet to convert into points.
     private float chargeSeconds;
+
+    // Component references.
+    RisingTextCreator rtc;
+
+    private void Awake()
+    {
+        rtc = GetComponent<RisingTextCreator>();
+    }
 
     // Use this public function to add charge seconds to the shrine.
     // rootPosition is the spawn position of the +1.
@@ -34,12 +36,11 @@ public class Shrine : MonoBehaviour
         while (chargeSeconds > chargeSecondsPerPoint)
         {
             chargeSeconds -= chargeSecondsPerPoint;
-            points += 1;
+            int additionalPoints = 1;
+            points += additionalPoints;
             // Instantiate the +1 canvas.
-            GameObject plusOne = Instantiate(risingTextPrefab, rootPosition + plusOneSpawnOffset, Quaternion.identity);
-            RisingText rt = plusOne.GetComponent<RisingText>();
-            rt.SetTextString("+1");
-            rt.SetTextColor(plusOneTextColor);
+            rtc.message = "+" + additionalPoints + " faith";
+            rtc.CreateRisingText(rootPosition);
 
 #if DEBUG_SHRINE_POINTS
             Debug.Log("Shrine points: " + points);

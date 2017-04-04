@@ -58,6 +58,8 @@ public class Village : LateInit
             villagers.Add(newVillager);
             // Subscribe to the villager's death event.
             newVillager.GetComponent<VillagerStatus>().Died += VillagerStatus_Died;
+            // Initialization time!
+            vm.Init();
         }
 
         base.Init();

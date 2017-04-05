@@ -22,6 +22,8 @@ public class Shrine : MonoBehaviour
     public RisingTextCreator rtcNotEnoughPoints;
     [Tooltip("Reference to the Spent x Points rising text creator component.")]
     public RisingTextCreator rtcSpentPoints;
+    [Tooltip("The string that is the icon for faith.")]
+    public string faithString = "faith";
 
     // The quantity of charge (in charge seconds) that the shrine has yet to convert into points.
     private float chargeSeconds;
@@ -37,7 +39,7 @@ public class Shrine : MonoBehaviour
             int additionalPoints = 1;
             points += additionalPoints;
             // Instantiate the +1 canvas.
-            rtcPlusPoints.message = "+" + additionalPoints + " faith";
+            rtcPlusPoints.message = "+" + additionalPoints + " " + faithString;
             rtcPlusPoints.CreateRisingText(rootPosition);
 
 #if DEBUG_SHRINE_POINTS
@@ -56,13 +58,13 @@ public class Shrine : MonoBehaviour
         if (points >= amount)
         {
             points -= amount;
-            rtcSpentPoints.message = "-" + amount + " faith";
+            rtcSpentPoints.message = "-" + amount + " " + faithString;
             rtcSpentPoints.CreateRisingText(location);
             return true;
         }
         else
         {
-            rtcNotEnoughPoints.message = "Not enough faith!";
+            rtcNotEnoughPoints.message = "Not enough faith!\n" + amount + " " + faithString + " needed.";
             rtcNotEnoughPoints.CreateRisingText(location);
             return false;
         }

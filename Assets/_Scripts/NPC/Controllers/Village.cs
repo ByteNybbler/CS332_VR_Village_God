@@ -85,7 +85,7 @@ public class Village : LateInit
     // Villager death event payload.
     private void VillagerStatus_Died(GameObject victim)
     {
-        Debug.Log("Whoa! A villager DIED!!!");
+        //Debug.Log("Whoa! A villager DIED!!!");
         // Remove the villager from the villagers list.
         villagers.Remove(victim);
         // Notify subscribers about the villager's death.

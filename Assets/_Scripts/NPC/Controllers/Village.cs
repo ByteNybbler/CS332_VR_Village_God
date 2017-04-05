@@ -59,8 +59,6 @@ public class Village : LateInit
             vm.shrineObject = shrineObject;
             // Add the villager to the list of existing villagers.
             villagers.Add(newVillager);
-            // Subscribe to the villager's death event.
-            vs.Died += VillagerStatus_Died;
             // Pass the food controller to the villager.
             vm.instanceFoodController = instanceFoodController;
             vs.instanceFoodController = instanceFoodController;
@@ -87,6 +85,7 @@ public class Village : LateInit
     // Villager death event payload.
     private void VillagerStatus_Died(GameObject victim)
     {
+        Debug.Log("Whoa! A villager DIED!!!");
         // Remove the villager from the villagers list.
         villagers.Remove(victim);
         // Notify subscribers about the villager's death.

@@ -95,13 +95,19 @@ namespace DigitalRuby.LightningBolt
         private bool orthographic;
 
         [Tooltip("Reference to the controller scripts object to raycast from.")]
-		public GameObject controller;
+        public GameObject controller;
         [Tooltip("Reference to the shrine instance.")]
-		public GameObject shrine;
-        
+        public GameObject shrine;
+
         // Component references.
-		private Shrine compShrine;
+        private Shrine compShrine;
         private CastRay compCastRay;
+        private SoundArray compSoundArray;
+
+        private void Awake()
+        {
+            compSoundArray = GetComponent<SoundArray>();
+        }
 
         private void GetPerpendicularVector(ref Vector3 directionNormalized, out Vector3 side)
         {
@@ -323,17 +329,18 @@ namespace DigitalRuby.LightningBolt
         /// Trigger a lightning bolt. Use this if ManualMode is true.
         /// </summary>
         public void Trigger()
-		{
-			if (compShrine.SpendPoints (10))
+        {
+            Vector3 location;
+            if (compCastRay.Cast(out location))
             {
-				gameObject.GetComponent<SoundArray>().PlayRandomSound();
-				Vector3 start, end;
-				timer = Duration + Mathf.Min (0.0f, timer);
-
-                Vector3 additionalY = new Vector3(0, 100, 0);
-                Vector3 location;
-                if (compCastRay.Cast(out location))
+                if (compShrine.SpendPoints(10, location))
                 {
+                    timer = Duration + Mathf.Min(0.0f, timer);
+
+                    compSoundArray.PlayRandomSound();
+
+                    Vector3 start, end;
+                    Vector3 additionalY = new Vector3(0, 100, 0);
                     start = location + additionalY;
                     end = location;
 
@@ -342,8 +349,8 @@ namespace DigitalRuby.LightningBolt
 
                     UpdateLineRenderer();
                 }
-			}
-		}
+            }
+        }
 
         /// <summary>
         /// Call this method if you change the material on the line renderer

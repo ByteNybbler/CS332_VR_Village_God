@@ -1,4 +1,4 @@
-﻿// Author(s): Hunter Golden
+﻿// Author(s): Hunter Golden, Paul Calande
 // Growth meter script.
 
 using System.Collections;
@@ -7,15 +7,20 @@ using UnityEngine;
 
 public class GrowthMeter : MonoBehaviour
 {
-    public float startingSize;
-    public float finishSize;
-    public Crops crops;
-    public float rate;
+    [Tooltip("Reference to the stalks parent object.")]
+    public GameObject stalks;
+
+    private float startingSize;
+    private float finishSize;
+    private float rate;
+
+    // Component references.
+    private Crops crops;
 
     // Use this for initialization
     void Start()
     {
-        crops = GameObject.Find("plant").GetComponent<Crops>();
+        crops = stalks.GetComponent<Crops>();
         startingSize = 0;
         finishSize = gameObject.transform.localScale.x;
         rate = finishSize / (crops.maxSize / crops.rate);
@@ -32,7 +37,7 @@ public class GrowthMeter : MonoBehaviour
         }
         else
         {
-            Destroy(GameObject.Find("meter"));
+            Destroy(transform.parent.gameObject);
         }
     }
 }

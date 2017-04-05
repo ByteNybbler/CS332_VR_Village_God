@@ -39,6 +39,11 @@ public class Health : MonoBehaviour
         CapHealth();
     }
 
+    public void FullHeal()
+    {
+        healthCurrent = healthMax;
+    }
+
     // Check if the health has run out, and if so, DIE!!!
     private void CheckIfDead()
     {

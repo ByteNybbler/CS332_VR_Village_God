@@ -16,6 +16,9 @@ public class PlantFood : LateInit
     [Tooltip("The maximum number of crops that can exist in the scene at once.")]
     public int maxNumberOfCrops = 10;
 
+    public delegate void CropDiedHandler(GameObject victim);
+    public event CropDiedHandler CropDied;
+
     // List of existing crops.
     private List<GameObject> crops = new List<GameObject>();
 
@@ -38,7 +41,7 @@ public class PlantFood : LateInit
             Vector3 location;
             if (compCastRay.Cast(out location))
             {
-                if (compShrine.SpendPoints(10))
+                if (compShrine.SpendPoints(10, location))
                 {
                     GameObject cropInstance = Instantiate(prefabCrop, location, Quaternion.identity);
                     cropInstance.GetComponent<PlantHealth>().Died += PlantHealth_Died;
@@ -51,6 +54,48 @@ public class PlantFood : LateInit
     private void PlantHealth_Died(GameObject victim)
     {
         crops.Remove(victim);
+        OnCropDied(victim);
+    }
+
+    private void OnCropDied(GameObject victim)
+    {
+        if (CropDied != null)
+        {
+            CropDied(victim);
+        }
+    }
+
+    // Get the crop that's closest to a certain position.
+    public GameObject GetClosestViableCrop(Vector3 position)
+    {
+        GameObject closestObject = null;
+        float closestDistance = Mathf.Infinity;
+        foreach (GameObject crop in crops)
+        {
+            if (crop.GetComponent<PlantHealth>().GetIsGrown())
+            {
+                float distance = Vector3.Distance(position, crop.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestObject = crop;
+                }
+            }
+        }
+        return closestObject;
+    }
+
+    public int GetViableCropCount()
+    {
+        int count = 0;
+        foreach (GameObject crop in crops)
+        {
+            if (crop.GetComponent<PlantHealth>().GetIsGrown())
+            {
+                count += 1;
+            }
+        }
+        return count;
     }
 
     protected override void EventsSubscribe()

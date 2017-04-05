@@ -17,6 +17,8 @@ public class Village : LateInit
     public GameObject shrineObject;
     [Tooltip("Reference to the villager prefab.")]
     public GameObject villagerPrefab;
+    [Tooltip("Reference to the food controller instance.")]
+    public GameObject instanceFoodController;
 
     public delegate void VillagerDiedHandler(GameObject victim);
     public event VillagerDiedHandler VillagerDied;
@@ -47,8 +49,9 @@ public class Village : LateInit
         {
             // Instantiate a new villager.
             GameObject newVillager = Instantiate(villagerPrefab, trans.position, Quaternion.identity);
-            // Get the villager's movement component for assignment operations.
+            // Get the villager's relevant components for assignment operations.
             VillagerMovement vm = newVillager.GetComponent<VillagerMovement>();
+            VillagerStatus vs = newVillager.GetComponent<VillagerStatus>();
             // Assign the house to the villager.
             vm.houseTransform = trans;
             // Assign the shrine to the villager.
@@ -56,10 +59,12 @@ public class Village : LateInit
             vm.shrineObject = shrineObject;
             // Add the villager to the list of existing villagers.
             villagers.Add(newVillager);
-            // Subscribe to the villager's death event.
-            newVillager.GetComponent<VillagerStatus>().Died += VillagerStatus_Died;
+            // Pass the food controller to the villager.
+            vm.instanceFoodController = instanceFoodController;
+            vs.instanceFoodController = instanceFoodController;
             // Initialization time!
             vm.Init();
+            vs.Init();
         }
 
         base.Init();
@@ -80,6 +85,7 @@ public class Village : LateInit
     // Villager death event payload.
     private void VillagerStatus_Died(GameObject victim)
     {
+        //Debug.Log("Whoa! A villager DIED!!!");
         // Remove the villager from the villagers list.
         villagers.Remove(victim);
         // Notify subscribers about the villager's death.

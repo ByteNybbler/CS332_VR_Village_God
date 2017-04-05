@@ -16,17 +16,15 @@ public class Shrine : MonoBehaviour
     [Tooltip("How many points the shrine currently has.\n" +
     "Change this quantity in the inspector to change how many points the shrine starts off with.")]
     public int points = 0;
+    [Tooltip("Reference to the +x faith rising text creator component.")]
+    public RisingTextCreator rtcPlusPoints;
+    [Tooltip("Reference to the Not Enough Points rising text creator component.")]
+    public RisingTextCreator rtcNotEnoughPoints;
+    [Tooltip("Reference to the Spent x Points rising text creator component.")]
+    public RisingTextCreator rtcSpentPoints;
 
     // The quantity of charge (in charge seconds) that the shrine has yet to convert into points.
     private float chargeSeconds;
-
-    // Component references.
-    RisingTextCreator rtc;
-
-    private void Awake()
-    {
-        rtc = GetComponent<RisingTextCreator>();
-    }
 
     // Use this public function to add charge seconds to the shrine.
     // rootPosition is the spawn position of the +1.
@@ -39,8 +37,8 @@ public class Shrine : MonoBehaviour
             int additionalPoints = 1;
             points += additionalPoints;
             // Instantiate the +1 canvas.
-            rtc.message = "+" + additionalPoints + " faith";
-            rtc.CreateRisingText(rootPosition);
+            rtcPlusPoints.message = "+" + additionalPoints + " faith";
+            rtcPlusPoints.CreateRisingText(rootPosition);
 
 #if DEBUG_SHRINE_POINTS
             Debug.Log("Shrine points: " + points);
@@ -51,15 +49,21 @@ public class Shrine : MonoBehaviour
     // This function is used for buying stuff with the shrine's points.
     // If the player has enough points, those points will be spent and true will be returned.
     // Otherwise, return false.
-    public bool SpendPoints(int amount)
+    // amount is the number of points to be spent.
+    // location is the spawning location of the various points notifications.
+    public bool SpendPoints(int amount, Vector3 location)
     {
         if (points >= amount)
         {
             points -= amount;
+            rtcSpentPoints.message = "-" + amount + " faith";
+            rtcSpentPoints.CreateRisingText(location);
             return true;
         }
         else
         {
+            rtcNotEnoughPoints.message = "Not enough faith!";
+            rtcNotEnoughPoints.CreateRisingText(location);
             return false;
         }
     }

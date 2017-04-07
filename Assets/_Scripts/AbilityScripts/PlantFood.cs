@@ -41,7 +41,7 @@ public class PlantFood : LateInit
             Vector3 location;
             if (compCastRay.Cast(out location))
             {
-                if (compShrine.SpendPoints(10))
+                if (compShrine.SpendPoints(10, location))
                 {
                     GameObject cropInstance = Instantiate(prefabCrop, location, Quaternion.identity);
                     cropInstance.GetComponent<PlantHealth>().Died += PlantHealth_Died;

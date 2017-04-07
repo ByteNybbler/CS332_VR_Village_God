@@ -4,6 +4,7 @@
 // that needs to perform initialization after receiving the parameters.
 // All of this initialization should be contained in the Init() function,
 // which you should override in your own classes.
+// Use Init() instead of Start().
 
 using System.Collections;
 using System.Collections.Generic;

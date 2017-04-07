@@ -12,6 +12,8 @@ public class GameController : LateInit
     public GameObject enemyController;
     [Tooltip("Reference to the village instance.")]
     public GameObject village;
+    [Tooltip("The string that is the icon for XP.")]
+    public string xpString = "XP";
 
     // Component references.
     private XPLevels compLevels;
@@ -49,7 +51,7 @@ public class GameController : LateInit
         // Increment XP.
         compLevels.AddXP(xp);
         // Spawn XP text at the enemy position.
-        compRisingTextCreatorXP.message = "+" + xp + " XP";
+        compRisingTextCreatorXP.message = "+" + xp + " " + xpString;
         compRisingTextCreatorXP.CreateRisingText(enemy.transform.position);
     }
 

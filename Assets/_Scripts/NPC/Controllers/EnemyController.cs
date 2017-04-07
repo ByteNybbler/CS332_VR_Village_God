@@ -88,6 +88,9 @@ public class EnemyController : LateInit
 
     private void EnemyStatus_Died(GameObject enemy, int xp)
     {
+        // Remove the enemy from the enemies list.
+        enemies.Remove(enemy);
+        // Invoke the "enemy died" event.
         OnEnemyDied(enemy, xp);
     }
 

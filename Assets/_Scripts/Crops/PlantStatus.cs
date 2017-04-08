@@ -33,7 +33,7 @@ public class PlantStatus : MonoBehaviour
 
     private void Start()
     {
-        meter.SetInitialState(currentScale, maxScale);
+        meter.SetBothValues(currentScale, maxScale);
     }
 
     private void Update()
@@ -48,7 +48,7 @@ public class PlantStatus : MonoBehaviour
             {
                 isGrown = true;
             }
-            meter.SetValue(currentScale);
+            meter.SetCurrentValue(currentScale);
         }
     }
 

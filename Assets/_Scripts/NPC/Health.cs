@@ -21,43 +21,43 @@ public class Health : MonoBehaviour
     {
         if (meter != null)
         {
-            meter.SetInitialState(healthCurrent, healthMax);
+            meter.SetBothValues(healthCurrent, healthMax);
         }
     }
 
     public void Damage(float amount)
     {
         healthCurrent -= amount;
-        UpdateMeterValue();
+        UpdateMeterCurrentValue();
         CheckIfDead();
     }
 
     public void Heal(float amount)
     {
         healthCurrent += amount;
-        UpdateMeterValue();
         CapHealth();
+        UpdateMeterCurrentValue();
     }
 
     public void SetHealth(float amount)
     {
         healthCurrent = amount;
         CapHealth();
-        UpdateMeterValue();
+        UpdateMeterCurrentValue();
         CheckIfDead();
     }
 
     public void FullHeal()
     {
         healthCurrent = healthMax;
-        UpdateMeterValue();
+        UpdateMeterCurrentValue();
     }
 
     public void SetMaxHealth(float amount)
     {
         healthMax = amount;
         CapHealth();
-        UpdateMeterMaxValue();
+        UpdateMeterBothValues();
         CheckIfDead();
     }
 
@@ -65,7 +65,7 @@ public class Health : MonoBehaviour
     {
         healthMax += amount;
         CapHealth();
-        UpdateMeterMaxValue();
+        UpdateMeterBothValues();
         CheckIfDead();
     }
 
@@ -95,11 +95,11 @@ public class Health : MonoBehaviour
         }
     }
 
-    private void UpdateMeterValue()
+    private void UpdateMeterCurrentValue()
     {
         if (meter != null)
         {
-            meter.SetValue(healthCurrent);
+            meter.SetCurrentValue(healthCurrent);
         }
     }
 
@@ -109,5 +109,10 @@ public class Health : MonoBehaviour
         {
             meter.SetMaxValue(healthMax);
         }
+    }
+
+    private void UpdateMeterBothValues()
+    {
+        meter.SetBothValues(healthCurrent, healthMax);
     }
 }

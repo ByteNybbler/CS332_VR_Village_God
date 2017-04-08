@@ -90,14 +90,16 @@ public class Meter : MonoBehaviour
     }
 
     /// <summary>
-    /// Used to set the progress on the meter for the first time.
+    /// Sets both the current and maximum values of the meter.
+    /// Mainly used to set the progress on the meter for the first time.
+    /// This function is more efficient than calling SetCurrentValue and SetMaxValue separately.
     /// </summary>
-    /// <param name="startingValue">The initial current value of the meter.</param>
-    /// <param name="maxValue">The initial maximum value of the meter.</param>
-    public void SetInitialState(float startingValue, float maxValue)
+    /// <param name="newCurrentValue">The new current value of the meter.</param>
+    /// <param name="newMaxValue">The new maximum value of the meter.</param>
+    public void SetBothValues(float newCurrentValue, float newMaxValue)
     {
-        currentValue = startingValue;
-        SetMaxValue(maxValue);
+        currentValue = newCurrentValue;
+        SetMaxValue(newMaxValue);
     }
 
     /// <summary>
@@ -108,14 +110,14 @@ public class Meter : MonoBehaviour
     {
         percentPerUnitValue = maxPercentage / maxValue;
         // Now that we have a new percent per unit value, update the progress of the meter.
-        SetValue(currentValue);
+        SetCurrentValue(currentValue);
     }
 
     /// <summary>
     /// Set the current progress value of the meter.
     /// </summary>
     /// <param name="value">The new value.</param>
-    public void SetValue(float value)
+    public void SetCurrentValue(float value)
     {
         currentValue = value;
         currentPercentage = value * percentPerUnitValue;

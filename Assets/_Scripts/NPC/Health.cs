@@ -11,37 +11,62 @@ public class Health : MonoBehaviour
     public float healthMax;
     [Tooltip("The current health the object has.")]
     public float healthCurrent;
+    [Tooltip("Optional meter component for the health to interface with.")]
+    public Meter meter;
 
     public delegate void DiedHandler();
     public event DiedHandler Died;
 
-    private void Awake()
+    private void Start()
     {
-        healthCurrent = healthMax;
+        if (meter != null)
+        {
+            meter.SetInitialState(healthCurrent, healthMax);
+        }
     }
 
     public void Damage(float amount)
     {
         healthCurrent -= amount;
+        UpdateMeterValue();
         CheckIfDead();
     }
 
     public void Heal(float amount)
     {
         healthCurrent += amount;
+        UpdateMeterValue();
         CapHealth();
     }
 
     public void SetHealth(float amount)
     {
         healthCurrent = amount;
-        CheckIfDead();
         CapHealth();
+        UpdateMeterValue();
+        CheckIfDead();
     }
 
     public void FullHeal()
     {
         healthCurrent = healthMax;
+        UpdateMeterValue();
+    }
+
+    public void SetMaxHealth(float amount)
+    {
+        healthMax = amount;
+        CapHealth();
+        UpdateMeterMaxValue();
+        CheckIfDead();
+    }
+
+    public void AddMaxHealth(float amount)
+    {
+        healthMax += amount;
+        CapHealth();
+        UpdateMeterMaxValue();
+        CheckIfDead();
     }
 
     // Check if the health has run out, and if so, DIE!!!
@@ -67,6 +92,22 @@ public class Health : MonoBehaviour
         if (Died != null)
         {
             Died();
+        }
+    }
+
+    private void UpdateMeterValue()
+    {
+        if (meter != null)
+        {
+            meter.SetValue(healthCurrent);
+        }
+    }
+
+    private void UpdateMeterMaxValue()
+    {
+        if (meter != null)
+        {
+            meter.SetMaxValue(healthMax);
         }
     }
 }

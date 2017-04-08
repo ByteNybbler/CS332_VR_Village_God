@@ -61,7 +61,7 @@ public class VillagerMovement : LateInit
         shrinePosition = shrineObject.transform.position;
         // Set the agent's destination to the shrine first.
         agent.destination = shrinePosition;
-        // Get the PlantFood component.
+        // Get the PlantFood component of the food controller.
         compPlantFood = instanceFoodController.GetComponent<PlantFood>();
 
         base.Init();
@@ -108,12 +108,20 @@ public class VillagerMovement : LateInit
         {
             StopHuntingForFood();
         }
+        else
+        {
+            HuntForFood();
+        }
+    }
+
+    private void HuntForFood()
+    {
+        destinationIsFood = true;
     }
 
     private void StopHuntingForFood()
     {
         destinationIsFood = false;
-        timeIdled = 0f;
     }
 
     // Get the distance away from the agent's destination.
@@ -128,15 +136,8 @@ public class VillagerMovement : LateInit
         if (destinationIsFood)
         {
             // GET TO THE FOOD ROY
-            /*
-            if (cropTarget == null)
-            {
-                SetCropTargetToClosest();
-            }
-            else
-            {
-            */
             agent.destination = cropTarget.transform.position;
+            // If the villager is close enough to the crop...
             if (GetDestinationDistance() < cropEatDistance)
             {
                 // Eat a bit of the crop.
@@ -146,7 +147,6 @@ public class VillagerMovement : LateInit
                 // Return to normal activities.
                 StopHuntingForFood();
             }
-            //}
         }
         // If the villager is NOT heading towards food, head towards other things.
         else

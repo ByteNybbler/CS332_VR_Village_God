@@ -47,7 +47,7 @@ public class Meter : MonoBehaviour
     private GameObject meterBack;
     private GameObject meterBorder;
 
-    private void Start()
+    private void Awake()
     {
         meter = Instantiate(prefabMeter, transform.position + relativePosition, Quaternion.identity);
         // Set the meter's parent to this GameObject.
@@ -87,6 +87,17 @@ public class Meter : MonoBehaviour
         Vector3 offset = new Vector3(xOffset, 0f, 0f);
         //Debug.Log("SetPieceProperties offset: " + offset);
         rt.localPosition = offset;
+    }
+
+    /// <summary>
+    /// Used to set the progress on the meter for the first time.
+    /// </summary>
+    /// <param name="startingValue">The initial current value of the meter.</param>
+    /// <param name="maxValue">The initial maximum value of the meter.</param>
+    public void SetInitialState(float startingValue, float maxValue)
+    {
+        currentValue = startingValue;
+        SetMaxValue(maxValue);
     }
 
     /// <summary>

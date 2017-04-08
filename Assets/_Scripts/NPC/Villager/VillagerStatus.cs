@@ -42,32 +42,35 @@ public class VillagerStatus : LateInit
 
     private void Update()
     {
+        // Hunger damages the villager constantly over time.
         health.Damage(Time.deltaTime * hungerRate);
+
+        // If the villager needs food and food is present, set the food as a target.
         if (compVillagerMovement.destinationIsFood == false)
         {
             if (health.healthCurrent < fleeToCropAtThisHealth && compPlantFood.GetViableCropCount() != 0)
             {
-                compVillagerMovement.destinationIsFood = true;
                 compVillagerMovement.SetCropTargetToClosest();
             }
         }
 
-
+        /*
         if (health.healthCurrent < fleeToCropAtThisHealth)
         {
-            if (compPlantFood.GetViableCropCount() != 0)
+            if (compPlantFood.GetViableCropCount() == 0)
             {
-                compVillagerMovement.destinationIsFood = true;
+                compVillagerMovement.destinationIsFood = false;
             }
             else
             {
-                compVillagerMovement.destinationIsFood = false;
+                compVillagerMovement.destinationIsFood = true;
             }
         }
         else
         {
             compVillagerMovement.destinationIsFood = false;
         }
+        */
     }
 
     protected override void EventsSubscribe()

@@ -33,8 +33,7 @@ public class PlantStatus : MonoBehaviour
 
     private void Start()
     {
-        meter.SetValue(currentScale);
-        meter.SetMaxValue(maxScale);
+        meter.SetInitialState(currentScale, maxScale);
     }
 
     private void Update()

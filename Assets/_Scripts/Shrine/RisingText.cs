@@ -39,13 +39,13 @@ public class RisingText : MonoBehaviour
         {
             risingSpeed = 0f;
         }
+        // Update the text color.
+        text.color = new Color(text.color.r, text.color.g, text.color.b, alpha);
         // If enough time has passed...
         if (timePassed > alphaStartingSeconds)
         {
             // Decay the alpha.
             alpha -= alphaDecayRate * Time.deltaTime;
-            // Update the text color.
-            text.color = new Color(text.color.r, text.color.g, text.color.b, alpha);
             // Destroy the object when there's no alpha left.
             if (alpha < 0f)
             {

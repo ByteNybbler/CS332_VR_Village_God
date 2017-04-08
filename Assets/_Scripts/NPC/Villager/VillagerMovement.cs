@@ -140,7 +140,7 @@ public class VillagerMovement : LateInit
             if (GetDestinationDistance() < cropEatDistance)
             {
                 // Eat a bit of the crop.
-                cropTarget.GetComponent<PlantHealth>().DecreaseHealth();
+                cropTarget.GetComponent<PlantStatus>().DecreaseHealth();
                 // Restore all health.
                 compHealth.FullHeal();
                 // Return to normal activities.

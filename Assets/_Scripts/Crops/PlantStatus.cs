@@ -1,26 +1,56 @@
 ﻿// Author(s): Hunter Golden, Paul Calande
-// Plant health script.
+// Plant status script.
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlantHealth : MonoBehaviour
+public class PlantStatus : MonoBehaviour
 {
     [Tooltip("The current health of the plant.")]
     public int health = 10;
     [Tooltip("Reference to the crop stalks parent object.")]
     public GameObject stalks;
+    [Tooltip("The speed at which the plants grow.")]
+    public float rate;
+    [Tooltip("The maximum scale of the plant.")]
+    public float maxScale;
 
     public delegate void DiedHandler(GameObject victim);
     public event DiedHandler Died;
 
+    // Whether the plant is fully grown.
+    private bool isGrown = false;
+    // The current scale of the plant.
+    private float currentScale = 0f;
     // Component references.
-    private Crops compCrops;
+    Meter meter;
+
+    private void Awake()
+    {
+        meter = GetComponent<Meter>();
+    }
 
     private void Start()
     {
-        compCrops = stalks.GetComponent<Crops>();
+        meter.SetValue(currentScale);
+        meter.SetMaxValue(maxScale);
+    }
+
+    private void Update()
+    {
+        if (!isGrown)
+        {
+            float increase = rate * Time.deltaTime;
+            stalks.transform.localScale += Vector3.up * increase;
+            stalks.transform.position += (Vector3.up * increase) / 2;
+            currentScale += increase;
+            if (currentScale >= maxScale)
+            {
+                isGrown = true;
+            }
+            meter.SetValue(currentScale);
+        }
     }
 
     // Decrease plant health. This function is called each time a villager eats the crop.
@@ -40,7 +70,7 @@ public class PlantHealth : MonoBehaviour
     // Returns true if the crop is fully grown.
     public bool GetIsGrown()
     {
-        return compCrops.isGrown;
+        return isGrown;
     }
 
     private void Die()

@@ -1,5 +1,6 @@
 ﻿// Author(s): Paul Calande
 // Health script.
+// Arguments for these member functions are intended to only ever be positive.
 
 using System.Collections;
 using System.Collections.Generic;
@@ -47,10 +48,19 @@ public class Health : MonoBehaviour
         CheckIfDead();
     }
 
+    // Restore the current health to the max health.
     public void FullHeal()
     {
         healthCurrent = healthMax;
         UpdateMeterCurrentValue();
+    }
+
+    // Set the health to 0, causing death.
+    public void Die()
+    {
+        healthCurrent = 0f;
+        UpdateMeterCurrentValue();
+        OnDied();
     }
 
     public void SetMaxHealth(float amount)
@@ -64,6 +74,12 @@ public class Health : MonoBehaviour
     public void AddMaxHealth(float amount)
     {
         healthMax += amount;
+        UpdateMeterMaxValue();
+    }
+
+    public void SubtractMaxHealth(float amount)
+    {
+        healthMax -= amount;
         CapHealth();
         UpdateMeterBothValues();
         CheckIfDead();

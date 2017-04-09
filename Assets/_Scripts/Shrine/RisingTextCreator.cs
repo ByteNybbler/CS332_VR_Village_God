@@ -19,6 +19,7 @@ public class RisingTextCreator : MonoBehaviour
     public void CreateRisingText(Vector3 position)
     {
         // Instantiate the +1 canvas.
+		//Debug.Log(name + " is trying to create rising text!");
         GameObject plusOne = Instantiate(prefabRisingText, position + spawnOffset, Quaternion.identity);
         RisingText rt = plusOne.GetComponent<RisingText>();
         rt.SetTextString(message);

@@ -64,7 +64,8 @@ public class Shrine : MonoBehaviour
         }
         else
         {
-            rtcNotEnoughPoints.message = "Not enough faith!\n" + amount + " " + faithString + " needed.";
+			rtcNotEnoughPoints.message = "Need " + amount + " " + faithString;
+            //rtcNotEnoughPoints.message = "Not enough faith!\n" + amount + " " + faithString + " needed.";
             rtcNotEnoughPoints.CreateRisingText(location);
             return false;
         }

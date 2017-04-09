@@ -44,14 +44,14 @@ public class PlantFood : LateInit
                 if (compShrine.SpendPoints(10, location))
                 {
                     GameObject cropInstance = Instantiate(prefabCrop, location, Quaternion.identity);
-                    cropInstance.GetComponent<PlantHealth>().Died += PlantHealth_Died;
+                    cropInstance.GetComponent<PlantStatus>().Died += PlantStatus_Died;
                     crops.Add(cropInstance);
                 }
             }
         }
     }
 
-    private void PlantHealth_Died(GameObject victim)
+    private void PlantStatus_Died(GameObject victim)
     {
         crops.Remove(victim);
         OnCropDied(victim);
@@ -72,7 +72,7 @@ public class PlantFood : LateInit
         float closestDistance = Mathf.Infinity;
         foreach (GameObject crop in crops)
         {
-            if (crop.GetComponent<PlantHealth>().GetIsGrown())
+            if (crop.GetComponent<PlantStatus>().GetIsGrown())
             {
                 float distance = Vector3.Distance(position, crop.transform.position);
                 if (distance < closestDistance)
@@ -90,7 +90,7 @@ public class PlantFood : LateInit
         int count = 0;
         foreach (GameObject crop in crops)
         {
-            if (crop.GetComponent<PlantHealth>().GetIsGrown())
+            if (crop.GetComponent<PlantStatus>().GetIsGrown())
             {
                 count += 1;
             }
@@ -104,7 +104,7 @@ public class PlantFood : LateInit
         {
             if (crop != null)
             {
-                crop.GetComponent<PlantHealth>().Died += PlantHealth_Died;
+                crop.GetComponent<PlantStatus>().Died += PlantStatus_Died;
             }
         }
     }
@@ -115,7 +115,7 @@ public class PlantFood : LateInit
         {
             if (crop != null)
             {
-                crop.GetComponent<PlantHealth>().Died -= PlantHealth_Died;
+                crop.GetComponent<PlantStatus>().Died -= PlantStatus_Died;
             }
         }
     }

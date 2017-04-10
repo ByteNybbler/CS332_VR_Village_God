@@ -15,6 +15,10 @@ public class VillagerStatus : LateInit
     public float hungerRate;
     [Tooltip("The percentage of health the villager has remaining before it flees to a crop.")]
     public float fleeToCropHealthRatio;
+    [Tooltip("Rising text creator for healing.")]
+    public RisingTextCreator rtcHealed;
+    [Tooltip("Rising text creator for damage.")]
+    public RisingTextCreator rtcDamaged;
 
     public delegate void DiedHandler(GameObject victim);
     public event DiedHandler Died;
@@ -23,12 +27,14 @@ public class VillagerStatus : LateInit
 
     // Component references.
     private Health health;
+    private NPCHealth npchealth;
     private PlantFood compPlantFood;
     private VillagerMovement compVillagerMovement;
 
     private void Awake()
     {
         health = GetComponent<Health>();
+        npchealth = GetComponent<NPCHealth>();
         fleeToCropAtThisHealth = health.healthMax * fleeToCropHealthRatio;
         compVillagerMovement = GetComponent<VillagerMovement>();
     }
@@ -53,42 +59,22 @@ public class VillagerStatus : LateInit
                 compVillagerMovement.SetCropTargetToClosest();
             }
         }
-
-        /*
-        if (health.healthCurrent < fleeToCropAtThisHealth)
-        {
-            if (compPlantFood.GetViableCropCount() == 0)
-            {
-                compVillagerMovement.destinationIsFood = false;
-            }
-            else
-            {
-                compVillagerMovement.destinationIsFood = true;
-            }
-        }
-        else
-        {
-            compVillagerMovement.destinationIsFood = false;
-        }
-        */
     }
 
     protected override void EventsSubscribe()
     {
-        health.Died += Health_Died;
+        npchealth.Died += NPCHealth_Died;
     }
     protected override void EventsUnsubscribe()
     {
-        health.Died -= Health_Died;
+        npchealth.Died -= NPCHealth_Died;
     }
 
     // Health death event payload.
-    private void Health_Died()
+    private void NPCHealth_Died()
     {
-        // Call the villager death event.
+        // Invoke the villager death event.
         OnDied(gameObject);
-        // Destroy this villager.
-        Destroy(gameObject);
     }
 
     private void OnDied(GameObject obj)

@@ -18,12 +18,12 @@ public class EnemyStatus : LateInit
     public event DiedHandler Died;
 
     // Component references.
-    private Health health;
+    private NPCHealth npchealth;
     private EnemyMovement cmpEnemyMovement;
 
     private void Awake()
     {
-        health = GetComponent<Health>();
+        npchealth = GetComponent<NPCHealth>();
         cmpEnemyMovement = GetComponent<EnemyMovement>();
     }
 
@@ -35,41 +35,13 @@ public class EnemyStatus : LateInit
 
     protected override void EventsSubscribe()
     {
-        health.Died += Health_Died;
+        npchealth.Died += NPCHealth_Died;
         village.VillagerDied += Village_VillagerDied;
     }
     protected override void EventsUnsubscribe()
     {
-        health.Died -= Health_Died;
+        npchealth.Died -= NPCHealth_Died;
         village.VillagerDied -= Village_VillagerDied;
-    }
-
-    private void OnDied(GameObject obj, int xp)
-    {
-        if (Died != null)
-        {
-            Died(obj, xp);
-        }
-    }
-
-    // Health death event payload.
-    private void Health_Died()
-    {
-        // Invoke this enemy's death event.
-        OnDied(gameObject, xpOnKill);
-        // Destroy the enemy.
-        Destroy(gameObject);
-    }
-
-    // Event payload for when the target villager dies.
-    private void Village_VillagerDied(GameObject victim)
-    {
-        // If the current target was removed from the villager list...
-        if (victim == cmpEnemyMovement.target)
-        {
-            // Choose a new target.
-            SetRandomTarget();
-        }
     }
 
     // Choose a certain villager to target.
@@ -82,5 +54,31 @@ public class EnemyStatus : LateInit
     public void SetRandomTarget()
     {
         SetTarget(village.GetRandomVillager());
+    }
+
+    // NPC health death event payload.
+    private void NPCHealth_Died()
+    {
+        // Invoke this enemy's death event.
+        OnDied(gameObject, xpOnKill);
+    }
+
+    // Event payload for when a villager dies.
+    private void Village_VillagerDied(GameObject victim)
+    {
+        // If the current target was removed from the villager list...
+        if (victim == cmpEnemyMovement.target)
+        {
+            // Choose a new target.
+            SetRandomTarget();
+        }
+    }
+
+    private void OnDied(GameObject obj, int xp)
+    {
+        if (Died != null)
+        {
+            Died(obj, xp);
+        }
     }
 }

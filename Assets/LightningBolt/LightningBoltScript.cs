@@ -78,6 +78,12 @@ namespace DigitalRuby.LightningBolt
         [Tooltip("The animation mode for the lightning")]
         public LightningBoltAnimationMode AnimationMode = LightningBoltAnimationMode.PingPong;
 
+		[Tooltip("The particle effect to be created on the lightning bolt end location.")]
+		public ParticleSystem LightningBlast;
+
+		[Tooltip("The area that the lightning damages objects")]
+		public GameObject AreaOfEffect;
+
         /// <summary>
         /// Assign your own random if you want to have the same lightning appearance
         /// </summary>
@@ -346,7 +352,8 @@ namespace DigitalRuby.LightningBolt
 
                     startIndex = 0;
                     GenerateLightningBolt(start, end, Generations, Generations, 0.0f);
-
+					Instantiate(LightningBlast, end , Quaternion.identity);
+					Instantiate (AreaOfEffect, end, Quaternion.identity);
                     UpdateLineRenderer();
                 }
             }

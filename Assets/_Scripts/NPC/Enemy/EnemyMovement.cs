@@ -15,18 +15,13 @@ public class EnemyMovement : MonoBehaviour
     public float damageDistance;
     [Tooltip("How many seconds between each attempt to damage the villager.")]
     public float timeBetweenAttacks;
-    [Tooltip("The string that is the icon for HP.")]
-    public string hpString = "HP";
 
     // Component references.
     private NavMeshAgent agent;
-    // RisingTextCreator for damage text.
-    private RisingTextCreator rtcDamage;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        rtcDamage = GetComponent<RisingTextCreator>();
     }
 
     private void Update()
@@ -44,6 +39,11 @@ public class EnemyMovement : MonoBehaviour
         StartCoroutine(TryToDealDamage());
     }
 
+    private void OnDisable()
+    {
+        StopCoroutine(TryToDealDamage());
+    }
+
     IEnumerator TryToDealDamage()
     {
         while (true)
@@ -57,9 +57,6 @@ public class EnemyMovement : MonoBehaviour
                 {
                     Health compVillagerHealth = target.GetComponent<Health>();
                     float damage = 1f;
-                    // Create the damage text.
-                    rtcDamage.message = "-" + (int)damage + " " + hpString;
-                    rtcDamage.CreateRisingText(target.transform.position);
                     // Damage the target.
                     compVillagerHealth.Damage(damage);
                 }

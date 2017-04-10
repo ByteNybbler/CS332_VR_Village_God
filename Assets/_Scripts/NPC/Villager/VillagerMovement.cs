@@ -67,22 +67,6 @@ public class VillagerMovement : LateInit
         base.Init();
     }
 
-    protected override void OnEnable()
-    {
-        if (isInitialized)
-        {
-            if (destinationIsShrine)
-            {
-                agent.destination = shrinePosition;
-            }
-            else
-            {
-                agent.destination = housePosition;
-            }
-        }
-        base.OnEnable();
-    }
-
     protected override void EventsSubscribe()
     {
         compPlantFood.CropDied += PlantFood_CropDied;

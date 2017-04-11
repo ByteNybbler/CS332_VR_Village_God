@@ -1,6 +1,9 @@
 ﻿// Author(s): Hunter Golden, Paul Calande
 // Raycast script for VR Mountain God.
 
+// Comment out the following line to prevent CastRay.cs debug messages.
+//#define CASTRAY_DEBUG
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,12 +18,16 @@ public class CastRay : MonoBehaviour
     // Also takes a hit location as an out parameter.
     public bool Cast(out Vector3 location)
     {
-		Debug.DrawRay (transform.position, transform.forward, Color.green);
-        RaycastHit RayCastData;
-        if (Physics.Raycast(transform.position, transform.forward, out RayCastData, Mathf.Infinity, layerMasks))
+#if CASTRAY_DEBUG
+        Debug.DrawRay(transform.position, transform.forward, Color.green);
+#endif
+        RaycastHit rayCastData;
+        if (Physics.Raycast(transform.position, transform.forward, out rayCastData, Mathf.Infinity, layerMasks))
         {
-            Debug.Log("Hit At point: " + RayCastData.point);
-            location = RayCastData.point;
+#if CASTRAY_DEBUG
+            Debug.Log("CastRay: Hit at point: " + rayCastData.point);
+#endif
+            location = rayCastData.point;
             return true;
         }
         else
@@ -29,4 +36,4 @@ public class CastRay : MonoBehaviour
             return false;
         }
 	}
-}	
+}

@@ -22,8 +22,8 @@ public class VillagerMovement : LateInit
     [Tooltip("Reference to the shrine instance.\n" +
     "This reference is populated automatically by the Village class.")]
     public GameObject shrineObject;
-    [Tooltip("Reference to the food controller instance.")]
-    public GameObject instanceFoodController;
+    [Tooltip("Reference to the ability controller instance.")]
+    public GameObject instanceAbilityController;
     [Tooltip("Whether the agent is currently heading towards food. Overrides the other destinations.")]
     public bool destinationIsFood = false;
     [Tooltip("How close the villager must be to the crop in order to eat it.")]
@@ -62,7 +62,7 @@ public class VillagerMovement : LateInit
         // Set the agent's destination to the shrine first.
         agent.destination = shrinePosition;
         // Get the PlantFood component of the food controller.
-        compPlantFood = instanceFoodController.GetComponent<PlantFood>();
+        compPlantFood = instanceAbilityController.GetComponent<PlantFood>();
 
         base.Init();
     }

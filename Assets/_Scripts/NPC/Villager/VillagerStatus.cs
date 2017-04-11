@@ -9,8 +9,8 @@ using UnityEngine;
 [RequireComponent (typeof (VillagerMovement))]
 public class VillagerStatus : LateInit
 {
-    [Tooltip("Reference to the food controller object.")]
-    public GameObject instanceFoodController;
+    [Tooltip("Reference to the ability controller object.")]
+    public GameObject instanceAbilityController;
     [Tooltip("The rate at which the villager gets hungrier. Larger = faster.")]
     public float hungerRate;
     [Tooltip("The percentage of health the villager has remaining before it flees to a crop.")]
@@ -41,7 +41,7 @@ public class VillagerStatus : LateInit
 
     public override void Init()
     {
-        compPlantFood = instanceFoodController.GetComponent<PlantFood>();
+        compPlantFood = instanceAbilityController.GetComponent<PlantFood>();
 
         base.Init();
     }

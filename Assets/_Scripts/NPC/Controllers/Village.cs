@@ -17,8 +17,8 @@ public class Village : LateInit
     public GameObject shrineObject;
     [Tooltip("Reference to the villager prefab.")]
     public GameObject villagerPrefab;
-    [Tooltip("Reference to the food controller instance.")]
-    public GameObject instanceFoodController;
+    [Tooltip("Reference to the ability controller instance.")]
+    public GameObject instanceAbilityController;
 
     public delegate void VillagerDiedHandler(GameObject victim);
     public event VillagerDiedHandler VillagerDied;
@@ -60,8 +60,8 @@ public class Village : LateInit
             // Add the villager to the list of existing villagers.
             villagers.Add(newVillager);
             // Pass the food controller to the villager.
-            vm.instanceFoodController = instanceFoodController;
-            vs.instanceFoodController = instanceFoodController;
+            vm.instanceAbilityController = instanceAbilityController;
+            vs.instanceAbilityController = instanceAbilityController;
             // Initialization time!
             vm.Init();
             vs.Init();

@@ -1,5 +1,5 @@
 ﻿// Author(s): Paul Calande
-// ZA WARUDO!!!
+// Script for the ability to stop time. ZA WARUDO!!!
 
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +11,12 @@ public class TimeStop : MonoBehaviour
     public int cost;
     [Tooltip("The audio source to use for the time stop sound effect.")]
     public AudioSource cAudioSource;
+    [Tooltip("Audio clip for time stopping.")]
+    public AudioClip soundTimeStop;
+    [Tooltip("Audio clip for time resuming.")]
+    public AudioClip soundTimeResume;
+    [Tooltip("How many seconds the timestop lasts.")]
+    public float timeStopLength = 5.0f;
 
     // Component references.
     private AbilityInterface cai;
@@ -27,8 +33,22 @@ public class TimeStop : MonoBehaviour
         {
             if (cai.shrine.SpendPoints(cost, location))
             {
-                cAudioSource.PlayOneShot(cAudioSource.clip);
+                cAudioSource.PlayOneShot(soundTimeStop);
+                StartCoroutine(StopTimeCountdown());
             }
         }
+    }
+
+    IEnumerator StopTimeCountdown()
+    {
+        yield return new WaitForSeconds(timeStopLength);
+        ResumeTime();
+    }
+
+    private void ResumeTime()
+    {
+        cAudioSource.PlayOneShot(soundTimeResume);
+
+        // Set time back into motion!
     }
 }

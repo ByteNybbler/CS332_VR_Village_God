@@ -35,24 +35,29 @@ public class LightningAbility : MonoBehaviour
         {
             if (cai.shrine.SpendPoints(cost, location))
             {
-                // Calculate the lightning's start and end points.
-                Vector3 start, end;
-                Vector3 additionalY = new Vector3(0f, lightningHeight, 0f);
-                start = location + additionalY;
-                end = location;
-
-                // Interface with the third-party lightning script to create the lightning itself.
-                compLightning.StartPosition = start;
-                compLightning.EndPosition = end;
-                compLightning.Trigger();
-
-                // Play a lightning sound.
-                compSoundArray.PlayRandomSound();
-
-                // Instantiate the particles and area of effect object.
-                Instantiate(lightningBlast, end, Quaternion.identity);
-                Instantiate(areaOfEffect, end, Quaternion.identity);
+                SpawnLightningAt(location);
             }
         }
+    }
+
+    public void SpawnLightningAt(Vector3 location)
+    {
+        // Calculate the lightning's start and end points.
+        Vector3 start, end;
+        Vector3 additionalY = new Vector3(0f, lightningHeight, 0f);
+        start = location + additionalY;
+        end = location;
+
+        // Interface with the third-party lightning script to create the lightning itself.
+        compLightning.StartPosition = start;
+        compLightning.EndPosition = end;
+        compLightning.Trigger();
+
+        // Play a lightning sound.
+        compSoundArray.PlayRandomSound();
+
+        // Instantiate the particles and area of effect object.
+        Instantiate(lightningBlast, end, Quaternion.identity);
+        Instantiate(areaOfEffect, end, Quaternion.identity);
     }
 }

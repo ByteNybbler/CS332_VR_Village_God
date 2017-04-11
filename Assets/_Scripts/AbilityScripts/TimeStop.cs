@@ -9,14 +9,14 @@ public class TimeStop : MonoBehaviour
 {
     [Tooltip("How many points the ability costs.")]
     public int cost;
+    [Tooltip("How many seconds the timestop lasts.")]
+    public float timeStopLength = 5.0f;
     [Tooltip("The audio source to use for the time stop sound effect.")]
     public AudioSource cAudioSource;
     [Tooltip("Audio clip for time stopping.")]
     public AudioClip soundTimeStop;
     [Tooltip("Audio clip for time resuming.")]
     public AudioClip soundTimeResume;
-    [Tooltip("How many seconds the timestop lasts.")]
-    public float timeStopLength = 5.0f;
 
     // Component references.
     private AbilityInterface cai;

@@ -48,6 +48,8 @@ public class LightningAbility : MonoBehaviour
         start = location + additionalY;
         end = location;
 
+        //Debug.Log("Lightning StartObject/EndObject: " + compLightning.StartObject + ", " + compLightning.EndObject);
+
         // Interface with the third-party lightning script to create the lightning itself.
         compLightning.StartPosition = start;
         compLightning.EndPosition = end;

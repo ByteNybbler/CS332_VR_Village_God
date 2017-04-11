@@ -15,6 +15,9 @@ public class GameController : LateInit
     [Tooltip("The string that is the icon for XP.")]
     public string xpString = "XP";
 
+    // The timescale of the game.
+    //private float timeScale = 1f;
+
     // Component references.
     private XPLevels compLevels;
     private Village compVillage;

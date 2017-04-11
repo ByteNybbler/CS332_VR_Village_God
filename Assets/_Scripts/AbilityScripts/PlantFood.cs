@@ -9,12 +9,10 @@ public class PlantFood : LateInit
 {
     [Tooltip("Crop prefab reference.")]
     public GameObject prefabCrop;
-    [Tooltip("Shrine instance reference.")]
-    public GameObject instanceShrine;
-    [Tooltip("Reference to the controller script which summons the crops.")]
-    public GameObject locationObj;
     [Tooltip("The maximum number of crops that can exist in the scene at once.")]
     public int maxNumberOfCrops = 10;
+    [Tooltip("How many faith points it costs to plant a crop.")]
+    public int cost = 10;
 
     public delegate void CropDiedHandler(GameObject victim);
     public event CropDiedHandler CropDied;
@@ -23,15 +21,11 @@ public class PlantFood : LateInit
     private List<GameObject> crops = new List<GameObject>();
 
     // Component references.
-    private Shrine compShrine;
-    private CastRay compCastRay;
+    private AbilityInterface cai;
 
-    public override void Init()
+    private void Awake()
     {
-        compShrine = instanceShrine.GetComponent<Shrine>();
-        compCastRay = locationObj.GetComponent<CastRay>();
-
-        base.Init();
+        cai = GetComponent<AbilityInterface>();
     }
 
     public void MakeFood()
@@ -39,9 +33,9 @@ public class PlantFood : LateInit
         if (crops.Count < maxNumberOfCrops)
         {
             Vector3 location;
-            if (compCastRay.Cast(out location))
+            if (cai.castRayLeftController.Cast(out location))
             {
-                if (compShrine.SpendPoints(10, location))
+                if (cai.shrine.SpendPoints(cost, location))
                 {
                     GameObject cropInstance = Instantiate(prefabCrop, location, Quaternion.identity);
                     cropInstance.GetComponent<PlantStatus>().Died += PlantStatus_Died;

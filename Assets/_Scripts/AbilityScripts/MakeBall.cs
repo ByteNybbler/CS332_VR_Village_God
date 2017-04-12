@@ -22,6 +22,13 @@ public class MakeBall : MonoBehaviour
 
     public void SpawnBall()
     {
-        
+        Vector3 location;
+        if (cai.castRayRightController.Cast(out location))
+        {
+            if (cai.shrine.SpendPoints(cost, location))
+            {
+                Instantiate(prefabBallOfDeath, location, Quaternion.identity);
+            }
+        }
     }
 }

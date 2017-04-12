@@ -26,30 +26,40 @@ public class NPCInteract : VRTK_InteractableObject
         base.Awake();
         agent = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
-        SetBehavior(true);
+        SetKinematicEnabled(true);
     }
 
     public override void Grabbed(GameObject currentGrabbingObject)
     {
         base.Grabbed(currentGrabbingObject);
-        SetBehavior(false);
+        SetAgentEnabled(false);
+        SetKinematicEnabled(true);
         StopAllCoroutines();
     }
 
     public override void Ungrabbed(GameObject previousGrabbingObject)
     {
         base.Ungrabbed(previousGrabbingObject);
+        SetKinematicEnabled(false);
         StartCoroutine(TryToEnableAgent());
     }
 
     /// <summary>
-    /// Set the behavior state of the NPC.
+    /// Set the agent and movement behavior state of the NPC.
     /// </summary>
-    /// <param name="isEnabled">True for agent component to be enabled and rigidbody to be disabled.</param>
-    private void SetBehavior(bool isEnabled)
+    /// <param name="isEnabled">True for agent and movement to be enabled, false to be disabled.</param>
+    private void SetAgentEnabled(bool isEnabled)
     {
         agent.enabled = isEnabled;
         movementComponent.enabled = isEnabled;
+    }
+
+    /// <summary>
+    /// Set the rigidbody's kinematic state.
+    /// </summary>
+    /// <param name="isEnabled"></param>
+    private void SetKinematicEnabled(bool isEnabled)
+    {
         rb.isKinematic = isEnabled;
         //rb.detectCollisions = !isEnabled;
     }
@@ -64,7 +74,8 @@ public class NPCInteract : VRTK_InteractableObject
             if (NavMesh.SamplePosition(transform.position, out hit, enableAgentDistance, NavMesh.AllAreas))
             {
                 transform.position = hit.position;
-                SetBehavior(true);
+                SetAgentEnabled(true);
+                SetKinematicEnabled(true);
                 break;
             }
             else

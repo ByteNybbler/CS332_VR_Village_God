@@ -27,11 +27,12 @@ public class RisingText : MonoBehaviour
 
     private void Update()
     {
+        float deltaTimeFixed = Time.deltaTime / Time.timeScale;
         // Calculate the canvas' new position.
         Vector3 newpos = transform.position;
-        newpos.y += risingSpeed * Time.deltaTime;
+        newpos.y += risingSpeed * deltaTimeFixed;
         // Decrease the rising speed.
-        risingSpeed -= risingSpeedDecayRate * Time.deltaTime;
+        risingSpeed -= risingSpeedDecayRate * deltaTimeFixed;
         // Update the position.
         transform.position = newpos;
         // Cap the rising speed with a minimum of 0.
@@ -45,7 +46,7 @@ public class RisingText : MonoBehaviour
         if (timePassed > alphaStartingSeconds)
         {
             // Decay the alpha.
-            alpha -= alphaDecayRate * Time.deltaTime;
+            alpha -= alphaDecayRate * deltaTimeFixed;
             // Destroy the object when there's no alpha left.
             if (alpha < 0f)
             {
@@ -54,7 +55,7 @@ public class RisingText : MonoBehaviour
         }
         else
         {
-            timePassed += Time.deltaTime;
+            timePassed += deltaTimeFixed;
         }
     }
 

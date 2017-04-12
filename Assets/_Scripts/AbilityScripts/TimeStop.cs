@@ -8,7 +8,7 @@ using UnityEngine;
 public class TimeStop : MonoBehaviour
 {
     [Tooltip("How many points the ability costs.")]
-    public int cost;
+    public int cost = 100;
     [Tooltip("How many seconds the timestop lasts.")]
     public float timeStopLength = 10f;
     [Tooltip("The audio source to use for the time stop sound effect.")]
@@ -52,7 +52,7 @@ public class TimeStop : MonoBehaviour
 
     IEnumerator StopTimeCountdown()
     {
-        yield return new WaitForSeconds(timeStopLength);
+        yield return new WaitForSeconds(timeStopLength * Time.timeScale);
         ResumeTime();
     }
 

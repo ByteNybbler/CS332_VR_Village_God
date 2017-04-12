@@ -18,20 +18,15 @@ public class HealthTrigger : MonoBehaviour
     public float amount = 1f;
     [Tooltip("Seconds between each attempt to influence the object inside the trigger.")]
     public float timeBetweenFires = 0.5f;
+    [Tooltip("The collider that's connected to this HealthTrigger.")]
+    public Collider compCollider;
 
     public delegate void DisabledHandler(Collider col);
     public event DisabledHandler Disabled;
 
-    // Component references.
-    private Collider compCollider;
-
-    private void Awake()
-    {
-        compCollider = GetComponent<Collider>();
-    }
-
     private void OnDisable()
     {
+        //Debug.Log("HealthTrigger OnDisable()");
         OnDisabled(compCollider);
     }
 

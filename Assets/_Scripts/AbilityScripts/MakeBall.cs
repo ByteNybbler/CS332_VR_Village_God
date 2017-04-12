@@ -5,15 +5,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MakeBall : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+public class MakeBall : MonoBehaviour
+{
+    [Tooltip("Ball of death prefab to instantiate.")]
+    public GameObject prefabBallOfDeath;
 }

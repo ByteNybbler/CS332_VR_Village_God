@@ -51,7 +51,7 @@ public class NPCInteract : VRTK_InteractableObject
         agent.enabled = isEnabled;
         movementComponent.enabled = isEnabled;
         rb.isKinematic = isEnabled;
-        rb.detectCollisions = !isEnabled;
+        //rb.detectCollisions = !isEnabled;
     }
 
     // Coroutine to try to turn the agent and NPC movement components back on.

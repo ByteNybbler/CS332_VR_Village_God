@@ -19,11 +19,14 @@ public class NPCInteract : VRTK_InteractableObject
 
     // Component references.
     private NavMeshAgent agent;
+    private Rigidbody rb;
 
     protected override void Awake()
     {
         base.Awake();
         agent = GetComponent<NavMeshAgent>();
+        rb = GetComponent<Rigidbody>();
+        SetBehavior(true);
     }
 
     public override void Grabbed(GameObject currentGrabbingObject)
@@ -39,10 +42,16 @@ public class NPCInteract : VRTK_InteractableObject
         StartCoroutine(TryToEnableAgent());
     }
 
+    /// <summary>
+    /// Set the behavior state of the NPC.
+    /// </summary>
+    /// <param name="isEnabled">True for agent component to be enabled and rigidbody to be disabled.</param>
     private void SetBehavior(bool isEnabled)
     {
         agent.enabled = isEnabled;
         movementComponent.enabled = isEnabled;
+        rb.isKinematic = isEnabled;
+        rb.detectCollisions = !isEnabled;
     }
 
     // Coroutine to try to turn the agent and NPC movement components back on.

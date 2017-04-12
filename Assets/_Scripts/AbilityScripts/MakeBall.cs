@@ -27,7 +27,11 @@ public class MakeBall : MonoBehaviour
         {
             if (cai.shrine.SpendPoints(cost, location))
             {
-                Instantiate(prefabBallOfDeath, location, Quaternion.identity);
+                // Calculate the required y offset so that the Ball of Death doesn't spawn halfway into the ground.
+                float yOffset = prefabBallOfDeath.transform.localScale.y * 0.5f;
+                Vector3 creationLocation = new Vector3(location.x, location.y + yOffset, location.z);
+                // Instantiate the Ball of Death accordingly.
+                Instantiate(prefabBallOfDeath, creationLocation, Quaternion.identity);
             }
         }
     }

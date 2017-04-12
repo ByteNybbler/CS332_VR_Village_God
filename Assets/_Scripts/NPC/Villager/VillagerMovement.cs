@@ -26,8 +26,10 @@ public class VillagerMovement : LateInit
     public GameObject instanceAbilityController;
     [Tooltip("Whether the agent is currently heading towards food. Overrides the other destinations.")]
     public bool destinationIsFood = false;
-    [Tooltip("How close the villager must be to the crop in order to eat it.")]
+    [Tooltip("How close the villager must be to a crop in order to eat it.")]
     public float cropEatDistance;
+    [Tooltip("The current crop that the villager is heading towards.")]
+    public GameObject cropTarget = null;
 
     // How many seconds the villager has spent idling.
     private float timeIdled = 0f;
@@ -37,13 +39,10 @@ public class VillagerMovement : LateInit
     private Vector3 shrinePosition;
     // Whether the agent's current destination is the shrine.
     private bool destinationIsShrine = true;
-    // The current crop that the villager is heading towards.
-    private GameObject cropTarget = null;
 
     // Component references.
     private NavMeshAgent agent;
     private Shrine shrine;
-    private PlantFood compPlantFood;
     private Health compHealth;
 
     private void Awake()
@@ -60,55 +59,12 @@ public class VillagerMovement : LateInit
         housePosition = houseTransform.position;
         shrinePosition = shrineObject.transform.position;
         // Set the agent's destination to the shrine first.
-        agent.destination = shrinePosition;
-        // Get the PlantFood component of the food controller.
-        compPlantFood = instanceAbilityController.GetComponent<PlantFood>();
+        //agent.destination = shrinePosition;
 
         base.Init();
     }
 
-    protected override void EventsSubscribe()
-    {
-        compPlantFood.CropDied += PlantFood_CropDied;
-    }
-    protected override void EventsUnsubscribe()
-    {
-        compPlantFood.CropDied -= PlantFood_CropDied;
-    }
-
-    private void PlantFood_CropDied(GameObject victim)
-    {
-        if (victim == cropTarget)
-        {
-            SetCropTargetToClosest();
-        }
-    }
-
-    // Set the closest crop to the villager as the target.
-    public void SetCropTargetToClosest()
-    {
-        cropTarget = compPlantFood.GetClosestViableCrop(transform.position);
-        if (cropTarget == null)
-        {
-            StopHuntingForFood();
-        }
-        else
-        {
-            HuntForFood();
-        }
-    }
-
-    private void HuntForFood()
-    {
-        destinationIsFood = true;
-    }
-
-    private void StopHuntingForFood()
-    {
-        destinationIsFood = false;
-    }
-
-    // Get the distance away from the agent's destination.
+    // Get the distance the agent is away from its destination.
     private float GetDestinationDistance()
     {
         return Vector3.Distance(transform.position, agent.destination);
@@ -129,7 +85,8 @@ public class VillagerMovement : LateInit
                 // Restore all health.
                 compHealth.FullHeal();
                 // Return to normal activities.
-                StopHuntingForFood();
+                cropTarget = null;
+                destinationIsFood = false;
             }
         }
         // If the villager is NOT heading towards food, head towards other things.
@@ -138,6 +95,7 @@ public class VillagerMovement : LateInit
             // If the villager is targeting the shrine...
             if (destinationIsShrine)
             {
+                agent.destination = shrinePosition;
                 // If the villager is within shrine charging distance...
                 if (GetDestinationDistance() < shrineChargeDistance)
                 {
@@ -152,12 +110,13 @@ public class VillagerMovement : LateInit
                     // Reset the idle time and start heading to the house.
                     timeIdled = 0f;
                     destinationIsShrine = false;
-                    agent.destination = housePosition;
+                    //agent.destination = housePosition;
                 }
             }
             // If the villager is targeting the house...
             else
             {
+                agent.destination = housePosition;
                 // If the villager is close enough to the house destination to be considered idling...
                 if (GetDestinationDistance() < houseDestinationDistance)
                 {
@@ -170,7 +129,7 @@ public class VillagerMovement : LateInit
                     // Reset the idle time and start heading to the shrine.
                     timeIdled = 0f;
                     destinationIsShrine = true;
-                    agent.destination = shrinePosition;
+                    //agent.destination = shrinePosition;
                 }
             }
         }

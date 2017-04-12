@@ -9,4 +9,19 @@ public class MakeBall : MonoBehaviour
 {
     [Tooltip("Ball of death prefab to instantiate.")]
     public GameObject prefabBallOfDeath;
+    [Tooltip("The cost of the Ball of Death.")]
+    public int cost = 25;
+
+    // Component references.
+    private AbilityInterface cai;
+
+    private void Awake()
+    {
+        cai = GetComponent<AbilityInterface>();
+    }
+
+    public void SpawnBall()
+    {
+        
+    }
 }

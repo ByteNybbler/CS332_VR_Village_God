@@ -158,6 +158,7 @@ public class Health : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        //Debug.Log("Health: Entered trigger.");
         HealthTrigger ht = other.GetComponent<HealthTrigger>();
         // If the other object has a HealthTrigger...
         if (ht != null)
@@ -227,6 +228,7 @@ public class Health : MonoBehaviour
     {
         while (true)
         {
+            //Debug.Log("TriggerHurt timer: " + timeBetweenFires * Time.timeScale);
             Damage(amount);
             yield return new WaitForSeconds(timeBetweenFires);
         }

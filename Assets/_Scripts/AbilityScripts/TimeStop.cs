@@ -21,6 +21,11 @@ public class TimeStop : MonoBehaviour
     //[Tooltip("Whether or not time is currently stopped.")]
     //public bool timeIsStopped = false;
 
+    public delegate void TimeStoppedHandler();
+    public event TimeStoppedHandler TimeStopped;
+    public delegate void TimeResumedHandler();
+    public event TimeResumedHandler TimeResumed;
+
     // Component references.
     private AbilityInterface cai;
 
@@ -46,6 +51,7 @@ public class TimeStop : MonoBehaviour
         cAudioSource.PlayOneShot(soundTimeStop);
         // Stop time!
         Time.timeScale = 0.00001f;
+        OnTimeStopped();
         // Start the coroutine that will resume time after a while.
         StartCoroutine(StopTimeCountdown());
     }
@@ -61,10 +67,27 @@ public class TimeStop : MonoBehaviour
         cAudioSource.PlayOneShot(soundTimeResume);
         // Set time back into motion!
         Time.timeScale = 1f;
+        OnTimeResumed();
     }
 
     private void OnDisable()
     {
         ResumeTime();
+    }
+
+    private void OnTimeStopped()
+    {
+        if (TimeStopped != null)
+        {
+            TimeStopped();
+        }
+    }
+
+    private void OnTimeResumed()
+    {
+        if (TimeResumed != null)
+        {
+            TimeResumed();
+        }
     }
 }

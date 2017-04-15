@@ -7,6 +7,6 @@ public class RotateAround : MonoBehaviour {
 	//Script that rotates a gameObject around its origin
 
 	void Update () {
-		gameObject.transform.RotateAround (gameObject.transform.position, Vector3.right, 30 * Time.deltaTime);
+		gameObject.transform.RotateAround (gameObject.transform.position, Vector3.right, 15 * Time.deltaTime);
 	}
 }

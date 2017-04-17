@@ -8,12 +8,12 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
+    [SerializeField]
     [Tooltip("The maximum health the object can have.")]
-    public float healthMax;
+    private float healthMax;
+    [SerializeField]
     [Tooltip("The current health the object has.")]
-    public float healthCurrent;
-    [Tooltip("Optional meter component for the health to interface with.")]
-    public Meter meter;
+    private float healthCurrent;
 
     public delegate void DiedHandler();
     public event DiedHandler Died;
@@ -25,30 +25,45 @@ public class Health : MonoBehaviour
     public event MaxHealthAddedHandler MaxHealthAdded;
     public delegate void MaxHealthSubtractedHandler(float amount);
     public event MaxHealthSubtractedHandler MaxHealthSubtracted;
+    public delegate void CurrentHealthChangedHandler(float newHealthCurrent);
+    public event CurrentHealthChangedHandler CurrentHealthChanged;
+    public delegate void MaxHealthChangedHandler(float newHealthMax);
+    public event MaxHealthChangedHandler MaxHealthChanged;
 
-    private void Start()
+    public float GetCurrentHealth()
     {
-        if (meter != null)
-        {
-            meter.SetBothValues(healthCurrent, healthMax);
-        }
+        return healthCurrent;
+    }
+
+    public float GetMaxHealth()
+    {
+        return healthMax;
     }
 
     public void Damage(float amount)
     {
-        amount = Mathf.Min(amount, healthCurrent);
-        healthCurrent -= amount;
-        OnDamaged(amount);
-        UpdateMeterCurrentValue();
-        CheckIfDead();
+        if (!IsDead())
+        {
+            amount = Mathf.Min(amount, healthCurrent);
+            healthCurrent -= amount;
+            OnDamaged(amount);
+            OnCurrentHealthChanged(healthCurrent);
+        }
+        if (IsDead())
+        {
+            OnDied();
+        }
     }
 
     public void Heal(float amount)
     {
-        amount = Mathf.Min(amount, healthMax - healthCurrent);
-        healthCurrent += amount;
-        OnHealed(amount);
-        UpdateMeterCurrentValue();
+        if (!IsHealthFull())
+        {
+            amount = Mathf.Min(amount, healthMax - healthCurrent);
+            healthCurrent += amount;
+            OnHealed(amount);
+            OnCurrentHealthChanged(healthCurrent);
+        }
     }
 
     public void SetHealth(float amount)
@@ -66,40 +81,31 @@ public class Health : MonoBehaviour
     // Restore the current health to the max health.
     public void FullHeal()
     {
-        if (!IsHealthFull())
-        {
-            OnHealed(healthMax - healthCurrent);
-            healthCurrent = healthMax;
-            UpdateMeterCurrentValue();
-        }
+        Heal(healthMax - healthCurrent);
     }
 
-    // Set the health to 0, causing death.
+    // Effectively set the health to 0, causing death.
     public void Die()
     {
-        OnDamaged(healthCurrent);
-        healthCurrent = 0f;
-        UpdateMeterCurrentValue();
-        OnDied();
+        Damage(healthCurrent);
     }
 
     public void AddMaxHealth(float amount)
     {
         healthMax += amount;
         OnMaxHealthAdded(amount);
-        UpdateMeterMaxValue();
+        OnMaxHealthChanged(healthMax);
     }
 
     public void SubtractMaxHealth(float amount)
     {
         healthMax -= amount;
         OnMaxHealthSubtracted(amount);
+        OnMaxHealthChanged(healthMax);
         if (healthCurrent > healthMax)
         {
             Damage(healthCurrent - healthMax);
         }
-        UpdateMeterMaxValue();
-        CheckIfDead();
     }
 
     public void SetMaxHealth(float amount)
@@ -119,34 +125,10 @@ public class Health : MonoBehaviour
         return (healthCurrent == healthMax);
     }
 
-    // Check if the health has run out, and if so, DIE!!!
-    private void CheckIfDead()
+    // Returns true if there's no health left.
+    private bool IsDead()
     {
-        if (healthCurrent <= 0f)
-        {
-            OnDied();
-        }
-    }
-
-    private void UpdateMeterCurrentValue()
-    {
-        if (meter != null)
-        {
-            meter.SetCurrentValue(healthCurrent);
-        }
-    }
-
-    private void UpdateMeterMaxValue()
-    {
-        if (meter != null)
-        {
-            meter.SetMaxValue(healthMax);
-        }
-    }
-
-    private void UpdateMeterBothValues()
-    {
-        meter.SetBothValues(healthCurrent, healthMax);
+        return (healthCurrent <= 0f);
     }
 
     // Event invocations.
@@ -183,6 +165,20 @@ public class Health : MonoBehaviour
         if (MaxHealthSubtracted != null)
         {
             MaxHealthSubtracted(amount);
+        }
+    }
+    private void OnCurrentHealthChanged(float newHealthCurrent)
+    {
+        if (CurrentHealthChanged != null)
+        {
+            CurrentHealthChanged(newHealthCurrent);
+        }
+    }
+    private void OnMaxHealthChanged(float newHealthMax)
+    {
+        if (MaxHealthChanged != null)
+        {
+            MaxHealthChanged(newHealthMax);
         }
     }
 }

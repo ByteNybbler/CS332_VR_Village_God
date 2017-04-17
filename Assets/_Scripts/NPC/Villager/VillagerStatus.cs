@@ -32,7 +32,7 @@ public class VillagerStatus : LateInit
     {
         health = GetComponent<Health>();
         npchealth = GetComponent<NPCHealth>();
-        fleeToCropAtThisHealth = health.healthMax * fleeToCropHealthRatio;
+        fleeToCropAtThisHealth = health.GetMaxHealth() * fleeToCropHealthRatio;
         compVillagerMovement = GetComponent<VillagerMovement>();
     }
 
@@ -51,7 +51,7 @@ public class VillagerStatus : LateInit
         // If the villager needs food and food is present, set the food as a target.
         if (compVillagerMovement.destinationIsFood == false)
         {
-            if (health.healthCurrent < fleeToCropAtThisHealth && compPlantFood.GetViableCropCount() != 0)
+            if (health.GetCurrentHealth() < fleeToCropAtThisHealth && compPlantFood.GetViableCropCount() != 0)
             {
                 SetCropTargetToClosest();
             }

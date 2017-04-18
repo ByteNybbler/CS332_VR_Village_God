@@ -68,4 +68,9 @@ public class RisingText : MonoBehaviour
     {
         text.color = col;
     }
+
+    public void SetTextSize(int size)
+    {
+        text.fontSize = size;
+    }
 }

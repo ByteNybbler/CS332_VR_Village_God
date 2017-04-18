@@ -11,6 +11,8 @@ public class Meter : MonoBehaviour
 {
     [Tooltip("The meter prefab.")]
     public GameObject prefabMeter;
+    [Tooltip("Whether the meter is enabled upon creation.")]
+    public bool enabledOnAwake = true;
     [Tooltip("The color of the meter that indicates the meter's progress; the front color.")]
     public Color colorFront = Color.green;
     [Tooltip("The color of the meter that isn't covered by the progress; the back color.")]
@@ -46,6 +48,8 @@ public class Meter : MonoBehaviour
     private GameObject meterFront;
     private GameObject meterBack;
     private GameObject meterBorder;
+    // Whether the meter has been initialized yet.
+    //private bool initialized = false;
 
     private void Awake()
     {
@@ -66,6 +70,11 @@ public class Meter : MonoBehaviour
         SetPieceProperties(meterFront, width, height, colorFront, -width * 0.5f);
         SetPieceProperties(meterBack, width, height, colorBack, 0f);
         SetPieceProperties(meterBorder, width + borderThickness, height + borderThickness, colorBorder, 0f);
+
+        if (!enabledOnAwake)
+        {
+            meter.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -121,6 +130,7 @@ public class Meter : MonoBehaviour
     {
         currentValue = value;
         currentPercentage = value * percentPerUnitValue;
+
         meterFront.transform.localScale = new Vector3(currentPercentage, 1f, 1f);
 
         // Enable or disable the meter depending on the progress of the meter.

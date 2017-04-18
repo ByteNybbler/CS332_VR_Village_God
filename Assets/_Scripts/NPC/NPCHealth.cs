@@ -13,8 +13,6 @@ public class NPCHealth : MonoBehaviour
     public RisingTextCreator rtcDamaged;
     [Tooltip("The string that is the icon for HP.")]
     public string hpString = "HP";
-    [Tooltip("How big the health change must be for the rising text to be displayed.")]
-    public float minimumHealthChangeForText = 0.5f;
 
     public delegate void DiedHandler();
     public event DiedHandler Died;
@@ -40,22 +38,16 @@ public class NPCHealth : MonoBehaviour
         compHealth.Died -= Health_Died;
     }
 
-    private void Health_Damaged(float amount)
+    private void Health_Damaged(int amount)
     {
-        if (amount > minimumHealthChangeForText)
-        {
-            rtcDamaged.message = "-" + Mathf.CeilToInt(amount) + " " + hpString;
-            rtcDamaged.CreateRisingText(transform.position);
-        }
+        rtcDamaged.message = "-" + Mathf.CeilToInt(amount) + " " + hpString;
+        rtcDamaged.CreateRisingText(transform.position);
     }
 
-    private void Health_Healed(float amount)
+    private void Health_Healed(int amount)
     {
-        if (amount > minimumHealthChangeForText)
-        {
-            rtcHealed.message = "+" + Mathf.CeilToInt(amount) + " " + hpString;
-            rtcHealed.CreateRisingText(transform.position);
-        }
+        rtcHealed.message = "+" + Mathf.CeilToInt(amount) + " " + hpString;
+        rtcHealed.CreateRisingText(transform.position);
     }
 
     private void Health_Died()

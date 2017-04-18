@@ -16,6 +16,8 @@ public class PlantFood : LateInit
 
     public delegate void CropDiedHandler(GameObject victim);
     public event CropDiedHandler CropDied;
+    public delegate void CropGrownHandler(GameObject crop);
+    public event CropGrownHandler CropGrown;
 
     // List of existing crops.
     private List<GameObject> crops = new List<GameObject>();
@@ -38,24 +40,10 @@ public class PlantFood : LateInit
                 if (cai.shrine.SpendPoints(cost, location))
                 {
                     GameObject cropInstance = Instantiate(prefabCrop, location, Quaternion.identity);
-                    cropInstance.GetComponent<PlantStatus>().Died += PlantStatus_Died;
+                    SubscribeToCrop(cropInstance);
                     crops.Add(cropInstance);
                 }
             }
-        }
-    }
-
-    private void PlantStatus_Died(GameObject victim)
-    {
-        crops.Remove(victim);
-        OnCropDied(victim);
-    }
-
-    private void OnCropDied(GameObject victim)
-    {
-        if (CropDied != null)
-        {
-            CropDied(victim);
         }
     }
 
@@ -92,25 +80,65 @@ public class PlantFood : LateInit
         return count;
     }
 
+    private void SubscribeToCrop(GameObject crop)
+    {
+        PlantStatus ps = crop.GetComponent<PlantStatus>();
+        ps.Died += PlantStatus_Died;
+        ps.Grown += PlantStatus_Grown;
+    }
+    private void UnsubscribeFromCrop(GameObject crop)
+    {
+        PlantStatus ps = crop.GetComponent<PlantStatus>();
+        ps.Died -= PlantStatus_Died;
+        ps.Grown -= PlantStatus_Grown;
+    }
+
     protected override void EventsSubscribe()
     {
         foreach (GameObject crop in crops)
         {
             if (crop != null)
             {
-                crop.GetComponent<PlantStatus>().Died += PlantStatus_Died;
+                SubscribeToCrop(crop);
             }
         }
     }
-
     protected override void EventsUnsubscribe()
     {
         foreach (GameObject crop in crops)
         {
             if (crop != null)
             {
-                crop.GetComponent<PlantStatus>().Died -= PlantStatus_Died;
+                UnsubscribeFromCrop(crop);
             }
+        }
+    }
+
+    // Event callbacks.
+    private void PlantStatus_Died(GameObject victim)
+    {
+        crops.Remove(victim);
+        OnCropDied(victim);
+    }
+
+    private void PlantStatus_Grown(GameObject crop)
+    {
+        OnCropGrown(crop);
+    }
+
+    // Event invocations.
+    private void OnCropDied(GameObject victim)
+    {
+        if (CropDied != null)
+        {
+            CropDied(victim);
+        }
+    }
+    private void OnCropGrown(GameObject crop)
+    {
+        if (CropGrown != null)
+        {
+            CropGrown(crop);
         }
     }
 }

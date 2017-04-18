@@ -10,37 +10,37 @@ public class Health : MonoBehaviour
 {
     [SerializeField]
     [Tooltip("The maximum health the object can have.")]
-    private float healthMax;
+    private int healthMax;
     [SerializeField]
     [Tooltip("The current health the object has.")]
-    private float healthCurrent;
+    private int healthCurrent;
 
     public delegate void DiedHandler();
     public event DiedHandler Died;
-    public delegate void HealedHandler(float amount);
+    public delegate void HealedHandler(int amount);
     public event HealedHandler Healed;
-    public delegate void DamagedHandler(float amount);
+    public delegate void DamagedHandler(int amount);
     public event DamagedHandler Damaged;
-    public delegate void MaxHealthAddedHandler(float amount);
+    public delegate void MaxHealthAddedHandler(int amount);
     public event MaxHealthAddedHandler MaxHealthAdded;
-    public delegate void MaxHealthSubtractedHandler(float amount);
+    public delegate void MaxHealthSubtractedHandler(int amount);
     public event MaxHealthSubtractedHandler MaxHealthSubtracted;
-    public delegate void CurrentHealthChangedHandler(float newHealthCurrent);
+    public delegate void CurrentHealthChangedHandler(int newHealthCurrent);
     public event CurrentHealthChangedHandler CurrentHealthChanged;
-    public delegate void MaxHealthChangedHandler(float newHealthMax);
+    public delegate void MaxHealthChangedHandler(int newHealthMax);
     public event MaxHealthChangedHandler MaxHealthChanged;
 
-    public float GetCurrentHealth()
+    public int GetCurrentHealth()
     {
         return healthCurrent;
     }
 
-    public float GetMaxHealth()
+    public int GetMaxHealth()
     {
         return healthMax;
     }
 
-    public void Damage(float amount)
+    public void Damage(int amount)
     {
         if (!IsDead())
         {
@@ -55,7 +55,7 @@ public class Health : MonoBehaviour
         }
     }
 
-    public void Heal(float amount)
+    public void Heal(int amount)
     {
         if (!IsHealthFull())
         {
@@ -66,7 +66,7 @@ public class Health : MonoBehaviour
         }
     }
 
-    public void SetHealth(float amount)
+    public void SetHealth(int amount)
     {
         if (amount > healthCurrent)
         {
@@ -90,14 +90,14 @@ public class Health : MonoBehaviour
         Damage(healthCurrent);
     }
 
-    public void AddMaxHealth(float amount)
+    public void AddMaxHealth(int amount)
     {
         healthMax += amount;
         OnMaxHealthAdded(amount);
         OnMaxHealthChanged(healthMax);
     }
 
-    public void SubtractMaxHealth(float amount)
+    public void SubtractMaxHealth(int amount)
     {
         healthMax -= amount;
         OnMaxHealthSubtracted(amount);
@@ -108,7 +108,7 @@ public class Health : MonoBehaviour
         }
     }
 
-    public void SetMaxHealth(float amount)
+    public void SetMaxHealth(int amount)
     {
         if (amount > healthMax)
         {
@@ -139,42 +139,42 @@ public class Health : MonoBehaviour
             Died();
         }
     }
-    private void OnHealed(float amount)
+    private void OnHealed(int amount)
     {
         if (Healed != null)
         {
             Healed(amount);
         }
     }
-    private void OnDamaged(float amount)
+    private void OnDamaged(int amount)
     {
         if (Damaged != null)
         {
             Damaged(amount);
         }
     }
-    private void OnMaxHealthAdded(float amount)
+    private void OnMaxHealthAdded(int amount)
     {
         if (MaxHealthAdded != null)
         {
             MaxHealthAdded(amount);
         }
     }
-    private void OnMaxHealthSubtracted(float amount)
+    private void OnMaxHealthSubtracted(int amount)
     {
         if (MaxHealthSubtracted != null)
         {
             MaxHealthSubtracted(amount);
         }
     }
-    private void OnCurrentHealthChanged(float newHealthCurrent)
+    private void OnCurrentHealthChanged(int newHealthCurrent)
     {
         if (CurrentHealthChanged != null)
         {
             CurrentHealthChanged(newHealthCurrent);
         }
     }
-    private void OnMaxHealthChanged(float newHealthMax)
+    private void OnMaxHealthChanged(int newHealthMax)
     {
         if (MaxHealthChanged != null)
         {

@@ -56,7 +56,7 @@ public class EnemyMovement : MonoBehaviour
                 if (distance < damageDistance)
                 {
                     Health compVillagerHealth = target.GetComponent<Health>();
-                    float damage = 1f;
+                    int damage = 1;
                     // Damage the target.
                     compVillagerHealth.Damage(damage);
                 }

@@ -30,6 +30,8 @@ public class VillagerMovement : LateInit
     public float cropEatDistance;
     [Tooltip("The current crop that the villager is heading towards.")]
     public GameObject cropTarget = null;
+    [Tooltip("How many seconds the villager has to wait between eating crops.")]
+    public float eatCooldownTime;
 
     // How many seconds the villager has spent idling.
     private float timeIdled = 0f;
@@ -39,27 +41,31 @@ public class VillagerMovement : LateInit
     private Vector3 shrinePosition;
     // Whether the agent's current destination is the shrine.
     private bool destinationIsShrine = true;
+    // Whether the villager can currently eat crops.
+    private bool canEat = true;
 
     // Component references.
     private NavMeshAgent agent;
     private Shrine shrine;
     private Health compHealth;
+    private PlantFood compPlantFood;
+    private VillagerStatus compVillagerStatus;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         compHealth = GetComponent<Health>();
+        compVillagerStatus = GetComponent<VillagerStatus>();
     }
 
     public override void Init()
     {
-        // Now that we are in the Start event, we can safely fetch the shrine's component.
+        // Now that we are in the Start event, we can safely fetch components from other objects.
         shrine = shrineObject.GetComponent<Shrine>();
+        compPlantFood = instanceAbilityController.GetComponent<PlantFood>();
         // Get the house and shrine positions.
         housePosition = houseTransform.position;
         shrinePosition = shrineObject.transform.position;
-        // Set the agent's destination to the shrine first.
-        //agent.destination = shrinePosition;
 
         base.Init();
     }
@@ -78,15 +84,21 @@ public class VillagerMovement : LateInit
             // GET TO THE FOOD ROY
             agent.destination = cropTarget.transform.position;
             // If the villager is close enough to the crop...
-            if (GetDestinationDistance() < cropEatDistance)
+            if (GetDestinationDistance() < cropEatDistance && canEat)
             {
                 // Eat a bit of the crop.
                 cropTarget.GetComponent<PlantStatus>().DecreaseHealth();
-                // Restore all health.
-                compHealth.FullHeal();
-                // Return to normal activities.
-                cropTarget = null;
-                destinationIsFood = false;
+                // Restore health.
+                compHealth.Heal(1);
+                // Trigger eating cooldown.
+                canEat = false;
+                StartCoroutine(EatingCooldown());
+                // If health is full, return to normal activities.
+                if (compHealth.IsHealthFull())
+                {
+                    cropTarget = null;
+                    destinationIsFood = false;
+                }
             }
         }
         // If the villager is NOT heading towards food, head towards other things.
@@ -107,10 +119,14 @@ public class VillagerMovement : LateInit
                 // If the villager has idled at the shrine for long enough...
                 if (timeIdled > shrineIdleTime)
                 {
-                    // Reset the idle time and start heading to the house.
+                    // Reset the idle time and stop targeting the shrine.
                     timeIdled = 0f;
                     destinationIsShrine = false;
-                    //agent.destination = housePosition;
+                    // If the villager needs health, target a crop now if possible.
+                    if (!compHealth.IsHealthFull() && compPlantFood.GetViableCropCount() != 0)
+                    {
+                        compVillagerStatus.SetCropTargetToClosest();
+                    }
                 }
             }
             // If the villager is targeting the house...
@@ -133,5 +149,11 @@ public class VillagerMovement : LateInit
                 }
             }
         }
+    }
+
+    IEnumerator EatingCooldown()
+    {
+        yield return new WaitForSeconds(eatCooldownTime);
+        canEat = true;
     }
 }

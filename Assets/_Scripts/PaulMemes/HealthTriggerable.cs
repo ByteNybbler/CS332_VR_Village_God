@@ -90,7 +90,7 @@ public class HealthTriggerable : MonoBehaviour
         }
     }
 
-    IEnumerator TriggerHurt(float amount, float timeBetweenFires)
+    IEnumerator TriggerHurt(int amount, float timeBetweenFires)
     {
         while (true)
         {
@@ -99,7 +99,7 @@ public class HealthTriggerable : MonoBehaviour
             yield return new WaitForSeconds(timeBetweenFires);
         }
     }
-    IEnumerator TriggerHeal(float amount, float timeBetweenFires)
+    IEnumerator TriggerHeal(int amount, float timeBetweenFires)
     {
         while (true)
         {
@@ -107,7 +107,7 @@ public class HealthTriggerable : MonoBehaviour
             yield return new WaitForSeconds(timeBetweenFires);
         }
     }
-    IEnumerator TriggerSetHealth(float amount, float timeBetweenFires)
+    IEnumerator TriggerSetHealth(int amount, float timeBetweenFires)
     {
         while (true)
         {

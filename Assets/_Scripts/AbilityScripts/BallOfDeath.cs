@@ -1,37 +1,47 @@
 ﻿// Author(s): Paul Calande
 // Ball of Death script.
 
+// Comment out the following line to stop the Ball of Death from constantly printing its damage to the console.
+//#define BOD_PRINT_DAMAGE
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BallOfDeath : MonoBehaviour
 {
-    [Tooltip("Seconds between each damage recalculation.")]
-    public float damageUpdateFrequency = 0.2f;
+    [Tooltip("How much the Ball of Death's damage is multiplied by.")]
+    public float damageMultiplier = 1f;
 
     // Component references.
-    private HealthTrigger ht;
     private Rigidbody rb;
 
     private void Awake()
     {
-        ht = GetComponent<HealthTrigger>();
         rb = GetComponent<Rigidbody>();
     }
 
-    private void Start()
+#if BOD_PRINT_DAMAGE
+    private void Update()
     {
-        StartCoroutine(CalculateDamage());
+        Debug.Log("Ball of Death Update Damage: " + CalculateDamage());
+    }
+#endif
+
+    // Calculate the damage that the ball does based on its speed.
+    private int CalculateDamage()
+    {
+        return (int)(rb.velocity.magnitude * damageMultiplier);
     }
 
-    // Calculate the damage based on how quickly the ball of death is moving.
-    IEnumerator CalculateDamage()
+    private void OnCollisionEnter(Collision collision)
     {
-        while (true)
+        //Debug.Log("Ball of Death collided with " + collision.gameObject.name);
+        if (collision.gameObject.tag == "NPC")
         {
-            ht.amount = Mathf.Floor(rb.velocity.magnitude);
-            yield return new WaitForSeconds(damageUpdateFrequency);
+            //Debug.Log("Damage upon NPC collision: " + CalculateDamage());
+            Health otherHealth = collision.gameObject.GetComponent<Health>();
+            otherHealth.Damage(CalculateDamage());
         }
     }
 }

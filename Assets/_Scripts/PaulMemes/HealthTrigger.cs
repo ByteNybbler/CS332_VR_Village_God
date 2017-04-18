@@ -15,7 +15,7 @@ public class HealthTrigger : MonoBehaviour
     [Tooltip("The trigger type.")]
     public Type type;
     [Tooltip("The quantity of health points that this trigger will affect the health with.")]
-    public float amount = 1f;
+    public int amount = 1;
     [Tooltip("Seconds between each attempt to influence the object inside the trigger.")]
     public float timeBetweenFires = 0.5f;
     [Tooltip("The collider that's connected to this HealthTrigger.")]

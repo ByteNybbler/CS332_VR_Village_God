@@ -13,6 +13,8 @@ public class RisingTextCreator : MonoBehaviour
     public string message;
     [Tooltip("The color of the rising text.")]
     public Color textColor;
+    [Tooltip("The size of the rising text's font.")]
+    public int fontSize = 140;
     [Tooltip("The offset of the rising text's spawning position.")]
     public Vector3 spawnOffset;
 
@@ -24,5 +26,6 @@ public class RisingTextCreator : MonoBehaviour
         RisingText rt = plusOne.GetComponent<RisingText>();
         rt.SetTextString(message);
         rt.SetTextColor(textColor);
+        rt.SetTextSize(fontSize);
     }
 }

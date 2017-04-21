@@ -84,7 +84,7 @@ public class VillagerMovement : LateInit
             // GET TO THE FOOD ROY
             agent.destination = cropTarget.transform.position;
             // If the villager is close enough to the crop...
-            if (GetDestinationDistance() < cropEatDistance && canEat)
+            if ((GetDestinationDistance() < cropEatDistance) && canEat)
             {
                 // Eat a bit of the crop.
                 cropTarget.GetComponent<PlantStatus>().DecreaseHealth();
@@ -122,11 +122,7 @@ public class VillagerMovement : LateInit
                     // Reset the idle time and stop targeting the shrine.
                     timeIdled = 0f;
                     destinationIsShrine = false;
-                    // If the villager needs health, target a crop now if possible.
-                    if (!compHealth.IsHealthFull() && compPlantFood.GetViableCropCount() != 0)
-                    {
-                        compVillagerStatus.SetCropTargetToClosest();
-                    }
+                    CheckIfWantsCrop();
                 }
             }
             // If the villager is targeting the house...
@@ -145,7 +141,7 @@ public class VillagerMovement : LateInit
                     // Reset the idle time and start heading to the shrine.
                     timeIdled = 0f;
                     destinationIsShrine = true;
-                    //agent.destination = shrinePosition;
+                    CheckIfWantsCrop();
                 }
             }
         }
@@ -155,5 +151,14 @@ public class VillagerMovement : LateInit
     {
         yield return new WaitForSeconds(eatCooldownTime);
         canEat = true;
+    }
+
+    private void CheckIfWantsCrop()
+    {
+        // If the villager needs health, target a crop now if possible.
+        if (!compHealth.IsHealthFull() && compPlantFood.GetViableCropCount() != 0)
+        {
+            compVillagerStatus.SetCropTargetToClosest();
+        }
     }
 }

@@ -25,6 +25,9 @@ public class Shrine : MonoBehaviour
     [Tooltip("The string that is the icon for faith.")]
     public string faithString = "faith";
 
+    public delegate void PointsUpdatedHandler(int amount);
+    public event PointsUpdatedHandler PointsUpdated;
+
     // The quantity of charge (in charge seconds) that the shrine has yet to convert into points.
     private float chargeSeconds;
 
@@ -36,8 +39,11 @@ public class Shrine : MonoBehaviour
         while (chargeSeconds > chargeSecondsPerPoint)
         {
             chargeSeconds -= chargeSecondsPerPoint;
+            // Update the points.
             int additionalPoints = 1;
             points += additionalPoints;
+            // Invoke the event with the updated amount of points.
+            OnPointsUpdated(points);
             // Instantiate the +1 canvas.
             rtcPlusPoints.message = "+" + additionalPoints + " " + faithString;
             rtcPlusPoints.CreateRisingText(rootPosition);
@@ -68,6 +74,14 @@ public class Shrine : MonoBehaviour
             //rtcNotEnoughPoints.message = "Not enough faith!\n" + amount + " " + faithString + " needed.";
             rtcNotEnoughPoints.CreateRisingText(location);
             return false;
+        }
+    }
+
+    private void OnPointsUpdated(int amountOfPoints)
+    {
+        if (PointsUpdated != null)
+        {
+            PointsUpdated(amountOfPoints);
         }
     }
 }

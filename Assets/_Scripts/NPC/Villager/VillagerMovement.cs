@@ -40,18 +40,27 @@ public class VillagerMovement : MonoBehaviour
     private bool destinationIsShrine = true;
     // Whether the villager can currently eat crops.
     private bool canEat = true;
+    // Eating cooldown timer.
+    private float eatCooldownTimer;
 
     // Component references.
     private NavMeshAgent agent;
     private Health compHealth;
     private PlantFood compPlantFood;
     private VillagerStatus compVillagerStatus;
+    private TimeScale ts;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         compHealth = GetComponent<Health>();
         compVillagerStatus = GetComponent<VillagerStatus>();
+        ts = GetComponent<TimeScale>();
+    }
+
+    private void Start()
+    {
+        eatCooldownTimer = eatCooldownTime;
     }
 
     // Get the distance the agent is away from its destination.
@@ -62,6 +71,16 @@ public class VillagerMovement : MonoBehaviour
 
     private void Update()
     {
+        float timePassed = ts.GetTimePassed();
+        if (!canEat)
+        {
+            eatCooldownTimer -= timePassed;
+            if (eatCooldownTimer < 0f)
+            {
+                eatCooldownTimer = eatCooldownTime;
+                canEat = true;
+            }
+        }
         // If the villager is heading towards food...
         if (destinationIsFood)
         {
@@ -74,9 +93,8 @@ public class VillagerMovement : MonoBehaviour
                 cropTarget.GetComponent<PlantStatus>().DecreaseHealth();
                 // Restore health.
                 compHealth.Heal(1);
-                // Trigger eating cooldown.
+                // Temporarily prevent the villager from eating another crop.
                 canEat = false;
-                StartCoroutine(EatingCooldown());
                 // If health is full, return to normal activities.
                 if (compHealth.IsHealthFull())
                 {
@@ -129,12 +147,6 @@ public class VillagerMovement : MonoBehaviour
                 }
             }
         }
-    }
-
-    IEnumerator EatingCooldown()
-    {
-        yield return new WaitForSeconds(eatCooldownTime);
-        canEat = true;
     }
 
     private void CheckIfWantsCrop()

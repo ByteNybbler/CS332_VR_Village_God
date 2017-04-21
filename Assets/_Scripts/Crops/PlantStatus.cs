@@ -74,7 +74,7 @@ public class PlantStatus : MonoBehaviour
         // Destroy one of the stalks' children, hence removing one crop.
         Destroy(stalks.transform.GetChild(0).gameObject);
         // Decrement health.
-        health--;
+        --health;
         // Check if the plant is dead yet.
         if (health <= 0)
         {

@@ -5,10 +5,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TimeStop : MonoBehaviour
+public class TimeStop : Ability
 {
-    [Tooltip("How many points the ability costs.")]
-    public int cost = 100;
     [Tooltip("How many seconds the timestop lasts.")]
     public float timeStopLength = 10f;
     [Tooltip("The audio source to use for the time stop sound effect.")]
@@ -26,27 +24,7 @@ public class TimeStop : MonoBehaviour
     public delegate void TimeResumedHandler();
     public event TimeResumedHandler TimeResumed;
 
-    // Component references.
-    private AbilityInterface cai;
-
-    private void Awake()
-    {
-        cai = GetComponent<AbilityInterface>();
-    }
-
-    public void TimeAbility()
-    {
-        Vector3 location;
-        if (cai.castRayLeftController.Cast(out location))
-        {
-            if (cai.shrine.SpendPoints(cost, location))
-            {
-                StopTime();
-            }
-        }
-    }
-
-    public void StopTime()
+    public override void PointerLocationAbility(Vector3 location)
     {
         cAudioSource.PlayOneShot(soundTimeStop);
         // Stop time!

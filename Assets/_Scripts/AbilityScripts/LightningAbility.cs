@@ -1,16 +1,14 @@
 ﻿// Author(s): Paul Calande, Hunter Golden
-// Lightning ability script that interfaces with a lightning bolt.
+// Lightning ability class that interfaces with a class of an actual lightning bolt.
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LightningAbility : MonoBehaviour
+public class LightningAbility : Ability
 {
     [Tooltip("Reference to the LightningBoltScript for the lightning bolt itself.")]
     public DigitalRuby.LightningBolt.LightningBoltScript compLightning;
-    [Tooltip("The cost in faith points of the lightning.")]
-    public int cost = 5;
     [Tooltip("Reference to the SoundArray component.")]
     public SoundArray compSoundArray;
     [Tooltip("The particle effect to be created on the lightning bolt end location.")]
@@ -20,27 +18,7 @@ public class LightningAbility : MonoBehaviour
     [Tooltip("How high the lightning extends above the end point.")]
     public float lightningHeight = 100f;
 
-    // Component references.
-    private AbilityInterface cai;
-
-    private void Awake()
-    {
-        cai = GetComponent<AbilityInterface>();
-    }
-
-    public void ShootLightning()
-    {
-        Vector3 location;
-        if (cai.castRayRightController.Cast(out location))
-        {
-            if (cai.shrine.SpendPoints(cost, location))
-            {
-                SpawnLightningAt(location);
-            }
-        }
-    }
-
-    public void SpawnLightningAt(Vector3 location)
+    public override void PointerLocationAbility(Vector3 location)
     {
         // Calculate the lightning's start and end points.
         Vector3 start, end;

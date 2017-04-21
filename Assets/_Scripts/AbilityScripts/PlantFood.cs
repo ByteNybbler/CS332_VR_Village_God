@@ -1,18 +1,17 @@
 ﻿// Author(s): Hunter Golden, Paul Calande
 // Script for planting food.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlantFood : LateInit
+public class PlantFood : Ability
 {
     [Tooltip("Crop prefab reference.")]
     public GameObject prefabCrop;
-    [Tooltip("The maximum number of crops that can exist in the scene at once.")]
-    public int maxNumberOfCrops = 10;
-    [Tooltip("How many faith points it costs to plant a crop.")]
-    public int cost = 10;
+    //[Tooltip("The maximum number of crops that can exist in the scene at once.")]
+    //public int maxNumberOfCrops = 9001;
 
     public delegate void CropDiedHandler(GameObject victim);
     public event CropDiedHandler CropDied;
@@ -22,29 +21,11 @@ public class PlantFood : LateInit
     // List of existing crops.
     private List<GameObject> crops = new List<GameObject>();
 
-    // Component references.
-    private AbilityInterface cai;
-
-    private void Awake()
+    public override void PointerLocationAbility(Vector3 location)
     {
-        cai = GetComponent<AbilityInterface>();
-    }
-
-    public void MakeFood()
-    {
-        if (crops.Count < maxNumberOfCrops)
-        {
-            Vector3 location;
-            if (cai.castRayLeftController.Cast(out location))
-            {
-                if (cai.shrine.SpendPoints(cost, location))
-                {
-                    GameObject cropInstance = Instantiate(prefabCrop, location, Quaternion.identity);
-                    SubscribeToCrop(cropInstance);
-                    crops.Add(cropInstance);
-                }
-            }
-        }
+        GameObject cropInstance = Instantiate(prefabCrop, location, Quaternion.identity);
+        SubscribeToCrop(cropInstance);
+        crops.Add(cropInstance);
     }
 
     // Get the crop that's closest to a certain position.
@@ -93,7 +74,7 @@ public class PlantFood : LateInit
         ps.Grown -= PlantStatus_Grown;
     }
 
-    protected override void EventsSubscribe()
+    private void OnEnable()
     {
         foreach (GameObject crop in crops)
         {
@@ -103,7 +84,8 @@ public class PlantFood : LateInit
             }
         }
     }
-    protected override void EventsUnsubscribe()
+
+    private void OnDisable()
     {
         foreach (GameObject crop in crops)
         {

@@ -56,11 +56,17 @@ public class EnemyStatus : LateInit
         SetTarget(village.GetRandomVillager());
     }
 
-    // NPC health death event payload.
-    private void NPCHealth_Died()
+    // Make the enemy die.
+    public void Die()
     {
         // Invoke this enemy's death event.
         OnDied(gameObject, xpOnKill);
+    }
+
+    // NPC health death event payload.
+    private void NPCHealth_Died()
+    {
+        Die();
     }
 
     // Event payload for when a villager dies.

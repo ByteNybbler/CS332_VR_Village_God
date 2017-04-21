@@ -8,6 +8,6 @@ public class LightningTest : MonoBehaviour
 
     public void SpawnLightningHere()
     {
-        cLightningAbility.SpawnLightningAt(transform.position);
+        cLightningAbility.PointerLocationAbility(transform.position);
     }
 }

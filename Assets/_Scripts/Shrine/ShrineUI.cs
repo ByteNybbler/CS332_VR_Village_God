@@ -13,6 +13,7 @@ public class ShrineUI : MonoBehaviour
     [Tooltip("Reference to the text.")]
     public Text text;
 
+
     private void Start()
     {
         shrine.PointsUpdated += Shrine_PointsUpdated;
@@ -25,6 +26,7 @@ public class ShrineUI : MonoBehaviour
 
     private void Shrine_PointsUpdated(int amount)
     {
+		
         text.text = "Faith Points: " + amount.ToString();
     }
 }

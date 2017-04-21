@@ -1,6 +1,9 @@
 ﻿// Author(s): Paul Calande
 // Villager component for events and status.
 
+// Comment out the following line to prevent console messages involving villager destruction.
+#define VILLAGERSTATUS_DESTROY_DEBUG
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,13 +46,18 @@ public class VillagerStatus : MonoBehaviour
 
     private void OnDestroy()
     {
+#if VILLAGERSTATUS_DESTROY_DEBUG
         Debug.Log("VillagerStatus OnDestroy() called.");
+#endif
         if (npchealth != null)
         {
             npchealth.Died -= NPCHealth_Died;
         }
         if (foodController != null)
         {
+#if VILLAGERSTATUS_DESTROY_DEBUG
+            Debug.Log("VillagerStatus OnDestroy(): Unsubscribed from foodController.");
+#endif
             foodController.CropDied -= FoodController_CropDied;
             foodController.CropGrown -= FoodController_CropGrown;
         }

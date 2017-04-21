@@ -2,7 +2,7 @@
 // Shrine script.
 
 // Comment out the following line to prevent the shrine's points from being printed to the console.
-#define DEBUG_SHRINE_POINTS
+//#define DEBUG_SHRINE_POINTS
 
 using System.Collections;
 using System.Collections.Generic;

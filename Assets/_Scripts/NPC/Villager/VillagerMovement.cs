@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent (typeof (NavMeshAgent))]
-public class VillagerMovement : LateInit
+public class VillagerMovement : MonoBehaviour
 {
     [Tooltip("The number of seconds to stay at the house.")]
     public float houseIdleTime;
@@ -19,11 +19,8 @@ public class VillagerMovement : LateInit
     public float houseDestinationDistance;
     [Tooltip("The transform of the villager's house.")]
     public Transform houseTransform;
-    [Tooltip("Reference to the shrine instance.\n" +
-    "This reference is populated automatically by the Village class.")]
-    public GameObject shrineObject;
-    [Tooltip("Reference to the ability controller instance.")]
-    public GameObject instanceAbilityController;
+    [Tooltip("Reference to the shrine component.")]
+    public Shrine shrine;
     [Tooltip("Whether the agent is currently heading towards food. Overrides the other destinations.")]
     public bool destinationIsFood = false;
     [Tooltip("How close the villager must be to a crop in order to eat it.")]
@@ -46,7 +43,6 @@ public class VillagerMovement : LateInit
 
     // Component references.
     private NavMeshAgent agent;
-    private Shrine shrine;
     private Health compHealth;
     private PlantFood compPlantFood;
     private VillagerStatus compVillagerStatus;
@@ -56,18 +52,6 @@ public class VillagerMovement : LateInit
         agent = GetComponent<NavMeshAgent>();
         compHealth = GetComponent<Health>();
         compVillagerStatus = GetComponent<VillagerStatus>();
-    }
-
-    public override void Init()
-    {
-        // Now that we are in the Start event, we can safely fetch components from other objects.
-        shrine = shrineObject.GetComponent<Shrine>();
-        compPlantFood = instanceAbilityController.GetComponent<PlantFood>();
-        // Get the house and shrine positions.
-        housePosition = houseTransform.position;
-        shrinePosition = shrineObject.transform.position;
-
-        base.Init();
     }
 
     // Get the distance the agent is away from its destination.
@@ -107,7 +91,7 @@ public class VillagerMovement : LateInit
             // If the villager is targeting the shrine...
             if (destinationIsShrine)
             {
-                agent.destination = shrinePosition;
+                agent.destination = shrine.transform.position;
                 // If the villager is within shrine charging distance...
                 if (GetDestinationDistance() < shrineChargeDistance)
                 {
@@ -128,7 +112,7 @@ public class VillagerMovement : LateInit
             // If the villager is targeting the house...
             else
             {
-                agent.destination = housePosition;
+                agent.destination = houseTransform.position;
                 // If the villager is close enough to the house destination to be considered idling...
                 if (GetDestinationDistance() < houseDestinationDistance)
                 {
@@ -156,7 +140,7 @@ public class VillagerMovement : LateInit
     private void CheckIfWantsCrop()
     {
         // If the villager needs health, target a crop now if possible.
-        if (!compHealth.IsHealthFull() && compPlantFood.GetViableCropCount() != 0)
+        if (!compHealth.IsHealthFull() && compVillagerStatus.foodController.GetViableCropCount() != 0)
         {
             compVillagerStatus.SetCropTargetToClosest();
         }

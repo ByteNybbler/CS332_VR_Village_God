@@ -11,14 +11,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent (typeof (KeyPoints))]
-public class Village : LateInit
+public class Village : MonoBehaviour
 {
-    [Tooltip("Reference to the shrine GameObject.")]
-    public GameObject shrineObject;
+    [Tooltip("Reference to the shrine.")]
+    public Shrine shrine;
     [Tooltip("Reference to the villager prefab.")]
     public GameObject villagerPrefab;
-    [Tooltip("Reference to the ability controller instance.")]
-    public GameObject instanceAbilityController;
+    [Tooltip("Reference to the food controller instance.")]
+    public FoodController foodController;
 
     public delegate void VillagerDiedHandler(GameObject victim);
     public event VillagerDiedHandler VillagerDied;
@@ -35,7 +35,7 @@ public class Village : LateInit
         kp = GetComponent<KeyPoints>();
     }
 
-    public override void Init()
+    private void Start()
     {
         List<Transform> housePositions = kp.GetKeyPoints();
 
@@ -55,19 +55,27 @@ public class Village : LateInit
             // Assign the house to the villager.
             vm.houseTransform = trans;
             // Assign the shrine to the villager.
-            //Debug.Log("Shrine object: " + shrineObject);
-            vm.shrineObject = shrineObject;
+            vm.shrine = shrine;
+            // Pass the food controller to the villager.
+            vs.foodController = foodController;
+            // Subscribe to the villager's death event!
+            vs.Died += VillagerStatus_Died;
+            // Initialization time!
+            vs.Start();
             // Add the villager to the list of existing villagers.
             villagers.Add(newVillager);
-            // Pass the food controller to the villager.
-            vm.instanceAbilityController = instanceAbilityController;
-            vs.instanceAbilityController = instanceAbilityController;
-            // Initialization time!
-            vm.Init();
-            vs.Init();
         }
+    }
 
-        base.Init();
+    private void OnDestroy()
+    {
+        foreach (GameObject villager in villagers)
+        {
+            if (villager != null)
+            {
+                villager.GetComponent<VillagerStatus>().Died -= VillagerStatus_Died;
+            }
+        }
     }
 
     public GameObject GetRandomVillager()
@@ -110,27 +118,6 @@ public class Village : LateInit
         if (AllVillagersDied != null)
         {
             AllVillagersDied();
-        }
-    }
-    
-    protected override void EventsSubscribe()
-    {
-        foreach (GameObject villager in villagers)
-        {
-            if (villager != null)
-            {
-                villager.GetComponent<VillagerStatus>().Died += VillagerStatus_Died;
-            }
-        }
-    }
-    protected override void EventsUnsubscribe()
-    {
-        foreach (GameObject villager in villagers)
-        {
-            if (villager != null)
-            {
-                villager.GetComponent<VillagerStatus>().Died -= VillagerStatus_Died;
-            }
         }
     }
 }

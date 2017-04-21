@@ -7,10 +7,10 @@ using UnityEngine;
 
 [RequireComponent (typeof (Health))]
 [RequireComponent (typeof (VillagerMovement))]
-public class VillagerStatus : LateInit
+public class VillagerStatus : MonoBehaviour
 {
-    [Tooltip("Reference to the ability controller object.")]
-    public GameObject instanceAbilityController;
+    [Tooltip("Reference to the food controller.")]
+    public FoodController foodController;
     [Tooltip("The number of seconds between each instance of the villager taking damage due to hunger.")]
     public float hungerTime;
 
@@ -27,15 +27,17 @@ public class VillagerStatus : LateInit
     {
         health = GetComponent<Health>();
         npchealth = GetComponent<NPCHealth>();
+        npchealth.Died += NPCHealth_Died;
         compVillagerMovement = GetComponent<VillagerMovement>();
+        StartCoroutine(HungerTimer());
     }
 
-    public override void Init()
+    public void Start()
     {
-        compPlantFood = instanceAbilityController.GetComponent<PlantFood>();
-        StartCoroutine(HungerTimer());
-
-        base.Init();
+        if (foodController != null)
+        {
+            foodController.CropDied += FoodController_CropDied;
+        }
     }
 
     // Set the closest viable crop to the villager as the target.
@@ -43,23 +45,20 @@ public class VillagerStatus : LateInit
     // You will have a null reference otherwise!
     public void SetCropTargetToClosest()
     {
-        compVillagerMovement.cropTarget = compPlantFood.GetClosestViableCrop(transform.position);
+        compVillagerMovement.cropTarget = foodController.GetClosestViableCrop(transform.position);
         compVillagerMovement.destinationIsFood = true;
     }
 
-    protected override void EventsSubscribe()
+    private void OnDestroy()
     {
-        npchealth.Died += NPCHealth_Died;
-        compPlantFood.CropDied += PlantFood_CropDied;
-        //compPlantFood.CropGrown += PlantFood_CropGrown;
-        //health.Damaged += Health_Damaged;
-    }
-    protected override void EventsUnsubscribe()
-    {
-        npchealth.Died -= NPCHealth_Died;
-        compPlantFood.CropDied -= PlantFood_CropDied;
-        //compPlantFood.CropGrown -= PlantFood_CropGrown;
-        //health.Damaged -= Health_Damaged;
+        if (npchealth != null)
+        {
+            npchealth.Died -= NPCHealth_Died;
+        }
+        if (foodController != null)
+        {
+            foodController.CropDied -= FoodController_CropDied;
+        }
     }
 
     IEnumerator HungerTimer()
@@ -71,7 +70,7 @@ public class VillagerStatus : LateInit
         }
     }
 
-    // Health death event payload.
+    // Callback function for when health runs out.
     private void NPCHealth_Died()
     {
         // Invoke the villager death event.
@@ -79,13 +78,13 @@ public class VillagerStatus : LateInit
     }
 
     // Callback function for when a plant dies.
-    private void PlantFood_CropDied(GameObject victim)
+    private void FoodController_CropDied(GameObject victim)
     {
         // If the plant is the villager's current target...
         if (victim == compVillagerMovement.cropTarget)
         {
             // Check if there are any crops left and act accordingly.
-            if (compPlantFood.GetViableCropCount() == 0)
+            if (foodController.GetViableCropCount() == 0)
             {
                 // No crops left. No target. Stop looking for food.
                 compVillagerMovement.cropTarget = null;
@@ -97,34 +96,6 @@ public class VillagerStatus : LateInit
             }
         }
     }
-
-    /*
-    // Crop grown event callback.    
-    private void PlantFood_CropGrown(GameObject crop)
-    {
-        // If the villager isn't heading to food and doesn't have full health...
-        if (compVillagerMovement.destinationIsFood == false && !health.IsHealthFull())
-        {
-            // That must mean there were no crops in the scene.
-            // Head towards the one that was just created.
-            compVillagerMovement.cropTarget = crop;
-            compVillagerMovement.destinationIsFood = true;
-        }
-    }
-    */
-
-    /*
-    // Health damaged event callback.
-    private void Health_Damaged(int amount)
-    {
-        // If the villager is not heading towards food yet and crops are present...
-        if (compVillagerMovement.destinationIsFood == false && compPlantFood.GetViableCropCount() != 0)
-        {
-            // Head towards food.
-            SetCropTargetToClosest();
-        }
-    }
-    */
 
     // Event invocations.
     private void OnDied(GameObject obj)

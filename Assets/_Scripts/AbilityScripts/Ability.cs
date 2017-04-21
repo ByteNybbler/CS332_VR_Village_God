@@ -13,14 +13,18 @@ public abstract class Ability : MonoBehaviour
     public bool isOnRightController;
 
     // Reference to references... so meta.
-    private AbilityReferences car;
+    protected AbilityReferences car;
+
     // Reference to the CastRay of the controller that the ability is on.
     private CastRay controller;
 
     private void Awake()
     {
-        // Get references.
         car = GetComponent<AbilityReferences>();
+    }
+
+    private void Start()
+    {
         if (isOnRightController)
         {
             controller = car.castRayRightController;

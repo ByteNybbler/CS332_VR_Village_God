@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Health))]
+[RequireComponent(typeof(NPCHealth))]
 [RequireComponent(typeof(EnemyMovement))]
-public class EnemyStatus : LateInit
+public class EnemyStatus : MonoBehaviour
 {
-    [Tooltip("Reference to the village component so the enemy can keep track of villagers.")]
+    [Tooltip("Reference to the village class instance.")]
     public Village village;
     [Tooltip("How much XP is rewarded when the enemy is killed.")]
     public int xpOnKill = 5;
@@ -24,24 +25,29 @@ public class EnemyStatus : LateInit
     private void Awake()
     {
         npchealth = GetComponent<NPCHealth>();
+        npchealth.Died += NPCHealth_Died;
         cmpEnemyMovement = GetComponent<EnemyMovement>();
     }
 
-    public override void Init()
+    public void Start()
     {
-        SetRandomTarget();
-        base.Init();
+        if (village != null)
+        {
+            SetRandomTarget();
+            village.VillagerDied += Village_VillagerDied;
+        }
     }
 
-    protected override void EventsSubscribe()
+    private void OnDestroy()
     {
-        npchealth.Died += NPCHealth_Died;
-        village.VillagerDied += Village_VillagerDied;
-    }
-    protected override void EventsUnsubscribe()
-    {
-        npchealth.Died -= NPCHealth_Died;
-        village.VillagerDied -= Village_VillagerDied;
+        if (npchealth != null)
+        {
+            npchealth.Died -= NPCHealth_Died;
+        }
+        if (village != null)
+        {
+            village.VillagerDied -= Village_VillagerDied;
+        }
     }
 
     // Choose a certain villager to target.

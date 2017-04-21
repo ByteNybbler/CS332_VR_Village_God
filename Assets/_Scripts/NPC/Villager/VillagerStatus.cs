@@ -37,6 +37,21 @@ public class VillagerStatus : MonoBehaviour
         if (foodController != null)
         {
             foodController.CropDied += FoodController_CropDied;
+            foodController.CropGrown += FoodController_CropGrown;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("VillagerStatus OnDestroy() called.");
+        if (npchealth != null)
+        {
+            npchealth.Died -= NPCHealth_Died;
+        }
+        if (foodController != null)
+        {
+            foodController.CropDied -= FoodController_CropDied;
+            foodController.CropGrown -= FoodController_CropGrown;
         }
     }
 
@@ -47,18 +62,6 @@ public class VillagerStatus : MonoBehaviour
     {
         compVillagerMovement.cropTarget = foodController.GetClosestViableCrop(transform.position);
         compVillagerMovement.destinationIsFood = true;
-    }
-
-    private void OnDestroy()
-    {
-        if (npchealth != null)
-        {
-            npchealth.Died -= NPCHealth_Died;
-        }
-        if (foodController != null)
-        {
-            foodController.CropDied -= FoodController_CropDied;
-        }
     }
 
     IEnumerator HungerTimer()
@@ -93,6 +96,19 @@ public class VillagerStatus : MonoBehaviour
             else
             {
                 SetCropTargetToClosest();
+            }
+        }
+    }
+
+    private void FoodController_CropGrown(GameObject crop)
+    {
+        if (compVillagerMovement.cropTarget != null)
+        {
+            // If the new crop is closer than the current crop target, target the new crop.
+            if (Vector3.Distance(transform.position, crop.transform.position)
+                < Vector3.Distance(transform.position, compVillagerMovement.cropTarget.transform.position))
+            {
+                compVillagerMovement.cropTarget = crop;
             }
         }
     }

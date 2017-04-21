@@ -31,6 +31,12 @@ public class Shrine : MonoBehaviour
     // The quantity of charge (in charge seconds) that the shrine has yet to convert into points.
     private float chargeSeconds;
 
+    private void Start()
+    {
+        // Invoke the initial points event.
+        OnPointsUpdated(points);
+    }
+
     // Use this public function to add charge seconds to the shrine.
     // rootPosition is the spawn position of the +1.
     public void IncreaseChargeSeconds(float amount, Vector3 rootPosition)
@@ -64,6 +70,7 @@ public class Shrine : MonoBehaviour
         if (points >= amount)
         {
             points -= amount;
+            OnPointsUpdated(points);
             rtcSpentPoints.message = "-" + amount + " " + faithString;
             rtcSpentPoints.CreateRisingText(location);
             return true;

@@ -114,9 +114,9 @@ public class VillagerMovement : MonoBehaviour
                 if (GetDestinationDistance() < shrineChargeDistance)
                 {
                     // Increase the idle time.
-                    timeIdled += Time.deltaTime;
+                    timeIdled += timePassed;
                     // Charge up the shrine.
-                    shrine.IncreaseChargeSeconds(Time.deltaTime, transform.position);
+                    shrine.IncreaseChargeSeconds(timePassed, transform.position);
                 }
                 // If the villager has idled at the shrine for long enough...
                 if (timeIdled > shrineIdleTime)
@@ -135,7 +135,7 @@ public class VillagerMovement : MonoBehaviour
                 if (GetDestinationDistance() < houseDestinationDistance)
                 {
                     // Increase the idle time.
-                    timeIdled += Time.deltaTime;
+                    timeIdled += timePassed;
                 }
                 // If the villager has idled at the house for long enough...
                 if (timeIdled > houseIdleTime)

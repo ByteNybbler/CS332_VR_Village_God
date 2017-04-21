@@ -18,6 +18,11 @@ public class ShrineUI : MonoBehaviour
         shrine.PointsUpdated += Shrine_PointsUpdated;
     }
 
+    private void OnDestroy()
+    {
+        shrine.PointsUpdated -= Shrine_PointsUpdated;
+    }
+
     private void Shrine_PointsUpdated(int amount)
     {
         text.text = amount.ToString();

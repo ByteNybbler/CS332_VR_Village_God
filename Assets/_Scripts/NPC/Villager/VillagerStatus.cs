@@ -20,11 +20,15 @@ public class VillagerStatus : MonoBehaviour
     public delegate void DiedHandler(GameObject victim);
     public event DiedHandler Died;
 
+    // Hunger timer.
+    private float hungerTimer;
+
     // Component references.
     private Health health;
     private NPCHealth npchealth;
     private PlantFood compPlantFood;
     private VillagerMovement compVillagerMovement;
+    private TimeScale ts;
 
     private void Awake()
     {
@@ -32,11 +36,12 @@ public class VillagerStatus : MonoBehaviour
         npchealth = GetComponent<NPCHealth>();
         npchealth.Died += NPCHealth_Died;
         compVillagerMovement = GetComponent<VillagerMovement>();
-        StartCoroutine(HungerTimer());
+        ts = GetComponent<TimeScale>();
     }
 
     public void Start()
     {
+        hungerTimer = hungerTime;
         if (foodController != null)
         {
             foodController.CropDied += FoodController_CropDied;
@@ -63,6 +68,17 @@ public class VillagerStatus : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        float timePassed = ts.GetTimePassed();
+        hungerTimer -= timePassed;
+        while (hungerTimer < 0f)
+        {
+            health.Damage(1);
+            hungerTimer += hungerTime;
+        }
+    }
+
     // Set the closest viable crop to the villager as the target.
     // Make sure viable crops exist before calling this function!
     // You will have a null reference otherwise!
@@ -70,15 +86,6 @@ public class VillagerStatus : MonoBehaviour
     {
         compVillagerMovement.cropTarget = foodController.GetClosestViableCrop(transform.position);
         compVillagerMovement.destinationIsFood = true;
-    }
-
-    IEnumerator HungerTimer()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(hungerTime);
-            health.Damage(1);
-        }
     }
 
     // Callback function for when health runs out.

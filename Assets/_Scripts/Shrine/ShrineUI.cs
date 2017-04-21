@@ -25,6 +25,6 @@ public class ShrineUI : MonoBehaviour
 
     private void Shrine_PointsUpdated(int amount)
     {
-        text.text = amount.ToString();
+        text.text = "Faith Points: " + amount.ToString();
     }
 }

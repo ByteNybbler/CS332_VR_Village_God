@@ -27,6 +27,7 @@ public class Village : MonoBehaviour
 
     // A list of villagers.
     private List<GameObject> villagers = new List<GameObject>();
+
     // Component references.
     private KeyPoints kp;
 
@@ -52,16 +53,20 @@ public class Village : MonoBehaviour
             // Get the villager's relevant components for assignment operations.
             VillagerMovement vm = newVillager.GetComponent<VillagerMovement>();
             VillagerStatus vs = newVillager.GetComponent<VillagerStatus>();
+            TimeControllable tc = newVillager.GetComponent<TimeControllable>();
             // Assign the house to the villager.
             vm.houseTransform = trans;
-            // Assign the shrine to the villager.
+            // Pass the shrine to the villager.
             vm.shrine = shrine;
             // Pass the food controller to the villager.
             vs.foodController = foodController;
-            // Subscribe to the villager's death event!
+            // Subscribe to the villager's death event.
             vs.Died += VillagerStatus_Died;
+            // Pass the time controller to the villager.
+            tc.timeController = GetComponent<TimeControllable>().timeController;
             // Initialization time!
             vs.Start();
+            tc.Start();
             // Add the villager to the list of existing villagers.
             villagers.Add(newVillager);
         }

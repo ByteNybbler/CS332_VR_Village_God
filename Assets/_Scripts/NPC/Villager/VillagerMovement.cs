@@ -56,10 +56,6 @@ public class VillagerMovement : MonoBehaviour
         compHealth = GetComponent<Health>();
         compVillagerStatus = GetComponent<VillagerStatus>();
         ts = GetComponent<TimeScale>();
-    }
-
-    private void Start()
-    {
         eatCooldownTimer = eatCooldownTime;
     }
 

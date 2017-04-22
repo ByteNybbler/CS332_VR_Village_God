@@ -16,12 +16,22 @@ public class EnemyMovement : MonoBehaviour
     [Tooltip("How many seconds between each attempt to damage the villager.")]
     public float timeBetweenAttacks;
 
+    // Timers.
+    private float timerBetweenAttacks;
+
     // Component references.
     private NavMeshAgent agent;
+    private TimeScale ts;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        ts = GetComponent<TimeScale>();
+    }
+
+    private void Start()
+    {
+        timerBetweenAttacks = timeBetweenAttacks;
     }
 
     private void Update()
@@ -31,38 +41,23 @@ public class EnemyMovement : MonoBehaviour
         {
             // Move towards the target.
             agent.destination = target.transform.position;
-        }
-    }
-
-    private void OnEnable()
-    {
-        StartCoroutine(TryToDealDamage());
-    }
-
-    private void OnDisable()
-    {
-        StopCoroutine(TryToDealDamage());
-    }
-
-    IEnumerator TryToDealDamage()
-    {
-        while (true)
-        {
-            // If the target exists...
-            if (target != null)
+            // Occasionally attempt to deal damage towards the target.
+            float timePassed = ts.GetTimePassed();
+            timerBetweenAttacks -= timePassed;
+            while (timerBetweenAttacks <= 0f)
             {
+                timerBetweenAttacks += timeBetweenAttacks;
+
                 float distance = Vector3.Distance(transform.position, target.transform.position);
                 // If the enemy is close enough to the target to deal damage...
                 if (distance < damageDistance)
                 {
+                    // Damage the target.
                     Health compVillagerHealth = target.GetComponent<Health>();
                     int damage = 1;
-                    // Damage the target.
                     compVillagerHealth.Damage(damage);
                 }
             }
-
-            yield return new WaitForSeconds(timeBetweenAttacks);
         }
     }
 }

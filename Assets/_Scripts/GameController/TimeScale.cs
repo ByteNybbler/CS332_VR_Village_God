@@ -8,7 +8,12 @@ using UnityEngine;
 public class TimeScale : MonoBehaviour
 {
     // The scale of the time.
-    public float scale = 1.0f;
+    private float scale = 1.0f;
+
+    private void Start()
+    {
+        // Record the default values of components.
+    }
 
     // Get the timescale itself.
     public float GetTimeScale()
@@ -19,8 +24,23 @@ public class TimeScale : MonoBehaviour
     // Set the timescale.
     public void SetTimeScale(float amount)
     {
-        scale = amount;
-        // Adjust other components accordingly.
+        if (amount == 1f)
+        {
+            ResetTimeScale();
+        }
+        else
+        {
+            scale = amount;
+            // Adjust other components accordingly.
+            // TODO
+        }
+    }
+
+    // Set the time scale back to its default, 1.
+    public void ResetTimeScale()
+    {
+        scale = 1f;
+        // Set components back to their default values.
         // TODO
     }
 

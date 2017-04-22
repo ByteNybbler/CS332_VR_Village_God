@@ -24,12 +24,16 @@ public class EnemyController : MonoBehaviour
     {
         // Instantiate an enemy.
         GameObject enemy = Instantiate(enemyPrefab, trans.position, trans.rotation);
-        // Pass the village component to the spawned enemy.
+        // Get the enemy's components.
         EnemyStatus es = enemy.GetComponent<EnemyStatus>();
+        TimeControllable tc = enemy.GetComponent<TimeControllable>();
+        // Pass variables to the spawned enemy.
         es.village = village;
         es.Died += EnemyStatus_Died;
+        tc.timeController = GetComponent<TimeControllable>().timeController;
         // Initialize the enemy.
         es.Start();
+        tc.Start();
         // Add the enemy to the list.
         enemies.Add(enemy);
         // Return the enemy!

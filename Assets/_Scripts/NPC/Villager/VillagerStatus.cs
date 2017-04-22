@@ -44,6 +44,9 @@ public class VillagerStatus : MonoBehaviour
         hungerTimer = hungerTime;
         if (foodController != null)
         {
+#if VILLAGERSTATUS_DESTROY_DEBUG
+            Debug.Log("VillagerStatus " + GetInstanceID() + " subscribed to FoodController.");
+#endif
             foodController.CropDied += FoodController_CropDied;
             foodController.CropGrown += FoodController_CropGrown;
         }
@@ -72,10 +75,10 @@ public class VillagerStatus : MonoBehaviour
     {
         float timePassed = ts.GetTimePassed();
         hungerTimer -= timePassed;
-        while (hungerTimer < 0f)
+        while (hungerTimer <= 0f)
         {
-            health.Damage(1);
             hungerTimer += hungerTime;
+            health.Damage(1);
         }
     }
 

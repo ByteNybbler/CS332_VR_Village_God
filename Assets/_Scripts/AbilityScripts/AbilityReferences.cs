@@ -15,4 +15,6 @@ public class AbilityReferences : MonoBehaviour
     public Shrine shrine;
     [Tooltip("Game Controller component reference.")]
     public GameController gameController;
+    [Tooltip("Time Controller component reference.")]
+    public TimeController timeController;
 }

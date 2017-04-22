@@ -32,14 +32,17 @@ public class PlantStatus : MonoBehaviour
     private bool isGrown = false;
     // The current scale of the plant.
     private float currentScale = 0f;
+
     // Component references.
-    Meter meter;
+    private Meter meter;
+    private TimeScale ts;
 
     private void Awake()
     {
 #if PLANTSTATUS_USEMETER
         meter = GetComponent<Meter>();
 #endif
+        ts = GetComponent<TimeScale>();
     }
 
     private void Start()
@@ -53,7 +56,8 @@ public class PlantStatus : MonoBehaviour
     {
         if (!isGrown)
         {
-            float increase = rate * Time.deltaTime;
+            float timePassed = ts.GetTimePassed();
+            float increase = rate * timePassed;
             stalks.transform.localScale += Vector3.up * yScaleFactor * increase;
             stalks.transform.position += (Vector3.up * increase) / 2;
             currentScale += increase;

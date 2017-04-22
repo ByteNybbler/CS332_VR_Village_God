@@ -40,13 +40,18 @@ public abstract class Ability : MonoBehaviour
     public void UseAbilityAtPointerLocation()
     {
         Vector3 location;
-        if (controller.Cast(out location))
+        if (controller.Cast(out location) && AdditionalPointerChecks(location))
         {
             if (car.shrine.SpendPoints(cost, location))
             {
                 PointerLocationAbility(location);
             }
         }
+    }
+
+    public virtual bool AdditionalPointerChecks(Vector3 location)
+    {
+        return true;
     }
 
     // Function that does the actual ability. Implement this in derived classes.

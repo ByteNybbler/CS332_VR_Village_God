@@ -24,6 +24,10 @@ public class WaveController : MonoBehaviour
     [Tooltip("Number of seconds between each wave.")]
     public float timeBetweenWaves = 5f;
 
+    // Timer variables.
+    private float timerBetweenEnemies;
+    private float timerBetweenWaves;
+
     // List of the transforms of the enemy spawn points.
     private List<Transform> spawnPoints;
     // The current wave.
@@ -35,10 +39,12 @@ public class WaveController : MonoBehaviour
 
     // Component references.
     private KeyPoints kp;
+    private TimeScale ts;
 
     private void Awake()
     {
         kp = GetComponent<KeyPoints>();
+        ts = GetComponent<TimeScale>();
     }
 
     private void Start()
@@ -47,6 +53,33 @@ public class WaveController : MonoBehaviour
         spawnPoints = kp.GetKeyPoints();
         // Start the countdown for the first wave.
         StartNextWaveTimer();
+    }
+
+    private void Update()
+    {
+        float timePassed = ts.GetTimePassed();
+        if (timerBetweenWaves > 0f)
+        {
+            timerBetweenWaves -= timePassed;
+        }
+        else
+        {
+            // Manages the enemy spawning loop during waves.
+            if (enemiesSpawnedThisWave < enemiesPerWave)
+            {
+                timerBetweenEnemies -= timePassed;
+                while (timerBetweenEnemies <= 0f)
+                {
+                    timerBetweenEnemies += timeBetweenEnemies;
+                    SpawnEnemy();
+                }
+                // Once all of the enemies have been spawned, end the wave.
+                if (enemiesSpawnedThisWave == enemiesPerWave)
+                {
+                    EndWave();
+                }
+            }
+        }
     }
 
     public void SpawnEnemy()
@@ -74,7 +107,9 @@ public class WaveController : MonoBehaviour
     // Start the timer for the next wave.
     private void StartNextWaveTimer()
     {
-        StartCoroutine(NextWaveTimer());
+        //StartCoroutine(NextWaveTimer());
+        timerBetweenWaves = timeBetweenWaves;
+        timerBetweenEnemies = timeBetweenEnemies;
     }
 
     private void StartWave()
@@ -84,8 +119,9 @@ public class WaveController : MonoBehaviour
 #if PRINT_WAVE_COUNTER
         Debug.Log("Wave " + wave + " has begun!");
 #endif
-        // Start the coroutine to begin spawning the enemies.
-        StartCoroutine(WaveCoroutine());
+        // Begin spawning the enemies.
+        //StartCoroutine(WaveCoroutine());
+        timerBetweenEnemies = 0f;
     }
 
     // This function is called when a wave ends.
@@ -100,24 +136,5 @@ public class WaveController : MonoBehaviour
 
         // Prepare for the next wave.
         StartNextWaveTimer();
-    }
-
-    // This coroutine manages the cooldown time between waves.
-    IEnumerator NextWaveTimer()
-    {
-        yield return new WaitForSeconds(timeBetweenWaves);
-        StartWave();
-    }
-
-    // This coroutine manages the enemy spawning loop during waves.
-    IEnumerator WaveCoroutine()
-    {
-        while (enemiesSpawnedThisWave < enemiesPerWave)
-        {
-            SpawnEnemy();
-            yield return new WaitForSeconds(timeBetweenEnemies);
-        }
-        // Once all of the enemies have been spawned, end the wave.
-        EndWave();
     }
 }

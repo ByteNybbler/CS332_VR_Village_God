@@ -89,12 +89,6 @@ public class VillagerMovement : MonoBehaviour
                 compHealth.Heal(1);
                 // Temporarily prevent the villager from eating another crop.
                 canEat = false;
-                // If health is full, return to normal activities.
-                if (compHealth.IsHealthFull())
-                {
-                    cropTarget = null;
-                    destinationIsFood = false;
-                }
             }
         }
         // If the villager is NOT heading towards food, head towards other things.

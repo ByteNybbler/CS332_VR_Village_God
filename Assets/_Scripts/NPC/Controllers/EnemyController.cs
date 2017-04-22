@@ -48,6 +48,14 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    public void KillAllEnemies()
+    {
+        foreach (GameObject enemy in enemies)
+        {
+            enemy.GetComponent<EnemyStatus>().Die();
+        }
+    }
+
     private void EnemyStatus_Died(GameObject enemy, int xp)
     {
         // Remove the enemy from the enemies list.

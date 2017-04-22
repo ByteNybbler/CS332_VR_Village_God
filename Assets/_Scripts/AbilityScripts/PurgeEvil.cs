@@ -8,8 +8,14 @@ using UnityEngine;
 
 public class PurgeEvil : Ability
 {
+    [Tooltip("The Audio Source to use to play sound.")]
+    public AudioSource audioSource;
+    [Tooltip("The Audio Clip to play.")]
+    public AudioClip audioClip;
+
     public override void PointerLocationAbility(Vector3 location)
     {
-        //
+        audioSource.PlayOneShot(audioClip);
+        car.gameController.enemyController.KillAllEnemies();
     }
 }

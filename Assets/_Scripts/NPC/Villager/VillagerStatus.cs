@@ -16,6 +16,14 @@ public class VillagerStatus : MonoBehaviour
     public FoodController foodController;
     [Tooltip("The number of seconds between each instance of the villager taking damage due to hunger.")]
     public float hungerTime;
+    [Tooltip("How much faith the villager gives.")]
+    public int faithAmount = 1;
+    [Tooltip("Number of seconds by which the hunger time increases per upgrade.")]
+    public float upgradeHungerTime;
+    [Tooltip("Faith increase per upgrade.")]
+    public int upgradeFaithAmount;
+    [Tooltip("Max health increase per upgrade.")]
+    public int upgradeMaxHealthAmount;
 
     public delegate void DiedHandler(GameObject victim);
     public event DiedHandler Died;
@@ -33,6 +41,7 @@ public class VillagerStatus : MonoBehaviour
     private void Awake()
     {
         health = GetComponent<Health>();
+        health.Healed += Health_Healed;
         npchealth = GetComponent<NPCHealth>();
         npchealth.Died += NPCHealth_Died;
         compVillagerMovement = GetComponent<VillagerMovement>();
@@ -56,6 +65,10 @@ public class VillagerStatus : MonoBehaviour
 #if VILLAGERSTATUS_DESTROY_DEBUG
         Debug.Log("VillagerStatus OnDestroy() called.");
 #endif
+        if (health != null)
+        {
+            health.Healed -= Health_Healed;
+        }
         if (npchealth != null)
         {
             npchealth.Died -= NPCHealth_Died;
@@ -79,6 +92,21 @@ public class VillagerStatus : MonoBehaviour
             hungerTimer += hungerTime;
             health.Damage(1);
         }
+    }
+
+    // Fully heal the villager.
+    public void FullHeal()
+    {
+        health.FullHeal();
+    }
+
+    // Upgrade the villager!
+    public void Upgrade()
+    {
+        hungerTime += upgradeHungerTime;
+        faithAmount += upgradeFaithAmount;
+        health.AddMaxHealth(upgradeMaxHealthAmount);
+        health.FullHeal();
     }
 
     // Set the closest viable crop to the villager as the target.
@@ -127,6 +155,16 @@ public class VillagerStatus : MonoBehaviour
             {
                 compVillagerMovement.cropTarget = crop;
             }
+        }
+    }
+
+    private void Health_Healed(int amount)
+    {
+        // If health is full, return to normal activities.
+        if (health.IsHealthFull())
+        {
+            compVillagerMovement.cropTarget = null;
+            compVillagerMovement.destinationIsFood = false;
         }
     }
 

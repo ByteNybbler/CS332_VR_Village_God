@@ -1,16 +1,20 @@
-﻿using System.Collections;
+﻿// Author(s): Paul Calande
+// Ability that fully heals all villagers in the scene.
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VillagerHealAll : MonoBehaviour {
+public class VillagerHealAll : Ability
+{
+    [Tooltip("The Audio Source to use to play sound.")]
+    public AudioSource audioSource;
+    [Tooltip("The Audio Clip to play.")]
+    public AudioClip audioClip;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public override void PointerLocationAbility(Vector3 location)
+    {
+        audioSource.PlayOneShot(audioClip);
+        car.gameController.village.FullHealAllVillagers();
+    }
 }

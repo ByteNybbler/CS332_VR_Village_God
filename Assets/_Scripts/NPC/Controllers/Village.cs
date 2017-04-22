@@ -80,6 +80,14 @@ public class Village : MonoBehaviour
         }
     }
 
+    public void FullHealAllVillagers()
+    {
+        foreach (GameObject villager in villagers)
+        {
+            villager.GetComponent<VillagerStatus>().FullHeal();
+        }
+    }
+
     public GameObject GetRandomVillager()
     {
         if (villagers.Count == 0)
@@ -90,6 +98,29 @@ public class Village : MonoBehaviour
         {
             return villagers[Random.Range(0, villagers.Count)];
         }
+    }
+
+    // Get the closest villager to a position that's within a certain distance.
+    // Returns null if no villager is found.
+    public GameObject GetClosestVillager(Vector3 position, float maxDistance)
+    {
+        // The closest villager so far.
+        GameObject closestVillager = null;
+        // Iterate through all of the villagers.
+        foreach (GameObject villager in villagers)
+        {
+            // Calculate the distance between the villager and the point.
+            float distance = Vector3.Distance(villager.transform.position, position);
+            // If the distance is the closest one so far...
+            if (distance < maxDistance)
+            {
+                // Update the smallest distance so far (between the villagers and the position).
+                maxDistance = distance;
+                // This villager is the closest one so far!
+                closestVillager = villager;
+            }
+        }
+        return closestVillager;
     }
 
     // Villager death event payload.

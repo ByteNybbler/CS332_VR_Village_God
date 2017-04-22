@@ -30,20 +30,20 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        if (village != null)
-        {
-            village.AllVillagersDied += Village_AllVillagersDied;
-        }
-        if (enemyController != null)
-        {
-            enemyController.EnemyDied += EnemyController_EnemyDied;
-        }
+        village.AllVillagersDied += Village_AllVillagersDied;
+        enemyController.EnemyDied += EnemyController_EnemyDied;
     }
 
     private void OnDestroy()
     {
-        village.AllVillagersDied -= Village_AllVillagersDied;
-        enemyController.EnemyDied -= EnemyController_EnemyDied;
+        if (village != null)
+        {
+            village.AllVillagersDied -= Village_AllVillagersDied;
+        }
+        if (enemyController != null)
+        {
+            enemyController.EnemyDied -= EnemyController_EnemyDied;
+        }
     }
 
     // Enemy death event callback.

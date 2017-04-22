@@ -2,7 +2,7 @@
 // Villager component for events and status.
 
 // Comment out the following line to prevent console messages involving villager destruction.
-#define VILLAGERSTATUS_DESTROY_DEBUG
+//#define VILLAGERSTATUS_DESTROY_DEBUG
 
 using System.Collections;
 using System.Collections.Generic;
@@ -39,17 +39,16 @@ public class VillagerStatus : MonoBehaviour
         ts = GetComponent<TimeScale>();
     }
 
-    public void Start()
+    private void Start()
     {
         hungerTimer = hungerTime;
-        if (foodController != null)
-        {
+        foodController.CropDied += FoodController_CropDied;
+        foodController.CropGrown += FoodController_CropGrown;
+
 #if VILLAGERSTATUS_DESTROY_DEBUG
-            Debug.Log("VillagerStatus " + GetInstanceID() + " subscribed to FoodController.");
+        Debug.Log("VillagerStatus " + GetInstanceID() +
+            " subscribed to foodController " + foodController.GetInstanceID());
 #endif
-            foodController.CropDied += FoodController_CropDied;
-            foodController.CropGrown += FoodController_CropGrown;
-        }
     }
 
     private void OnDestroy()

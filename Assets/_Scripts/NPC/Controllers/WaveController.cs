@@ -27,7 +27,6 @@ public class WaveController : MonoBehaviour
     // Timer variables.
     private float timerBetweenEnemies;
     private float timerBetweenWaves;
-
     // List of the transforms of the enemy spawn points.
     private List<Transform> spawnPoints;
     // The current wave.
@@ -107,7 +106,6 @@ public class WaveController : MonoBehaviour
     // Start the timer for the next wave.
     private void StartNextWaveTimer()
     {
-        //StartCoroutine(NextWaveTimer());
         timerBetweenWaves = timeBetweenWaves;
         timerBetweenEnemies = timeBetweenEnemies;
     }
@@ -120,7 +118,6 @@ public class WaveController : MonoBehaviour
         Debug.Log("Wave " + wave + " has begun!");
 #endif
         // Begin spawning the enemies.
-        //StartCoroutine(WaveCoroutine());
         timerBetweenEnemies = 0f;
     }
 

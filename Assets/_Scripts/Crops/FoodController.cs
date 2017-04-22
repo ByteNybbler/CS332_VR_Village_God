@@ -25,7 +25,6 @@ public class FoodController : MonoBehaviour
         // Pass the time controller reference to the crop.
         TimeControllable tc = cropInstance.GetComponent<TimeControllable>();
         tc.timeController = GetComponent<TimeControllable>().timeController;
-        tc.Start();
         // Subscribe to the crop and add it to the crops list.
         SubscribeToCrop(cropInstance);
         crops.Add(cropInstance);

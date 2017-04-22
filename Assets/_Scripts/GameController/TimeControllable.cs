@@ -18,13 +18,10 @@ public class TimeControllable : MonoBehaviour
         ts = GetComponent<TimeScale>();
     }
 
-    public void Start()
+    private void Start()
     {
-        if (timeController != null)
-        {
-            timeController.TimeStopped += TimeController_TimeStopped;
-            timeController.TimeResumed += TimeController_TimeResumed;
-        }
+        timeController.TimeStopped += TimeController_TimeStopped;
+        timeController.TimeResumed += TimeController_TimeResumed;
     }
 
     private void OnDestroy()

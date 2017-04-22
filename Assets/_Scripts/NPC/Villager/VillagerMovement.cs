@@ -56,13 +56,11 @@ public class VillagerMovement : MonoBehaviour
         compHealth = GetComponent<Health>();
         compVillagerStatus = GetComponent<VillagerStatus>();
         ts = GetComponent<TimeScale>();
-        eatCooldownTimer = eatCooldownTime;
     }
 
-    // Get the distance the agent is away from its destination.
-    private float GetDestinationDistance()
+    private void Start()
     {
-        return Vector3.Distance(transform.position, agent.destination);
+        eatCooldownTimer = eatCooldownTime;
     }
 
     private void Update()
@@ -143,6 +141,12 @@ public class VillagerMovement : MonoBehaviour
                 }
             }
         }
+    }
+
+    // Get the distance the agent is away from its destination.
+    private float GetDestinationDistance()
+    {
+        return Vector3.Distance(transform.position, agent.destination);
     }
 
     private void CheckIfWantsCrop()

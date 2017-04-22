@@ -64,9 +64,6 @@ public class Village : MonoBehaviour
             vs.Died += VillagerStatus_Died;
             // Pass the time controller to the villager.
             tc.timeController = GetComponent<TimeControllable>().timeController;
-            // Initialization time!
-            vs.Start();
-            tc.Start();
             // Add the villager to the list of existing villagers.
             villagers.Add(newVillager);
         }

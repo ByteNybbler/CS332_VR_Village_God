@@ -34,7 +34,9 @@ public class PlantStatus : MonoBehaviour
     private float currentScale = 0f;
 
     // Component references.
+#if PLANTSTATUS_USEMETER
     private Meter meter;
+#endif
     private TimeScale ts;
 
     private void Awake()

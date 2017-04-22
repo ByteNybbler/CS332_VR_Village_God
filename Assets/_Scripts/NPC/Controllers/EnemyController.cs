@@ -31,9 +31,6 @@ public class EnemyController : MonoBehaviour
         es.village = village;
         es.Died += EnemyStatus_Died;
         tc.timeController = GetComponent<TimeControllable>().timeController;
-        // Initialize the enemy.
-        es.Start();
-        tc.Start();
         // Add the enemy to the list.
         enemies.Add(enemy);
         // Return the enemy!

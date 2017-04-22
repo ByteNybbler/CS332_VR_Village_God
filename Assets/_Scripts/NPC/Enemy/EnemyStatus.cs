@@ -29,13 +29,10 @@ public class EnemyStatus : MonoBehaviour
         cmpEnemyMovement = GetComponent<EnemyMovement>();
     }
 
-    public void Start()
+    private void Start()
     {
-        if (village != null)
-        {
-            SetRandomTarget();
-            village.VillagerDied += Village_VillagerDied;
-        }
+        village.VillagerDied += Village_VillagerDied;
+        SetRandomTarget();
     }
 
     private void OnDestroy()

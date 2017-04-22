@@ -128,7 +128,7 @@ public class Health : MonoBehaviour
     // Returns true if there's no health left.
     private bool IsDead()
     {
-        return (healthCurrent <= 0f);
+        return (healthCurrent <= 0);
     }
 
     // Event invocations.

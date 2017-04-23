@@ -2,7 +2,7 @@
 // Villager interaction script for VR functionality.
 
 // Comment out the following line to disable all rigidbody functionality.
-#define NPC_USING_RIGIDBODY
+//#define NPC_USING_RIGIDBODY
 
 using System.Collections;
 using System.Collections.Generic;

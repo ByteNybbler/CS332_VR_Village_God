@@ -20,17 +20,23 @@ public class EnemyController : MonoBehaviour
     private List<GameObject> enemies = new List<GameObject>();
 
     // Spawn an enemy at a transform.
-    public GameObject SpawnEnemy(Transform trans)
+    public GameObject SpawnEnemy(Transform trans, int health, float speedMultiplier)
     {
         // Instantiate an enemy.
         GameObject enemy = Instantiate(enemyPrefab, trans.position, trans.rotation);
         // Get the enemy's components.
         EnemyStatus es = enemy.GetComponent<EnemyStatus>();
+        EnemyMovement em = enemy.GetComponent<EnemyMovement>();
+        Health h = enemy.GetComponent<Health>();
         TimeControllable tc = enemy.GetComponent<TimeControllable>();
         // Pass variables to the spawned enemy.
         es.village = village;
         es.Died += EnemyStatus_Died;
         tc.timeController = GetComponent<TimeControllable>().timeController;
+        // Adjust the enemy strength based on the parameters.
+        h.SetMaxHealth(health, Health.Type.Null);
+        h.SetHealth(health, Health.Type.Null);
+        em.MultiplySpeed(speedMultiplier);
         // Add the enemy to the list.
         enemies.Add(enemy);
         // Return the enemy!

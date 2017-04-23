@@ -23,6 +23,14 @@ public class WaveController : MonoBehaviour
     public float timeBetweenEnemiesMultiplier = 0.9f;
     [Tooltip("Number of seconds between each wave.")]
     public float timeBetweenWaves = 5f;
+    [Tooltip("How much health the enemy has.")]
+    public int enemyHealth = 8;
+    [Tooltip("How much the enemy health increases between waves.")]
+    public int enemyHealthIncrease = 1;
+    [Tooltip("How much the enemy speed is multiplied by.")]
+    public float enemySpeedMultiplier = 1f;
+    [Tooltip("How much the enemy speed is multiplied by per wave.")]
+    public float enemySpeedMultiplierIncrease = 0.1f;
 
     // Timer variables.
     private float timerBetweenEnemies;
@@ -60,6 +68,10 @@ public class WaveController : MonoBehaviour
         if (timerBetweenWaves > 0f)
         {
             timerBetweenWaves -= timePassed;
+            if (timerBetweenWaves <= 0f)
+            {
+                StartWave();
+            }
         }
         else
         {
@@ -86,7 +98,7 @@ public class WaveController : MonoBehaviour
         // Choose a spawn point at which to spawn an enemy.
         ChooseRandomSpawnPoint();
         // Spawn the actual enemy.
-        enemyController.SpawnEnemy(currentSpawnPoint);
+        enemyController.SpawnEnemy(currentSpawnPoint, enemyHealth, enemySpeedMultiplier);
         // Increment the number of enemies spawned this wave.
         enemiesSpawnedThisWave += 1;
     }
@@ -107,7 +119,6 @@ public class WaveController : MonoBehaviour
     private void StartNextWaveTimer()
     {
         timerBetweenWaves = timeBetweenWaves;
-        timerBetweenEnemies = timeBetweenEnemies;
     }
 
     private void StartWave()
@@ -125,8 +136,10 @@ public class WaveController : MonoBehaviour
     private void EndWave()
     {
         // Calculate deltas to affect the next wave's difficulty.
-        enemiesPerWave = (int)(enemiesPerWave * enemiesPerWaveMultiplier);
+        enemiesPerWave = Mathf.CeilToInt(enemiesPerWave * enemiesPerWaveMultiplier);
         timeBetweenEnemies *= timeBetweenEnemiesMultiplier;
+        enemyHealth += enemyHealthIncrease;
+        enemySpeedMultiplier += enemySpeedMultiplierIncrease;
 
         // Reset various counter variables.
         enemiesSpawnedThisWave = 0;

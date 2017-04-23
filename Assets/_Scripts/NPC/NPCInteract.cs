@@ -25,13 +25,14 @@ public class NPCInteract : VRTK_InteractableObject
 #if NPC_USING_RIGIDBODY
     //private Rigidbody rb;
 #endif
+    private Rigidbody rb;
 
     protected override void Awake()
     {
         base.Awake();
         agent = GetComponent<NavMeshAgent>();
+        rb = GetComponent<Rigidbody>();
 #if NPC_USING_RIGIDBODY
-        //rb = GetComponent<Rigidbody>();
         //rb = interactableRigidbody;
         SetKinematicEnabled(true);
 #endif
@@ -91,6 +92,7 @@ public class NPCInteract : VRTK_InteractableObject
             {
                 transform.position = hit.position;
                 SetAgentEnabled(true);
+                rb.velocity = Vector3.zero;
 #if NPC_USING_RIGIDBODY
                 SetKinematicEnabled(true);
 #endif

@@ -20,7 +20,7 @@ public class PressBToCheat : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.B))
         {
-            car.shrine.points += 1000000;
+            car.shrine.IncreasePoints(1000000, transform.position);
         }
     }
 }

@@ -42,7 +42,7 @@ public class NPCInteract : VRTK_InteractableObject
         base.Grabbed(currentGrabbingObject);
         SetAgentEnabled(false);
 #if NPC_USING_RIGIDBODY
-        SetKinematicEnabled(true);
+        SetKinematicEnabled(false);
 #endif
         StopAllCoroutines();
     }
@@ -51,7 +51,7 @@ public class NPCInteract : VRTK_InteractableObject
     {
         base.Ungrabbed(previousGrabbingObject);
 #if NPC_USING_RIGIDBODY
-        SetKinematicEnabled(false);
+        //SetKinematicEnabled(false);
 #endif
         StartCoroutine(TryToEnableAgent());
     }

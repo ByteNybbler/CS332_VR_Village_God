@@ -2,7 +2,7 @@
 // Villager interaction script for VR functionality.
 
 // Comment out the following line to disable all rigidbody functionality.
-//#define NPC_USING_RIGIDBODY
+#define NPC_USING_RIGIDBODY
 
 using System.Collections;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ public class NPCInteract : VRTK_InteractableObject
     // Component references.
     private NavMeshAgent agent;
 #if NPC_USING_RIGIDBODY
-    private Rigidbody rb;
+    //private Rigidbody rb;
 #endif
 
     protected override void Awake()
@@ -31,7 +31,8 @@ public class NPCInteract : VRTK_InteractableObject
         base.Awake();
         agent = GetComponent<NavMeshAgent>();
 #if NPC_USING_RIGIDBODY
-        rb = GetComponent<Rigidbody>();
+        //rb = GetComponent<Rigidbody>();
+        //rb = interactableRigidbody;
         SetKinematicEnabled(true);
 #endif
     }
@@ -72,8 +73,10 @@ public class NPCInteract : VRTK_InteractableObject
     /// <param name="isEnabled">True to enable the rigidbody's kinematic flag.</param>
     private void SetKinematicEnabled(bool isEnabled)
     {
-        rb.isKinematic = isEnabled;
+        //Debug.Log(interactableRigidbody);
+        //rb.isKinematic = isEnabled;
         //rb.detectCollisions = !isEnabled;
+        isKinematic = isEnabled;
     }
 #endif
 

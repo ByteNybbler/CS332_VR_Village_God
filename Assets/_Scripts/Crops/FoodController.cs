@@ -9,6 +9,10 @@ public class FoodController : MonoBehaviour
 {
     [Tooltip("Crop prefab reference.")]
     public GameObject prefabCrop;
+    [Tooltip("The Audio Source to use to play sound.")]
+    public AudioSource audioSource;
+    [Tooltip("The Audio Clip to play when a crop is planted.")]
+    public AudioClip soundPlant;
 
     public delegate void CropDiedHandler(GameObject victim);
     public event CropDiedHandler CropDied;
@@ -25,9 +29,12 @@ public class FoodController : MonoBehaviour
         // Pass the time controller reference to the crop.
         TimeControllable tc = cropInstance.GetComponent<TimeControllable>();
         tc.timeController = GetComponent<TimeControllable>().timeController;
+        TimeScale.PassTimeScale(cropInstance, gameObject);
         // Subscribe to the crop and add it to the crops list.
         SubscribeToCrop(cropInstance);
         crops.Add(cropInstance);
+        // Play crop planting sound.
+        audioSource.PlayOneShot(soundPlant);
     }
 
     // Get the crop that's closest to a certain position.

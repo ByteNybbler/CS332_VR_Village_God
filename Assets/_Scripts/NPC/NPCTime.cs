@@ -10,6 +10,7 @@ public class NPCTime : MonoBehaviour
 {
     // Original agent values.
     float oldSpeed, oldAngularSpeed, oldAcceleration;
+    Vector3 oldVelocity;
 
     // Component references.
     private TimeScale ts;
@@ -42,9 +43,14 @@ public class NPCTime : MonoBehaviour
 
     private void TimeScale_Changed(float timescale)
     {
+        //Debug.Log(name + " got caught in stopped time.");
+
         agent.speed = oldSpeed * timescale;
         agent.angularSpeed = oldAngularSpeed * timescale;
         agent.acceleration = oldAcceleration * timescale;
+
+        oldVelocity = agent.velocity;
+        agent.velocity *= timescale;
     }
 
     private void TimeScale_Reset()
@@ -52,5 +58,7 @@ public class NPCTime : MonoBehaviour
         agent.speed = oldSpeed;
         agent.angularSpeed = oldAngularSpeed;
         agent.acceleration = oldAcceleration;
+
+        agent.velocity = oldVelocity;
     }
 }

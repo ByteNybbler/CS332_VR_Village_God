@@ -8,13 +8,21 @@ using UnityEngine.Events;
 
 public class PeriodicFunction : MonoBehaviour
 {
+    [Tooltip("The amount of time before the first function call.")]
+    public float initialDelay = 0f;
     [Tooltip("The amount of time between each function call.")]
-    public float period = 2.0f;
+    public float period = 2f;
     [Tooltip("Function(s) to call.")]
     public UnityEvent function;
 
     private void Start()
     {
+        StartCoroutine(InitialDelay());
+    }
+
+    IEnumerator InitialDelay()
+    {
+        yield return new WaitForSeconds(initialDelay);
         StartCoroutine(Loop());
     }
 

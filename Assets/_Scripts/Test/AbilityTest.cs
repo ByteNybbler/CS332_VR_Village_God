@@ -14,6 +14,7 @@ public class AbilityTest : MonoBehaviour
 
     public void StopTime()
     {
+        //Debug.Log("AbilityTest: Time stop activated.");
         timeStopAbility.PointerLocationAbility(transform.position);
     }
 }

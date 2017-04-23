@@ -33,6 +33,7 @@ public class EnemyController : MonoBehaviour
         es.village = village;
         es.Died += EnemyStatus_Died;
         tc.timeController = GetComponent<TimeControllable>().timeController;
+        TimeScale.PassTimeScale(enemy, gameObject);
         // Adjust the enemy strength based on the parameters.
         h.SetMaxHealth(health, Health.Type.Null);
         h.SetHealth(health, Health.Type.Null);

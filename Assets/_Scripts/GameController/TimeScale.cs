@@ -15,6 +15,12 @@ public class TimeScale : MonoBehaviour
     public delegate void TimeScaleResetHandler();
     public event TimeScaleResetHandler Reset;
 
+    // Pass a time scale from the passer to the receiver.
+    public static void PassTimeScale(GameObject receiver, GameObject passer)
+    {
+        receiver.GetComponent<TimeScale>().SetTimeScale(passer.GetComponent<TimeScale>().GetTimeScale());
+    }
+
     // Get the timescale itself.
     public float GetTimeScale()
     {

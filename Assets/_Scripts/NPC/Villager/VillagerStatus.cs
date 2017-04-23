@@ -7,6 +7,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 [RequireComponent (typeof (Health))]
 [RequireComponent (typeof (VillagerMovement))]
@@ -37,6 +38,7 @@ public class VillagerStatus : MonoBehaviour
     private PlantFood compPlantFood;
     private VillagerMovement compVillagerMovement;
     private TimeScale ts;
+    //private NavMeshAgent agent;
 
     private void Awake()
     {
@@ -46,6 +48,7 @@ public class VillagerStatus : MonoBehaviour
         npchealth.Died += NPCHealth_Died;
         compVillagerMovement = GetComponent<VillagerMovement>();
         ts = GetComponent<TimeScale>();
+        //agent = GetComponent<NavMeshAgent>();
     }
 
     private void Start()

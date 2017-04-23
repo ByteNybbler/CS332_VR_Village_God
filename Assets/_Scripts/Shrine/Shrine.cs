@@ -28,36 +28,27 @@ public class Shrine : MonoBehaviour
     public delegate void PointsUpdatedHandler(int amount);
     public event PointsUpdatedHandler PointsUpdated;
 
-    // The quantity of charge (in charge seconds) that the shrine has yet to convert into points.
-    private float chargeSeconds;
-
     private void Start()
     {
         // Invoke the initial points event.
         OnPointsUpdated(points);
     }
 
-    // Use this public function to add charge seconds to the shrine.
+    // Use this public function to add points to the shrine.
     // rootPosition is the spawn position of the +1.
-    public void IncreaseChargeSeconds(float amount, Vector3 rootPosition)
+    public void IncreasePoints(int amount, Vector3 rootPosition)
     {
-        chargeSeconds += amount;
-        while (chargeSeconds > chargeSecondsPerPoint)
-        {
-            chargeSeconds -= chargeSecondsPerPoint;
-            // Update the points.
-            int additionalPoints = 1;
-            points += additionalPoints;
-            // Invoke the event with the updated amount of points.
-            OnPointsUpdated(points);
-            // Instantiate the +1 canvas.
-            rtcPlusPoints.message = "+" + additionalPoints + " " + faithString;
-            rtcPlusPoints.CreateRisingText(rootPosition);
+        // Increase points.
+        points += amount;
+        // Invoke the points updated event with the updated amount of points.
+        OnPointsUpdated(points);
+        // Instantiate the +1 canvas.
+        rtcPlusPoints.message = "+" + amount + " " + faithString;
+        rtcPlusPoints.CreateRisingText(rootPosition);
 
 #if DEBUG_SHRINE_POINTS
-            Debug.Log("Shrine points: " + points);
+        Debug.Log("Shrine points: " + points);
 #endif
-        }
     }
 
     // This function is used for buying stuff with the shrine's points.

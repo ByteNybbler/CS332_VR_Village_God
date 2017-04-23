@@ -11,6 +11,8 @@ public class VillagerUpgrade : Ability
     public AudioSource audioSource;
     [Tooltip("The Audio Clip to play.")]
     public AudioClip audioClip;
+    [Tooltip("How much the cost of the ability is multiplied by per use.")]
+    public float costMultiplierPerUse = 1.1f;
     [Tooltip("How close the villager must be to the pointer to be affected.")]
     public float range;
 
@@ -21,6 +23,7 @@ public class VillagerUpgrade : Ability
     {
         audioSource.PlayOneShot(audioClip);
         target.GetComponent<VillagerStatus>().Upgrade();
+        cost = Mathf.CeilToInt(cost * costMultiplierPerUse);
     }
 
     // Return true if a villager is close enough to a pointer.

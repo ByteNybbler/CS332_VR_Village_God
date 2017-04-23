@@ -103,16 +103,17 @@ public class VillagerMovement : MonoBehaviour
                 {
                     // Increase the idle time.
                     timeIdled += timePassed;
-                    // Charge up the shrine.
-                    shrine.IncreaseChargeSeconds(timePassed, transform.position);
-                }
-                // If the villager has idled at the shrine for long enough...
-                if (timeIdled > shrineIdleTime)
-                {
-                    // Reset the idle time and stop targeting the shrine.
-                    timeIdled = 0f;
-                    destinationIsShrine = false;
-                    CheckIfWantsCrop();
+                    // If the villager has idled at the shrine for long enough...
+                    if (timeIdled > shrineIdleTime)
+                    {
+                        // Reward faith points.
+                        shrine.IncreasePoints(compVillagerStatus.faithAmount, transform.position);
+                        // Reset the idle time and stop targeting the shrine.
+                        timeIdled = 0f;
+                        destinationIsShrine = false;
+                        // Check if the villager wants food.
+                        CheckIfWantsCrop();
+                    }
                 }
             }
             // If the villager is targeting the house...
@@ -124,14 +125,15 @@ public class VillagerMovement : MonoBehaviour
                 {
                     // Increase the idle time.
                     timeIdled += timePassed;
-                }
-                // If the villager has idled at the house for long enough...
-                if (timeIdled > houseIdleTime)
-                {
-                    // Reset the idle time and start heading to the shrine.
-                    timeIdled = 0f;
-                    destinationIsShrine = true;
-                    CheckIfWantsCrop();
+                    // If the villager has idled at the house for long enough...
+                    if (timeIdled > houseIdleTime)
+                    {
+                        // Reset the idle time and start heading to the shrine.
+                        timeIdled = 0f;
+                        destinationIsShrine = true;
+                        // Check if the villager wants food.
+                        CheckIfWantsCrop();
+                    }
                 }
             }
         }

@@ -93,14 +93,14 @@ public class VillagerStatus : MonoBehaviour
         while (hungerTimer <= 0f)
         {
             hungerTimer += hungerTime;
-            health.Damage(1);
+            health.Damage(1, Health.Type.Hunger);
         }
     }
 
     // Fully heal the villager.
-    public void FullHeal()
+    public void FullHeal(Health.Type type)
     {
-        health.FullHeal();
+        health.FullHeal(type);
     }
 
     // Upgrade the villager!
@@ -108,8 +108,8 @@ public class VillagerStatus : MonoBehaviour
     {
         hungerTime += upgradeHungerTime;
         faithAmount += upgradeFaithAmount;
-        health.AddMaxHealth(upgradeMaxHealthAmount);
-        health.FullHeal();
+        health.AddMaxHealth(upgradeMaxHealthAmount, Health.Type.Divine);
+        health.FullHeal(Health.Type.Divine);
     }
 
     // Set the closest viable crop to the villager as the target.
@@ -161,7 +161,7 @@ public class VillagerStatus : MonoBehaviour
         }
     }
 
-    private void Health_Healed(int amount)
+    private void Health_Healed(int amount, Health.Type type)
     {
         // If health is full, return to normal activities.
         if (health.IsHealthFull())

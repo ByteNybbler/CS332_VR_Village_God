@@ -41,7 +41,7 @@ public class BallOfDeath : MonoBehaviour
         {
             //Debug.Log("Damage upon NPC collision: " + CalculateDamage());
             Health otherHealth = collision.gameObject.GetComponent<Health>();
-            otherHealth.Damage(CalculateDamage());
+            otherHealth.Damage(CalculateDamage(), Health.Type.Crush);
         }
     }
 }

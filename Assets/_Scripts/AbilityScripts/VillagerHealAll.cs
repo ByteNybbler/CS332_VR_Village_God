@@ -15,6 +15,6 @@ public class VillagerHealAll : Ability
     public override void PointerLocationAbility(Vector3 location)
     {
         audioSource.PlayOneShot(audioClip);
-        car.gameController.village.FullHealAllVillagers();
+        car.gameController.village.FullHealAllVillagers(Health.Type.Divine);
     }
 }

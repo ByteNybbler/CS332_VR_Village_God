@@ -52,7 +52,7 @@ public class EnemyController : MonoBehaviour
     {
         foreach (GameObject enemy in enemies)
         {
-            enemy.GetComponent<EnemyStatus>().Die();
+            enemy.GetComponent<NPCHealth>().Die();
         }
     }
 

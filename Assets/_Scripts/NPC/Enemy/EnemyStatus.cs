@@ -59,17 +59,11 @@ public class EnemyStatus : MonoBehaviour
         SetTarget(village.GetRandomVillager());
     }
 
-    // Make the enemy die.
-    public void Die()
-    {
-        // Invoke this enemy's death event.
-        OnDied(gameObject, xpOnKill);
-    }
-
     // NPC health death event payload.
     private void NPCHealth_Died()
     {
-        Die();
+        // Invoke this enemy's death event.
+        OnDied(gameObject, xpOnKill);
     }
 
     // Event payload for when a villager dies.
@@ -83,6 +77,7 @@ public class EnemyStatus : MonoBehaviour
         }
     }
 
+    // Event invocations.
     private void OnDied(GameObject obj, int xp)
     {
         if (Died != null)

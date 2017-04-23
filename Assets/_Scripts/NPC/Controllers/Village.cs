@@ -80,11 +80,11 @@ public class Village : MonoBehaviour
         }
     }
 
-    public void FullHealAllVillagers()
+    public void FullHealAllVillagers(Health.Type type)
     {
         foreach (GameObject villager in villagers)
         {
-            villager.GetComponent<VillagerStatus>().FullHeal();
+            villager.GetComponent<VillagerStatus>().FullHeal(type);
         }
     }
 

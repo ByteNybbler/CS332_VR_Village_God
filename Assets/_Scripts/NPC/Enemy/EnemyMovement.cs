@@ -15,6 +15,8 @@ public class EnemyMovement : MonoBehaviour
     public float damageDistance;
     [Tooltip("How many seconds between each attempt to damage the villager.")]
     public float timeBetweenAttacks;
+    [Tooltip("How much damage the enemy does.")]
+    public int damage = 1;
 
     // Timers.
     private float timerBetweenAttacks;
@@ -54,10 +56,17 @@ public class EnemyMovement : MonoBehaviour
                 {
                     // Damage the target.
                     Health compVillagerHealth = target.GetComponent<Health>();
-                    int damage = 1;
-                    compVillagerHealth.Damage(damage);
+                    compVillagerHealth.Damage(damage, Health.Type.Impact);
                 }
             }
         }
+    }
+    
+    // Multiply the speed of the enemy.
+    public void MultiplySpeed(float amount)
+    {
+        agent.speed *= amount;
+        agent.angularSpeed *= amount;
+        agent.acceleration *= amount;
     }
 }

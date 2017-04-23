@@ -9,11 +9,13 @@ public class HealthTrigger : MonoBehaviour
 {
     public enum Type
     {
-        damage, heal, setHealth
+        Damage, Heal, SetHealth
     }
 
     [Tooltip("The trigger type.")]
-    public Type type;
+    public Type triggerType;
+    [Tooltip("The health type.")]
+    public Health.Type healthType;
     [Tooltip("The quantity of health points that this trigger will affect the health with.")]
     public int amount = 1;
     [Tooltip("Seconds between each attempt to influence the object inside the trigger.")]

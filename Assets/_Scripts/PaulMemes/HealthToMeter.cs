@@ -28,12 +28,12 @@ public class HealthToMeter : MonoBehaviour
         compHealth.MaxHealthChanged -= Health_MaxHealthChanged;
     }
 
-    private void Health_CurrentHealthChanged(int newHealthCurrent)
+    private void Health_CurrentHealthChanged(int newHealthCurrent, Health.Type type)
     {    
         compMeter.SetCurrentValue(newHealthCurrent);
     }
 
-    private void Health_MaxHealthChanged(int newHealthMax)
+    private void Health_MaxHealthChanged(int newHealthMax, Health.Type type)
     {
         compMeter.SetMaxValue(newHealthMax);
     }

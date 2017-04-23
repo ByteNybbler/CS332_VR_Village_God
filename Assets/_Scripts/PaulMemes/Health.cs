@@ -8,6 +8,14 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
+    // The "type" of the healing/damage of changes in health.
+    // This has no effect on the functionality within this class.
+    // However, you can use this information outside of this class via events.
+    public enum Type
+    {
+        Null, Impact, Hunger, Crush, Liquid, Divine, Electricity
+    }
+
     [SerializeField]
     [Tooltip("The maximum health the object can have.")]
     private int healthMax;
@@ -15,19 +23,19 @@ public class Health : MonoBehaviour
     [Tooltip("The current health the object has.")]
     private int healthCurrent;
 
-    public delegate void DiedHandler();
+    public delegate void DiedHandler(Type type);
     public event DiedHandler Died;
-    public delegate void HealedHandler(int amount);
+    public delegate void HealedHandler(int amount, Type type);
     public event HealedHandler Healed;
-    public delegate void DamagedHandler(int amount);
+    public delegate void DamagedHandler(int amount, Type type);
     public event DamagedHandler Damaged;
-    public delegate void MaxHealthAddedHandler(int amount);
+    public delegate void MaxHealthAddedHandler(int amount, Type type);
     public event MaxHealthAddedHandler MaxHealthAdded;
-    public delegate void MaxHealthSubtractedHandler(int amount);
+    public delegate void MaxHealthSubtractedHandler(int amount, Type type);
     public event MaxHealthSubtractedHandler MaxHealthSubtracted;
-    public delegate void CurrentHealthChangedHandler(int newHealthCurrent);
+    public delegate void CurrentHealthChangedHandler(int newHealthCurrent, Type type);
     public event CurrentHealthChangedHandler CurrentHealthChanged;
-    public delegate void MaxHealthChangedHandler(int newHealthMax);
+    public delegate void MaxHealthChangedHandler(int newHealthMax, Type type);
     public event MaxHealthChangedHandler MaxHealthChanged;
 
     public int GetCurrentHealth()
@@ -40,83 +48,83 @@ public class Health : MonoBehaviour
         return healthMax;
     }
 
-    public void Damage(int amount)
+    public void Damage(int amount, Type type)
     {
         if (!IsDead())
         {
             amount = Mathf.Min(amount, healthCurrent);
             healthCurrent -= amount;
-            OnDamaged(amount);
-            OnCurrentHealthChanged(healthCurrent);
+            OnDamaged(amount, type);
+            OnCurrentHealthChanged(healthCurrent, type);
         }
         if (IsDead())
         {
-            OnDied();
+            OnDied(type);
         }
     }
 
-    public void Heal(int amount)
+    public void Heal(int amount, Type type)
     {
         if (!IsHealthFull())
         {
             amount = Mathf.Min(amount, healthMax - healthCurrent);
             healthCurrent += amount;
-            OnHealed(amount);
-            OnCurrentHealthChanged(healthCurrent);
+            OnHealed(amount, type);
+            OnCurrentHealthChanged(healthCurrent, type);
         }
     }
 
-    public void SetHealth(int amount)
+    public void SetHealth(int amount, Type type)
     {
         if (amount > healthCurrent)
         {
-            Heal(amount - healthCurrent);
+            Heal(amount - healthCurrent, type);
         }
         if (amount < healthCurrent)
         {
-            Damage(healthCurrent - amount);
+            Damage(healthCurrent - amount, type);
         }
     }
 
     // Restore the current health to the max health.
-    public void FullHeal()
+    public void FullHeal(Type type)
     {
-        Heal(healthMax - healthCurrent);
+        Heal(healthMax - healthCurrent, type);
     }
 
     // Effectively set the health to 0, causing death.
-    public void Die()
+    public void Die(Type type)
     {
-        Damage(healthCurrent);
+        Damage(healthCurrent, type);
     }
 
-    public void AddMaxHealth(int amount)
+    public void AddMaxHealth(int amount, Type type)
     {
         healthMax += amount;
-        OnMaxHealthAdded(amount);
-        OnMaxHealthChanged(healthMax);
+        OnMaxHealthAdded(amount, type);
+        OnMaxHealthChanged(healthMax, type);
     }
 
-    public void SubtractMaxHealth(int amount)
+    public void SubtractMaxHealth(int amount, Type type)
     {
         healthMax -= amount;
-        OnMaxHealthSubtracted(amount);
-        OnMaxHealthChanged(healthMax);
+        OnMaxHealthSubtracted(amount, type);
+        OnMaxHealthChanged(healthMax, type);
         if (healthCurrent > healthMax)
         {
-            Damage(healthCurrent - healthMax);
+            Damage(healthCurrent - healthMax, type);
         }
     }
 
-    public void SetMaxHealth(int amount)
+    public void SetMaxHealth(int amount, Type type)
     {
         if (amount > healthMax)
         {
-            AddMaxHealth(amount - healthMax);
+            AddMaxHealth(amount - healthMax, type);
         }
         if (amount < healthMax)
         {
-            SubtractMaxHealth(healthMax - amount);
+            SubtractMaxHealth(healthMax - amount, type);
         }
     }
 
@@ -126,59 +134,59 @@ public class Health : MonoBehaviour
     }
 
     // Returns true if there's no health left.
-    private bool IsDead()
+    public bool IsDead()
     {
         return (healthCurrent <= 0);
     }
 
     // Event invocations.
-    private void OnDied()
+    private void OnDied(Type type)
     {
         if (Died != null)
         {
-            Died();
+            Died(type);
         }
     }
-    private void OnHealed(int amount)
+    private void OnHealed(int amount, Type type)
     {
         if (Healed != null)
         {
-            Healed(amount);
+            Healed(amount, type);
         }
     }
-    private void OnDamaged(int amount)
+    private void OnDamaged(int amount, Type type)
     {
         if (Damaged != null)
         {
-            Damaged(amount);
+            Damaged(amount, type);
         }
     }
-    private void OnMaxHealthAdded(int amount)
+    private void OnMaxHealthAdded(int amount, Type type)
     {
         if (MaxHealthAdded != null)
         {
-            MaxHealthAdded(amount);
+            MaxHealthAdded(amount, type);
         }
     }
-    private void OnMaxHealthSubtracted(int amount)
+    private void OnMaxHealthSubtracted(int amount, Type type)
     {
         if (MaxHealthSubtracted != null)
         {
-            MaxHealthSubtracted(amount);
+            MaxHealthSubtracted(amount, type);
         }
     }
-    private void OnCurrentHealthChanged(int newHealthCurrent)
+    private void OnCurrentHealthChanged(int newHealthCurrent, Type type)
     {
         if (CurrentHealthChanged != null)
         {
-            CurrentHealthChanged(newHealthCurrent);
+            CurrentHealthChanged(newHealthCurrent, type);
         }
     }
-    private void OnMaxHealthChanged(int newHealthMax)
+    private void OnMaxHealthChanged(int newHealthMax, Type type)
     {
         if (MaxHealthChanged != null)
         {
-            MaxHealthChanged(newHealthMax);
+            MaxHealthChanged(newHealthMax, type);
         }
     }
 }

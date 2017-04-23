@@ -38,22 +38,34 @@ public class NPCHealth : MonoBehaviour
         compHealth.Died -= Health_Died;
     }
 
-    private void Health_Damaged(int amount)
-    {
-        rtcDamaged.message = "-" + Mathf.CeilToInt(amount) + " " + hpString;
-        rtcDamaged.CreateRisingText(transform.position);
-    }
-
-    private void Health_Healed(int amount)
-    {
-        rtcHealed.message = "+" + Mathf.CeilToInt(amount) + " " + hpString;
-        rtcHealed.CreateRisingText(transform.position);
-    }
-
-    private void Health_Died()
+    // Make the NPC die.
+    public void Die()
     {
         OnDied();
         Destroy(gameObject);
+    }
+
+    private void Health_Damaged(int amount, Health.Type type)
+    {
+        if (type != Health.Type.Null)
+        {
+            rtcDamaged.message = "-" + Mathf.CeilToInt(amount) + " " + hpString;
+            rtcDamaged.CreateRisingText(transform.position);
+        }
+    }
+
+    private void Health_Healed(int amount, Health.Type type)
+    {
+        if (type != Health.Type.Null)
+        {
+            rtcHealed.message = "+" + Mathf.CeilToInt(amount) + " " + hpString;
+            rtcHealed.CreateRisingText(transform.position);
+        }
+    }
+
+    private void Health_Died(Health.Type type)
+    {
+        Die();
     }
 
     private void OnDied()

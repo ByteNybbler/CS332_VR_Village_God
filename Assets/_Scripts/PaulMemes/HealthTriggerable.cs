@@ -33,17 +33,17 @@ public class HealthTriggerable : MonoBehaviour
             Coroutine c;
             ht.Disabled += HealthTrigger_Disabled;
             healthTriggers.Add(ht);
-            switch (ht.type)
+            switch (ht.triggerType)
             {
-                case HealthTrigger.Type.damage:
-                    c = StartCoroutine(TriggerHurt(ht.amount, ht.timeBetweenFires));
+                case HealthTrigger.Type.Damage:
+                    c = StartCoroutine(TriggerHurt(ht.amount, ht.timeBetweenFires, ht.healthType));
                     break;
-                case HealthTrigger.Type.heal:
-                    c = StartCoroutine(TriggerHeal(ht.amount, ht.timeBetweenFires));
+                case HealthTrigger.Type.Heal:
+                    c = StartCoroutine(TriggerHeal(ht.amount, ht.timeBetweenFires, ht.healthType));
                     break;
-                case HealthTrigger.Type.setHealth:
+                case HealthTrigger.Type.SetHealth:
                 default:
-                    c = StartCoroutine(TriggerSetHealth(ht.amount, ht.timeBetweenFires));
+                    c = StartCoroutine(TriggerSetHealth(ht.amount, ht.timeBetweenFires, ht.healthType));
                     break;
             }
             triggerTimers.Add(other, c);
@@ -90,28 +90,28 @@ public class HealthTriggerable : MonoBehaviour
         }
     }
 
-    IEnumerator TriggerHurt(int amount, float timeBetweenFires)
+    IEnumerator TriggerHurt(int amount, float timeBetweenFires, Health.Type healthType)
     {
         while (true)
         {
             //Debug.Log("TriggerHurt timer: " + timeBetweenFires * Time.timeScale);
-            compHealth.Damage(amount);
+            compHealth.Damage(amount, healthType);
             yield return new WaitForSeconds(timeBetweenFires);
         }
     }
-    IEnumerator TriggerHeal(int amount, float timeBetweenFires)
+    IEnumerator TriggerHeal(int amount, float timeBetweenFires, Health.Type healthType)
     {
         while (true)
         {
-            compHealth.Heal(amount);
+            compHealth.Heal(amount, healthType);
             yield return new WaitForSeconds(timeBetweenFires);
         }
     }
-    IEnumerator TriggerSetHealth(int amount, float timeBetweenFires)
+    IEnumerator TriggerSetHealth(int amount, float timeBetweenFires, Health.Type healthType)
     {
         while (true)
         {
-            compHealth.SetHealth(amount);
+            compHealth.SetHealth(amount, healthType);
             yield return new WaitForSeconds(timeBetweenFires);
         }
     }

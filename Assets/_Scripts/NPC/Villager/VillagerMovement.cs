@@ -86,7 +86,7 @@ public class VillagerMovement : MonoBehaviour
                 // Eat a bit of the crop.
                 cropTarget.GetComponent<PlantStatus>().DecreaseHealth();
                 // Restore health.
-                compHealth.Heal(1);
+                compHealth.Heal(1, Health.Type.Hunger);
                 // Temporarily prevent the villager from eating another crop.
                 canEat = false;
             }

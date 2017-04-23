@@ -10,10 +10,10 @@ public class TimeScale : MonoBehaviour
     // The scale of the time.
     private float scale = 1.0f;
 
-    private void Start()
-    {
-        // Record the default values of components.
-    }
+    public delegate void TimeScaleChangedHandler(float timescale);
+    public event TimeScaleChangedHandler Changed;
+    public delegate void TimeScaleResetHandler();
+    public event TimeScaleResetHandler Reset;
 
     // Get the timescale itself.
     public float GetTimeScale()
@@ -31,8 +31,7 @@ public class TimeScale : MonoBehaviour
         else
         {
             scale = amount;
-            // Adjust other components accordingly.
-            // TODO
+            OnChanged(amount);
         }
     }
 
@@ -40,13 +39,28 @@ public class TimeScale : MonoBehaviour
     public void ResetTimeScale()
     {
         scale = 1f;
-        // Set components back to their default values.
-        // TODO
+        OnReset();
     }
 
     // Get the scaled version of delta time.
     public float GetTimePassed()
     {
         return Time.deltaTime * scale;
+    }
+
+    // Event invocations.
+    private void OnChanged(float timescale)
+    {
+        if (Changed != null)
+        {
+            Changed(timescale);
+        }
+    }
+    private void OnReset()
+    {
+        if (Reset != null)
+        {
+            Reset();
+        }
     }
 }

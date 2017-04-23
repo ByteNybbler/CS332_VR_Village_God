@@ -1,9 +1,10 @@
 ﻿// Author(s): Paul Calande
-// Script for the Mountain God game controller.
+// Class for the Mountain God game controller.
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent (typeof (XPLevels))]
 public class GameController : MonoBehaviour
@@ -14,9 +15,6 @@ public class GameController : MonoBehaviour
     public Village village;
     [Tooltip("The string that is the icon for XP.")]
     public string xpString = "XP";
-
-    // The timescale of the game.
-    //private float timeScale = 1f;
 
     // Component references.
     private XPLevels compLevels;
@@ -64,7 +62,7 @@ public class GameController : MonoBehaviour
 
     private void GameOver()
     {
-        Debug.Log("Game over, baby.");
-        // TODO: Stuff happens when you lose.
+        //Debug.Log("Game over, baby.");
+        SceneManager.LoadScene("GameOver");
     }
 }

@@ -24,11 +24,13 @@ public class EnemyMovement : MonoBehaviour
     // Component references.
     private NavMeshAgent agent;
     private TimeScale ts;
+    private SoundArray soundArray;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         ts = GetComponent<TimeScale>();
+        soundArray = GetComponent<SoundArray>();
     }
 
     private void Start()
@@ -57,6 +59,8 @@ public class EnemyMovement : MonoBehaviour
                     // Damage the target.
                     Health compVillagerHealth = target.GetComponent<Health>();
                     compVillagerHealth.Damage(damage, Health.Type.Impact);
+                    // Play sound.
+                    soundArray.PlayRandomSound();
                 }
             }
         }

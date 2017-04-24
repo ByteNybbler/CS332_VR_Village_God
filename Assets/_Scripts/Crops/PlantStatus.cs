@@ -20,6 +20,8 @@ public class PlantStatus : MonoBehaviour
     public float maxScale;
     [Tooltip("The plant's Y scale growth is multiplied by this.")]
     public float yScaleFactor = 1f;
+    [Tooltip("The audio clip that plays when the crop becomes fully grown.")]
+    public AudioClip soundFullyGrown;
 
     public delegate void DiedHandler(GameObject victim);
     public event DiedHandler Died;
@@ -38,6 +40,7 @@ public class PlantStatus : MonoBehaviour
     private Meter meter;
 #endif
     private TimeScale ts;
+    private AudioSource audioSource;
 
     private void Awake()
     {
@@ -45,6 +48,7 @@ public class PlantStatus : MonoBehaviour
         meter = GetComponent<Meter>();
 #endif
         ts = GetComponent<TimeScale>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -65,13 +69,19 @@ public class PlantStatus : MonoBehaviour
             currentScale += increase;
             if (currentScale >= maxScale)
             {
-                isGrown = true;
-                OnGrown(gameObject);
+                FinishGrowing();
             }
 #if PLANTSTATUS_USEMETER
             meter.SetCurrentValue(currentScale);
 #endif
         }
+    }
+
+    private void FinishGrowing()
+    {
+        isGrown = true;
+        audioSource.PlayOneShot(soundFullyGrown);
+        OnGrown(gameObject);
     }
 
     // Decrease plant health. This function is called each time a villager eats the crop.

@@ -1,68 +1,56 @@
 fileFormatVersion: 2
-guid: 07ea0ab5a3abe604489b61a6169a7d0d
-timeCreated: 1491935688
+guid: 05e40d42f0d39124fa7b050406f5c6f2
+timeCreated: 1492969539
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: Arm
-    100002: Arm1
-    100004: Body
-    100006: Chest
-    100008: Foot
-    100010: Foot 1
-    100012: //RootNode
-    100014: group
-    100016: group1
-    100018: group2
-    100020: Hand
-    100022: Hand 1
-    100024: Hip
-    100026: Leg
-    100028: Leg1
-    100030: pasted__group1
-    100032: pasted__pasted__pCube2
-    100034: pasted__pCube2
-    100036: pasted__pCube2 1
-    100038: pCube1
-    100040: pCube2
-    100042: pSphere1
+    100002: Head
+    100004: joint10
+    100006: joint11
+    100008: joint13
+    100010: joint14
+    100012: joint16
+    100014: joint17
+    100016: joint18
+    100018: joint19
+    100020: joint2
+    100022: joint5
+    100024: joint6
+    100026: joint8
+    100028: joint9
+    100030: Left_Arm
+    100032: Leg1
+    100034: polySurface15
+    100036: RightArm
+    100038: Torso
+    100040: //RootNode
     400000: Arm
-    400002: Arm1
-    400004: Body
-    400006: Chest
-    400008: Foot
-    400010: Foot 1
-    400012: //RootNode
-    400014: group
-    400016: group1
-    400018: group2
-    400020: Hand
-    400022: Hand 1
-    400024: Hip
-    400026: Leg
-    400028: Leg1
-    400030: pasted__group1
-    400032: pasted__pasted__pCube2
-    400034: pasted__pCube2
-    400036: pasted__pCube2 1
-    400038: pCube1
-    400040: pCube2
-    400042: pSphere1
-    2300000: pSphere1
-    3300000: pSphere1
-    4300000: pCube1
-    4300002: pCube2
-    4300004: pasted__pCube2
-    4300006: pasted__pCube2
-    4300008: pasted__pasted__pCube2
-    4300010: pSphere1
+    400002: Head
+    400004: joint10
+    400006: joint11
+    400008: joint13
+    400010: joint14
+    400012: joint16
+    400014: joint17
+    400016: joint18
+    400018: joint19
+    400020: joint2
+    400022: joint5
+    400024: joint6
+    400026: joint8
+    400028: joint9
+    400030: Left_Arm
+    400032: Leg1
+    400034: polySurface15
+    400036: RightArm
+    400038: Torso
+    400040: //RootNode
+    4300000: polySurface15
+    7400000: Take 001
     9500000: //RootNode
-    13700000: pasted__pasted__pCube2
-    13700002: pasted__pCube2
-    13700004: pasted__pCube2 1
-    13700006: pCube1
-    13700008: pCube2
+    13700000: polySurface15
   materials:
     importMaterials: 1
     materialName: 0

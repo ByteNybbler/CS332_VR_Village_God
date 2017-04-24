@@ -57,10 +57,16 @@ public class EnemyController : MonoBehaviour
 
     public void KillAllEnemies()
     {
+        while (enemies.Count != 0)
+        {
+            enemies[0].GetComponent<NPCHealth>().Die();
+        }
+        /*
         foreach (GameObject enemy in enemies)
         {
             enemy.GetComponent<NPCHealth>().Die();
         }
+        */
     }
 
     private void EnemyStatus_Died(GameObject enemy, int xp)

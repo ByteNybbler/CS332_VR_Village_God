@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 00237398508a68349a60ba997fa21114
+timeCreated: 1493154661
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Goddess of Fortune
+  fontNames:
+  - Goddess of Fortune
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -47,7 +47,7 @@ public class NPCHealth : MonoBehaviour
 
     private void Health_Damaged(int amount, Health.Type type)
     {
-        if (type != Health.Type.Null)
+        if (type != Health.Type.Null && type != Health.Type.Hunger)
         {
             rtcDamaged.message = "-" + Mathf.CeilToInt(amount) + " " + hpString;
             rtcDamaged.CreateRisingText(transform.position);

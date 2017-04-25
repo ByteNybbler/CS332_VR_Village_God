@@ -47,11 +47,13 @@ public class GameController : MonoBehaviour
     // Enemy death event callback.
     private void EnemyController_EnemyDied(GameObject enemy, int xp)
     {
+        /*
         // Increment XP.
         compLevels.AddXP(xp);
         // Spawn XP text at the enemy position.
         compRisingTextCreatorXP.message = "+" + xp + " " + xpString;
         compRisingTextCreatorXP.CreateRisingText(enemy.transform.position);
+        */
     }
 
     // Village "no more villagers" event callback.

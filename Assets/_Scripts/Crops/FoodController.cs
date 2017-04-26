@@ -78,9 +78,13 @@ public class FoodController : MonoBehaviour
     }
     public void RemoveCrop(PlantStatus crop)
     {
+        CropUnsubscribe(crop);
+        crops.Remove(crop);
+    }
+    private void CropUnsubscribe(PlantStatus crop)
+    {
         crop.Died -= PlantStatus_Died;
         crop.Grown -= PlantStatus_Grown;
-        crops.Remove(crop);
     }
 
     private void OnDestroy()
@@ -89,9 +93,10 @@ public class FoodController : MonoBehaviour
         {
             if (crop != null)
             {
-                RemoveCrop(crop);
+                CropUnsubscribe(crop);
             }
         }
+        crops.Clear();
     }
 
     // Event callbacks.

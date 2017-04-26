@@ -13,6 +13,10 @@ public class NPCHealth : MonoBehaviour
     public RisingTextCreator rtcDamaged;
     [Tooltip("The string that is the icon for HP.")]
     public string hpString = "HP";
+    [Tooltip("The audio source to use.")]
+    public AudioSource audioSource;
+    [Tooltip("The audio clip that plays when the NPC hits the water.")]
+    public AudioClip soundWaterImpact;
 
     public delegate void DiedHandler();
     public event DiedHandler Died;
@@ -51,6 +55,10 @@ public class NPCHealth : MonoBehaviour
         {
             rtcDamaged.message = "-" + Mathf.CeilToInt(amount) + " " + hpString;
             rtcDamaged.CreateRisingText(transform.position);
+            if (type == Health.Type.Liquid)
+            {
+                audioSource.PlayOneShot(soundWaterImpact);
+            }
         }
     }
 

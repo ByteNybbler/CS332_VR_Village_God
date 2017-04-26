@@ -13,17 +13,22 @@ public class GameController : MonoBehaviour
     public EnemyController enemyController;
     [Tooltip("Reference to the village.")]
     public Village village;
+
+    /*
     [Tooltip("The string that is the icon for XP.")]
     public string xpString = "XP";
 
     // Component references.
     private XPLevels compLevels;
     private RisingTextCreator compRisingTextCreatorXP;
+    */
 
     private void Awake()
     {
+        /*
         compLevels = GetComponent<XPLevels>();
         compRisingTextCreatorXP = GetComponent<RisingTextCreator>();
+        */
     }
 
     private void Start()

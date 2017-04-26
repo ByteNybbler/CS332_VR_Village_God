@@ -14,13 +14,13 @@ public class FoodController : MonoBehaviour
     [Tooltip("The Audio Clip to play when a crop is planted.")]
     public AudioClip soundPlant;
 
-    public delegate void CropDiedHandler(GameObject victim);
+    public delegate void CropDiedHandler(PlantStatus victim);
     public event CropDiedHandler CropDied;
-    public delegate void CropGrownHandler(GameObject crop);
+    public delegate void CropGrownHandler(PlantStatus crop);
     public event CropGrownHandler CropGrown;
 
     // List of existing crops.
-    private List<GameObject> crops = new List<GameObject>();
+    private List<PlantStatus> crops = new List<PlantStatus>();
 
     public void CreateCrop(Vector3 location)
     {
@@ -30,21 +30,21 @@ public class FoodController : MonoBehaviour
         TimeControllable tc = cropInstance.GetComponent<TimeControllable>();
         tc.timeController = GetComponent<TimeControllable>().timeController;
         TimeScale.PassTimeScale(cropInstance, gameObject);
-        // Subscribe to the crop and add it to the crops list.
-        SubscribeToCrop(cropInstance);
-        crops.Add(cropInstance);
+        // Pass the food controller reference to the crop.
+        PlantStatus ps = cropInstance.GetComponent<PlantStatus>();
+        ps.foodController = this;
         // Play crop planting sound.
         audioSource.PlayOneShot(soundPlant);
     }
 
     // Get the crop that's closest to a certain position.
-    public GameObject GetClosestViableCrop(Vector3 position)
+    public PlantStatus GetClosestViableCrop(Vector3 position)
     {
-        GameObject closestObject = null;
+        PlantStatus closestObject = null;
         float closestDistance = Mathf.Infinity;
-        foreach (GameObject crop in crops)
+        foreach (PlantStatus crop in crops)
         {
-            if (crop.GetComponent<PlantStatus>().GetIsGrown())
+            if (crop.GetIsGrown())
             {
                 float distance = Vector3.Distance(position, crop.transform.position);
                 if (distance < closestDistance)
@@ -60,9 +60,9 @@ public class FoodController : MonoBehaviour
     public int GetViableCropCount()
     {
         int count = 0;
-        foreach (GameObject crop in crops)
+        foreach (PlantStatus crop in crops)
         {
-            if (crop.GetComponent<PlantStatus>().GetIsGrown())
+            if (crop.GetIsGrown())
             {
                 count += 1;
             }
@@ -70,62 +70,51 @@ public class FoodController : MonoBehaviour
         return count;
     }
 
-    private void SubscribeToCrop(GameObject crop)
+    public void AddCrop(PlantStatus crop)
     {
-        PlantStatus ps = crop.GetComponent<PlantStatus>();
-        ps.Died += PlantStatus_Died;
-        ps.Grown += PlantStatus_Grown;
+        crop.Died += PlantStatus_Died;
+        crop.Grown += PlantStatus_Grown;
+        crops.Add(crop);
     }
-    private void UnsubscribeFromCrop(GameObject crop)
+    public void RemoveCrop(PlantStatus crop)
     {
-        PlantStatus ps = crop.GetComponent<PlantStatus>();
-        ps.Died -= PlantStatus_Died;
-        ps.Grown -= PlantStatus_Grown;
+        crop.Died -= PlantStatus_Died;
+        crop.Grown -= PlantStatus_Grown;
+        crops.Remove(crop);
     }
 
-    private void OnEnable()
+    private void OnDestroy()
     {
-        foreach (GameObject crop in crops)
+        foreach (PlantStatus crop in crops)
         {
             if (crop != null)
             {
-                SubscribeToCrop(crop);
-            }
-        }
-    }
-
-    private void OnDisable()
-    {
-        foreach (GameObject crop in crops)
-        {
-            if (crop != null)
-            {
-                UnsubscribeFromCrop(crop);
+                RemoveCrop(crop);
             }
         }
     }
 
     // Event callbacks.
-    private void PlantStatus_Died(GameObject victim)
+    private void PlantStatus_Died(PlantStatus victim)
     {
         crops.Remove(victim);
         OnCropDied(victim);
     }
 
-    private void PlantStatus_Grown(GameObject crop)
+    private void PlantStatus_Grown(PlantStatus crop)
     {
         OnCropGrown(crop);
     }
 
     // Event invocations.
-    private void OnCropDied(GameObject victim)
+    private void OnCropDied(PlantStatus victim)
     {
         if (CropDied != null)
         {
             CropDied(victim);
         }
     }
-    private void OnCropGrown(GameObject crop)
+    private void OnCropGrown(PlantStatus crop)
     {
         if (CropGrown != null)
         {

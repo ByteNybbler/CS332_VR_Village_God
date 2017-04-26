@@ -10,6 +10,8 @@ using UnityEngine;
 
 public class PlantStatus : MonoBehaviour
 {
+    [Tooltip("Reference to the food controller.")]
+    public FoodController foodController;
     [Tooltip("The current health of the plant.")]
     public int health = 10;
     [Tooltip("Reference to the crop stalks parent object.")]
@@ -23,11 +25,11 @@ public class PlantStatus : MonoBehaviour
     [Tooltip("The audio clip that plays when the crop becomes fully grown.")]
     public AudioClip soundFullyGrown;
 
-    public delegate void DiedHandler(GameObject victim);
+    public delegate void DiedHandler(PlantStatus victim);
     public event DiedHandler Died;
 
     // Crop is fully grown.
-    public delegate void GrownHandler(GameObject self);
+    public delegate void GrownHandler(PlantStatus self);
     public event GrownHandler Grown;
 
     // Whether the plant is fully grown.
@@ -56,6 +58,15 @@ public class PlantStatus : MonoBehaviour
 #if PLANTSTATUS_USEMETER
         meter.SetBothValues(currentScale, maxScale);
 #endif
+        foodController.AddCrop(this);
+    }
+
+    private void OnDestroy()
+    {
+        if (foodController != null)
+        {
+            foodController.RemoveCrop(this);
+        }
     }
 
     private void Update()
@@ -81,7 +92,7 @@ public class PlantStatus : MonoBehaviour
     {
         isGrown = true;
         audioSource.PlayOneShot(soundFullyGrown);
-        OnGrown(gameObject);
+        OnGrown(this);
     }
 
     // Decrease plant health. This function is called each time a villager eats the crop.
@@ -106,23 +117,23 @@ public class PlantStatus : MonoBehaviour
 
     private void Die()
     {
-        OnDied(gameObject);
+        OnDied(this);
         Destroy(gameObject);
     }
 
-    private void OnDied(GameObject obj)
+    // Event invocations.
+    private void OnDied(PlantStatus ps)
     {
         if (Died != null)
         {
-            Died(obj);
+            Died(ps);
         }
     }
-
-    private void OnGrown(GameObject obj)
+    private void OnGrown(PlantStatus ps)
     {
         if (Grown != null)
         {
-            Grown(obj);
+            Grown(ps);
         }
     }
 }

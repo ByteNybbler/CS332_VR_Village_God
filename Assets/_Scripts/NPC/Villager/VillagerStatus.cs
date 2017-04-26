@@ -129,7 +129,7 @@ public class VillagerStatus : MonoBehaviour
     }
 
     // Callback function for when a plant dies.
-    private void FoodController_CropDied(GameObject victim)
+    private void FoodController_CropDied(PlantStatus victim)
     {
         // If the plant is the villager's current target...
         if (victim == compVillagerMovement.cropTarget)
@@ -148,7 +148,7 @@ public class VillagerStatus : MonoBehaviour
         }
     }
 
-    private void FoodController_CropGrown(GameObject crop)
+    private void FoodController_CropGrown(PlantStatus crop)
     {
         if (compVillagerMovement.cropTarget != null)
         {

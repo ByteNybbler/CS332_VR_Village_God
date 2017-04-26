@@ -26,7 +26,7 @@ public class VillagerMovement : MonoBehaviour
     [Tooltip("How close the villager must be to a crop in order to eat it.")]
     public float cropEatDistance;
     [Tooltip("The current crop that the villager is heading towards.")]
-    public GameObject cropTarget = null;
+    public PlantStatus cropTarget = null;
     [Tooltip("How many seconds the villager has to wait between eating crops.")]
     public float eatCooldownTime;
 
@@ -84,7 +84,7 @@ public class VillagerMovement : MonoBehaviour
             if ((GetDestinationDistance() < cropEatDistance) && canEat)
             {
                 // Eat a bit of the crop.
-                cropTarget.GetComponent<PlantStatus>().DecreaseHealth();
+                cropTarget.DecreaseHealth();
                 // Restore health.
                 compHealth.Heal(1, Health.Type.Hunger);
                 // Temporarily prevent the villager from eating another crop.

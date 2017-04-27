@@ -1,6 +1,9 @@
 ﻿// Author(s): Paul Calande
 // Game over input class.
 
+// Comment out the following line to prevent debug input.
+//#define GAMEOVERINPUT_DEBUG_INPUT
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,17 +23,45 @@ public class GameOverInput : MonoBehaviour
 
     private void OnDestroy()
     {
-        controllerEvents.TriggerPressed -= ControllerEvents_TriggerPressed;
-        controllerEvents.TriggerReleased -= ControllerEvents_TriggerReleased;
+        if (controllerEvents != null)
+        {
+            controllerEvents.TriggerPressed -= ControllerEvents_TriggerPressed;
+            controllerEvents.TriggerReleased -= ControllerEvents_TriggerReleased;
+        }
     }
 
-    private void ControllerEvents_TriggerPressed(object sender, VRTK.ControllerInteractionEventArgs e)
+    private void FadeIn()
     {
         imageFade.state = ImageFade.State.FadeIn;
     }
 
-    private void ControllerEvents_TriggerReleased(object sender, VRTK.ControllerInteractionEventArgs e)
+    private void FadeOut()
     {
         imageFade.state = ImageFade.State.FadeOut;
     }
+
+    private void ControllerEvents_TriggerPressed(object sender, VRTK.ControllerInteractionEventArgs e)
+    {
+        FadeIn();
+    }
+
+    private void ControllerEvents_TriggerReleased(object sender, VRTK.ControllerInteractionEventArgs e)
+    {
+        FadeOut();
+    }
+
+#if GAMEOVERINPUT_DEBUG_INPUT
+    private void Update()
+    {
+        // For testing the fade in and fade out functionality.
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            FadeIn();
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            FadeOut();
+        }
+    }
+#endif
 }

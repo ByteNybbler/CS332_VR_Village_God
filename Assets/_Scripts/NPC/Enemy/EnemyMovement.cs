@@ -10,7 +10,7 @@ using UnityEngine.AI;
 public class EnemyMovement : MonoBehaviour
 {
     [Tooltip("The current villager being targeted.")]
-    public GameObject target = null;
+    public VillagerStatus target = null;
     [Tooltip("How close to the villager the enemy has to be to deal damage.")]
     public float damageDistance;
     [Tooltip("How many seconds between each attempt to damage the villager.")]
@@ -57,8 +57,7 @@ public class EnemyMovement : MonoBehaviour
                 if (distance < damageDistance)
                 {
                     // Damage the target.
-                    Health compVillagerHealth = target.GetComponent<Health>();
-                    compVillagerHealth.Damage(damage, Health.Type.Impact);
+                    target.Damage(damage, Health.Type.Impact);
                     // Play sound.
                     soundArray.PlayRandomSound();
                 }

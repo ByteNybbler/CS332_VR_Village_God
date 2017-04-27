@@ -26,7 +26,7 @@ public class VillagerStatus : MonoBehaviour
     [Tooltip("Max health increase per upgrade.")]
     public int upgradeMaxHealthAmount;
 
-    public delegate void DiedHandler(GameObject victim);
+    public delegate void DiedHandler(VillagerStatus victim);
     public event DiedHandler Died;
 
     // Hunger timer.
@@ -121,11 +121,16 @@ public class VillagerStatus : MonoBehaviour
         compVillagerMovement.destinationIsFood = true;
     }
 
+    public void Damage(int amount, Health.Type type)
+    {
+        health.Damage(amount, type);
+    }
+
     // Callback function for when health runs out.
     private void NPCHealth_Died()
     {
         // Invoke the villager death event.
-        OnDied(gameObject);
+        OnDied(this);
     }
 
     // Callback function for when a plant dies.
@@ -172,7 +177,7 @@ public class VillagerStatus : MonoBehaviour
     }
 
     // Event invocations.
-    private void OnDied(GameObject obj)
+    private void OnDied(VillagerStatus obj)
     {
         if (Died != null)
         {

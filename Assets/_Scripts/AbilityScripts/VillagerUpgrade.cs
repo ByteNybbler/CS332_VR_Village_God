@@ -17,12 +17,12 @@ public class VillagerUpgrade : Ability
     public float range;
 
     // The villager being pointed at.
-    private GameObject target;
+    private VillagerStatus target;
 
     public override void PointerLocationAbility(Vector3 location)
     {
         audioSource.PlayOneShot(audioClip);
-        target.GetComponent<VillagerStatus>().Upgrade();
+        target.Upgrade();
         cost = Mathf.CeilToInt(cost * costMultiplierPerUse);
     }
 

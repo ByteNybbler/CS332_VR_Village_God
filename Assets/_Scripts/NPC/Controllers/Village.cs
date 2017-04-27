@@ -20,13 +20,13 @@ public class Village : MonoBehaviour
     [Tooltip("Reference to the food controller instance.")]
     public FoodController foodController;
 
-    public delegate void VillagerDiedHandler(GameObject victim);
+    public delegate void VillagerDiedHandler(VillagerStatus victim);
     public event VillagerDiedHandler VillagerDied;
     public delegate void AllVillagersDiedHandler();
     public event AllVillagersDiedHandler AllVillagersDied;
 
     // A list of villagers.
-    private List<GameObject> villagers = new List<GameObject>();
+    private List<VillagerStatus> villagers = new List<VillagerStatus>();
 
     // Component references.
     private KeyPoints kp;
@@ -66,30 +66,30 @@ public class Village : MonoBehaviour
             tc.timeController = GetComponent<TimeControllable>().timeController;
             TimeScale.PassTimeScale(newVillager, gameObject);
             // Add the villager to the list of existing villagers.
-            villagers.Add(newVillager);
+            villagers.Add(vs);
         }
     }
 
     private void OnDestroy()
     {
-        foreach (GameObject villager in villagers)
+        foreach (VillagerStatus villager in villagers)
         {
             if (villager != null)
             {
-                villager.GetComponent<VillagerStatus>().Died -= VillagerStatus_Died;
+                villager.Died -= VillagerStatus_Died;
             }
         }
     }
 
     public void FullHealAllVillagers(Health.Type type)
     {
-        foreach (GameObject villager in villagers)
+        foreach (VillagerStatus villager in villagers)
         {
-            villager.GetComponent<VillagerStatus>().FullHeal(type);
+            villager.FullHeal(type);
         }
     }
 
-    public GameObject GetRandomVillager()
+    public VillagerStatus GetRandomVillager()
     {
         if (villagers.Count == 0)
         {
@@ -103,12 +103,12 @@ public class Village : MonoBehaviour
 
     // Get the closest villager to a position that's within a certain distance.
     // Returns null if no villager is found.
-    public GameObject GetClosestVillager(Vector3 position, float maxDistance)
+    public VillagerStatus GetClosestVillager(Vector3 position, float maxDistance)
     {
         // The closest villager so far.
-        GameObject closestVillager = null;
+        VillagerStatus closestVillager = null;
         // Iterate through all of the villagers.
-        foreach (GameObject villager in villagers)
+        foreach (VillagerStatus villager in villagers)
         {
             // Calculate the distance between the villager and the point.
             float distance = Vector3.Distance(villager.transform.position, position);
@@ -125,7 +125,7 @@ public class Village : MonoBehaviour
     }
 
     // Villager death event payload.
-    private void VillagerStatus_Died(GameObject victim)
+    private void VillagerStatus_Died(VillagerStatus victim)
     {
         //Debug.Log("Whoa! A villager DIED!!!");
         // Remove the villager from the villagers list.
@@ -138,8 +138,8 @@ public class Village : MonoBehaviour
             OnAllVillagersDied();
         }
     }
-
-    private void OnVillagerDied(GameObject victim)
+    
+    private void OnVillagerDied(VillagerStatus victim)
     {
         if (VillagerDied != null)
         {

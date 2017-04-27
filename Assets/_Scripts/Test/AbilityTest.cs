@@ -7,13 +7,14 @@ using UnityEngine;
 
 public class AbilityTest : MonoBehaviour
 {
-    public LightningAbility cLightningAbility;
+    public LightningAbility lightningAbility;
     public TimeStop timeStopAbility;
     public PurgeEvil purgeEvilAbility;
+    public VillagerUpgrade villagerUpgradeAbility;
 
     public void SpawnLightningHere()
     {
-        cLightningAbility.PointerLocationAbility(transform.position);
+        lightningAbility.PointerLocationAbility(transform.position);
     }
 
     public void StopTime()
@@ -25,5 +26,10 @@ public class AbilityTest : MonoBehaviour
     public void PurgeEvil()
     {
         purgeEvilAbility.PointerLocationAbility(transform.position);
+    }
+
+    public void UpgradeVillager()
+    {
+        villagerUpgradeAbility.PointerLocationAbility(transform.position);
     }
 }

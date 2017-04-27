@@ -99,7 +99,7 @@ public class GameController : MonoBehaviour
     }
 
     // Enemy death event callback.
-    private void EnemyController_EnemyDied(GameObject enemy, int xp)
+    private void EnemyController_EnemyDied(EnemyStatus enemy, int xp)
     {
         /*
         // Increment XP.

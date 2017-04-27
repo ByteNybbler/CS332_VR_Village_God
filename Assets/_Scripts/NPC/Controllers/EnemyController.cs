@@ -13,11 +13,11 @@ public class EnemyController : MonoBehaviour
     [Tooltip("Reference to the village class instance.")]
     public Village village;
 
-    public delegate void EnemyDiedHandler(GameObject enemy, int xp);
+    public delegate void EnemyDiedHandler(EnemyStatus enemy, int xp);
     public event EnemyDiedHandler EnemyDied;
 
     // List of living enemies.
-    private List<GameObject> enemies = new List<GameObject>();
+    private List<EnemyStatus> enemies = new List<EnemyStatus>();
 
     // Spawn an enemy at a transform.
     public GameObject SpawnEnemy(Transform trans, int health, float speedMultiplier)
@@ -39,18 +39,18 @@ public class EnemyController : MonoBehaviour
         h.SetHealth(health, Health.Type.Null);
         em.MultiplySpeed(speedMultiplier);
         // Add the enemy to the list.
-        enemies.Add(enemy);
+        enemies.Add(es);
         // Return the enemy!
         return enemy;
     }
 
     private void OnDestroy()
     {
-        foreach (GameObject enemy in enemies)
+        foreach (EnemyStatus enemy in enemies)
         {
             if (enemy != null)
             {
-                enemy.GetComponent<EnemyStatus>().Died -= EnemyStatus_Died;
+                enemy.Died -= EnemyStatus_Died;
             }
         }
     }
@@ -63,7 +63,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void EnemyStatus_Died(GameObject enemy, int xp)
+    private void EnemyStatus_Died(EnemyStatus enemy, int xp)
     {
         // Remove the enemy from the enemies list.
         enemies.Remove(enemy);
@@ -71,7 +71,7 @@ public class EnemyController : MonoBehaviour
         OnEnemyDied(enemy, xp);
     }
 
-    private void OnEnemyDied(GameObject enemy, int xp)
+    private void OnEnemyDied(EnemyStatus enemy, int xp)
     {
         if (EnemyDied != null)
         {

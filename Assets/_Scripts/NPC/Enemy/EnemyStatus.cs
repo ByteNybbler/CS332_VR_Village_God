@@ -15,7 +15,7 @@ public class EnemyStatus : MonoBehaviour
     [Tooltip("How much XP is rewarded when the enemy is killed.")]
     public int xpOnKill = 5;
 
-    public delegate void DiedHandler(GameObject victim, int xp);
+    public delegate void DiedHandler(EnemyStatus victim, int xp);
     public event DiedHandler Died;
 
     // Component references.
@@ -48,7 +48,7 @@ public class EnemyStatus : MonoBehaviour
     }
 
     // Choose a certain villager to target.
-    public void SetTarget(GameObject newTarget)
+    public void SetTarget(VillagerStatus newTarget)
     {
         cmpEnemyMovement.target = newTarget;
     }
@@ -63,11 +63,11 @@ public class EnemyStatus : MonoBehaviour
     private void NPCHealth_Died()
     {
         // Invoke this enemy's death event.
-        OnDied(gameObject, xpOnKill);
+        OnDied(this, xpOnKill);
     }
 
     // Event payload for when a villager dies.
-    private void Village_VillagerDied(GameObject victim)
+    private void Village_VillagerDied(VillagerStatus victim)
     {
         // If the current target was removed from the villager list...
         if (victim == cmpEnemyMovement.target)
@@ -78,7 +78,7 @@ public class EnemyStatus : MonoBehaviour
     }
 
     // Event invocations.
-    private void OnDied(GameObject obj, int xp)
+    private void OnDied(EnemyStatus obj, int xp)
     {
         if (Died != null)
         {

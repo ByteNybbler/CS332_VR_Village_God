@@ -61,8 +61,6 @@ public class WaveController : MonoBehaviour
     {
         // Get the enemy spawn points.
         spawnPoints = kp.GetKeyPoints();
-        // State before the first wave.
-        OnWaveStarted(0);
         // Start the countdown for the first wave.
         StartNextWaveTimer();
     }

@@ -21,6 +21,11 @@ public class ShrineUI : MonoBehaviour
     {
         shrine.PointsUpdated += Shrine_PointsUpdated;
         waveController.WaveStarted += WaveController_WaveStarted;
+
+        // Set the initial text values for the UI.
+        Shrine_PointsUpdated(shrine.points);
+        // We don't want to display a wave 0, so have the wave text be invisible at first.
+        textWave.text = "";
     }
 
     private void OnDestroy()
@@ -36,13 +41,6 @@ public class ShrineUI : MonoBehaviour
 
     private void WaveController_WaveStarted(int number)
     {
-        if (number == 0)
-        {
-            textWave.text = "";
-        }
-        else
-        {
-            textWave.text = "Current Wave: " + number;
-        }
+        textWave.text = "Current Wave: " + number;
     }
 }

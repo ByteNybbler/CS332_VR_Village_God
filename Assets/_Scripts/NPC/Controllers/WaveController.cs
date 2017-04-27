@@ -3,7 +3,7 @@
 // The key points are the enemy spawn points.
 
 // Comment out the following line to prevent the current wave from being printed to the console.
-#define PRINT_WAVE_COUNTER
+//#define PRINT_WAVE_COUNTER
 
 using System.Collections;
 using System.Collections.Generic;
@@ -32,6 +32,9 @@ public class WaveController : MonoBehaviour
     [Tooltip("How much the enemy speed is multiplied by per wave.")]
     public float enemySpeedMultiplierIncrease = 0.1f;
 
+    public delegate void WaveStartedHandler(int number);
+    public event WaveStartedHandler WaveStarted;
+
     // Timer variables.
     private float timerBetweenEnemies;
     private float timerBetweenWaves;
@@ -58,6 +61,8 @@ public class WaveController : MonoBehaviour
     {
         // Get the enemy spawn points.
         spawnPoints = kp.GetKeyPoints();
+        // State before the first wave.
+        OnWaveStarted(0);
         // Start the countdown for the first wave.
         StartNextWaveTimer();
     }
@@ -128,6 +133,9 @@ public class WaveController : MonoBehaviour
 #if PRINT_WAVE_COUNTER
         Debug.Log("Wave " + wave + " has begun!");
 #endif
+        // Invoke the wave started event.
+        OnWaveStarted(wave);
+
         // Begin spawning the enemies.
         timerBetweenEnemies = 0f;
     }
@@ -146,5 +154,14 @@ public class WaveController : MonoBehaviour
 
         // Prepare for the next wave.
         StartNextWaveTimer();
+    }
+
+    // Event invocations.
+    private void OnWaveStarted(int number)
+    {
+        if (WaveStarted != null)
+        {
+            WaveStarted(number);
+        }
     }
 }

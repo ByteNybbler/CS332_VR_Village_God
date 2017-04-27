@@ -20,6 +20,10 @@ public class TimeScale : MonoBehaviour
     {
         receiver.GetComponent<TimeScale>().SetTimeScale(passer.GetComponent<TimeScale>().GetTimeScale());
     }
+    public static void PassTimeScale(GameObject receiver, TimeScale passer)
+    {
+        receiver.GetComponent<TimeScale>().SetTimeScale(passer.GetTimeScale());
+    }
 
     // Get the timescale itself.
     public float GetTimeScale()

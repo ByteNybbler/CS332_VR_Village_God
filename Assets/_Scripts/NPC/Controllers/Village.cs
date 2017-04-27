@@ -19,21 +19,37 @@ public class Village : MonoBehaviour
     public GameObject villagerPrefab;
     [Tooltip("Reference to the food controller instance.")]
     public FoodController foodController;
+    [Tooltip("How many seconds the isBeingAttacked state lasts.")]
+    public float attackTime = 10f;
 
+    // A villager died.
     public delegate void VillagerDiedHandler(VillagerStatus victim);
     public event VillagerDiedHandler VillagerDied;
+    // All villagers died.
     public delegate void AllVillagersDiedHandler();
     public event AllVillagersDiedHandler AllVillagersDied;
+    // Village is attacked.
+    public delegate void AttackStartedHandler();
+    public event AttackStartedHandler AttackStarted;
+    // Attack on village ended.
+    public delegate void AttackEndedHandler();
+    public event AttackEndedHandler AttackEnded;
 
     // A list of villagers.
     private List<VillagerStatus> villagers = new List<VillagerStatus>();
+    // Whether the village is currently being attacked by enemies.
+    private bool isBeingAttacked = false;
+    // Timer that sets isBeingAttacked back to false when it hits 0.
+    private float attackTimer = 0f;
 
     // Component references.
     private KeyPoints kp;
+    private TimeScale ts;
 
     private void Awake()
     {
         kp = GetComponent<KeyPoints>();
+        ts = GetComponent<TimeScale>();
     }
 
     private void Start()
@@ -58,13 +74,16 @@ public class Village : MonoBehaviour
             vm.houseTransform = trans;
             // Pass the shrine to the villager.
             vm.shrine = shrine;
-            // Pass the food controller to the villager.
+            // Pass the food controller reference to the villager.
             vs.foodController = foodController;
-            // Subscribe to the villager's death event.
+            // Pass village reference to the villager.
+            //vs.village = this;
+            // Subscribe to the villager's events.
             vs.Died += VillagerStatus_Died;
+            vs.AttackedByEnemy += VillagerStatus_AttackedByEnemy;
             // Pass the time controller to the villager.
             tc.timeController = GetComponent<TimeControllable>().timeController;
-            TimeScale.PassTimeScale(newVillager, gameObject);
+            TimeScale.PassTimeScale(newVillager, ts);
             // Add the villager to the list of existing villagers.
             villagers.Add(vs);
         }
@@ -77,6 +96,20 @@ public class Village : MonoBehaviour
             if (villager != null)
             {
                 villager.Died -= VillagerStatus_Died;
+                villager.AttackedByEnemy -= VillagerStatus_AttackedByEnemy;
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if (attackTimer > 0f)
+        {
+            float timePassed = ts.GetTimePassed();
+            attackTimer -= timePassed;
+            if (attackTimer <= 0f)
+            {
+                AttackStateDisable();
             }
         }
     }
@@ -124,6 +157,26 @@ public class Village : MonoBehaviour
         return closestVillager;
     }
 
+    private void AttackStateEnable()
+    {
+        if (isBeingAttacked == false)
+        {
+            isBeingAttacked = true;
+            OnAttackStarted();
+            // Start the attack timer.
+            attackTimer = attackTime;
+        }
+    }
+
+    private void AttackStateDisable()
+    {
+        if (isBeingAttacked == true)
+        {
+            isBeingAttacked = false;
+            OnAttackEnded();
+        }
+    }
+
     // Villager death event payload.
     private void VillagerStatus_Died(VillagerStatus victim)
     {
@@ -138,7 +191,13 @@ public class Village : MonoBehaviour
             OnAllVillagersDied();
         }
     }
-    
+
+    private void VillagerStatus_AttackedByEnemy()
+    {
+        AttackStateEnable();
+    }
+
+    // Event invocations.
     private void OnVillagerDied(VillagerStatus victim)
     {
         if (VillagerDied != null)
@@ -146,12 +205,25 @@ public class Village : MonoBehaviour
             VillagerDied(victim);
         }
     }
-
     private void OnAllVillagersDied()
     {
         if (AllVillagersDied != null)
         {
             AllVillagersDied();
+        }
+    }
+    private void OnAttackStarted()
+    {
+        if (AttackStarted != null)
+        {
+            AttackStarted();
+        }
+    }
+    private void OnAttackEnded()
+    {
+        if (AttackEnded != null)
+        {
+            AttackEnded();
         }
     }
 }

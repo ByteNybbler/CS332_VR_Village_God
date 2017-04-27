@@ -82,7 +82,7 @@ public class GameController : MonoBehaviour
         // Preserve this object for the statistics in the game over scene.
         DontDestroyOnLoad(gameObject);
         // Go to the new scene.
-        SceneManager.LoadScene("EmptyScene");
+        SceneManager.LoadScene("GameOver");
     }
 
     // Return to the actual game.

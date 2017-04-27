@@ -13,7 +13,7 @@ using UnityEngine;
 [RequireComponent (typeof (VillagerMovement))]
 public class VillagerStatus : MonoBehaviour
 {
-    [Tooltip("Reference to the food controller.")]
+    [Tooltip("Reference to the food controller instance.")]
     public FoodController foodController;
     [Tooltip("The number of seconds between each instance of the villager taking damage due to hunger.")]
     public float hungerTime;
@@ -28,6 +28,8 @@ public class VillagerStatus : MonoBehaviour
 
     public delegate void DiedHandler(VillagerStatus victim);
     public event DiedHandler Died;
+    public delegate void AttackedByEnemyHandler();
+    public event AttackedByEnemyHandler AttackedByEnemy;
 
     // Hunger timer.
     private float hungerTimer;
@@ -121,9 +123,13 @@ public class VillagerStatus : MonoBehaviour
         compVillagerMovement.destinationIsFood = true;
     }
 
-    public void Damage(int amount, Health.Type type)
+    public void Damage(int amount, Health.Type type, bool isDamagerAnEnemy = false)
     {
         health.Damage(amount, type);
+        if (isDamagerAnEnemy)
+        {
+            OnAttackedByEnemy();
+        }
     }
 
     // Callback function for when health runs out.
@@ -182,6 +188,13 @@ public class VillagerStatus : MonoBehaviour
         if (Died != null)
         {
             Died(obj);
+        }
+    }
+    private void OnAttackedByEnemy()
+    {
+        if (AttackedByEnemy != null)
+        {
+            AttackedByEnemy();
         }
     }
 }

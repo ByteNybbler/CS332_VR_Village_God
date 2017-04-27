@@ -57,7 +57,7 @@ public class EnemyMovement : MonoBehaviour
                 if (distance < damageDistance)
                 {
                     // Damage the target.
-                    target.Damage(damage, Health.Type.Impact);
+                    target.Damage(damage, Health.Type.Impact, true);
                     // Play sound.
                     soundArray.PlayRandomSound();
                 }

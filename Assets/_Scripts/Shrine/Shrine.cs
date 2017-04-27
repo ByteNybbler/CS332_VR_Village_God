@@ -28,12 +28,6 @@ public class Shrine : MonoBehaviour
     public delegate void PointsUpdatedHandler(int amount);
     public event PointsUpdatedHandler PointsUpdated;
 
-    private void Start()
-    {
-        // Invoke the initial points event.
-        OnPointsUpdated(points);
-    }
-
     // Use this public function to add points to the shrine.
     // rootPosition is the spawn position of the +1.
     public void IncreasePoints(int amount, Vector3 rootPosition)

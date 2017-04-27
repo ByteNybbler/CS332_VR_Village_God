@@ -59,6 +59,11 @@ public class EnemyStatus : MonoBehaviour
         SetTarget(village.GetRandomVillager());
     }
 
+    public void Die()
+    {
+        npchealth.Die();
+    }
+
     // NPC health death event payload.
     private void NPCHealth_Died()
     {

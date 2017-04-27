@@ -59,7 +59,7 @@ public class EnemyController : MonoBehaviour
     {
         while (enemies.Count != 0)
         {
-            enemies[0].GetComponent<NPCHealth>().Die();
+            enemies[0].Die();
         }
     }
 

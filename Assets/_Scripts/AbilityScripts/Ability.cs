@@ -45,7 +45,7 @@ public abstract class Ability : MonoBehaviour
         float maxDistance;
         if (mustHitEnvironment)
         {
-            maxDistance = Mathf.Infinity;
+            maxDistance = 10000f;
         }
         else
         {

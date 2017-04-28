@@ -101,7 +101,8 @@ public class WaveController : MonoBehaviour
         // Choose a spawn point at which to spawn an enemy.
         ChooseRandomSpawnPoint();
         // Spawn the actual enemy.
-        enemyController.SpawnEnemy(currentSpawnPoint, enemyHealth, enemySpeedMultiplier);
+        int faithAmount = Mathf.CeilToInt(Mathf.Sqrt(wave));
+        enemyController.SpawnEnemy(currentSpawnPoint, enemyHealth, enemySpeedMultiplier, faithAmount);
         // Increment the number of enemies spawned this wave.
         enemiesSpawnedThisWave += 1;
     }

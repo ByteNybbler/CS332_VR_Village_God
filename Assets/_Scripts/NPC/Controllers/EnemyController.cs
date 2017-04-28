@@ -20,7 +20,7 @@ public class EnemyController : MonoBehaviour
     private List<EnemyStatus> enemies = new List<EnemyStatus>();
 
     // Spawn an enemy at a transform.
-    public GameObject SpawnEnemy(Transform trans, int health, float speedMultiplier)
+    public GameObject SpawnEnemy(Transform trans, int health, float speedMultiplier, int faith)
     {
         // Instantiate an enemy.
         GameObject enemy = Instantiate(enemyPrefab, trans.position, trans.rotation);
@@ -32,6 +32,7 @@ public class EnemyController : MonoBehaviour
         // Pass variables to the spawned enemy.
         es.village = village;
         es.Died += EnemyStatus_Died;
+        es.faithOnKill = faith;
         tc.timeController = GetComponent<TimeControllable>().timeController;
         TimeScale.PassTimeScale(enemy, gameObject);
         // Adjust the enemy strength based on the parameters.
@@ -63,19 +64,19 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void EnemyStatus_Died(EnemyStatus enemy, int xp)
+    private void EnemyStatus_Died(EnemyStatus enemy, int faith)
     {
         // Remove the enemy from the enemies list.
         enemies.Remove(enemy);
         // Invoke the "enemy died" event.
-        OnEnemyDied(enemy, xp);
+        OnEnemyDied(enemy, faith);
     }
 
-    private void OnEnemyDied(EnemyStatus enemy, int xp)
+    private void OnEnemyDied(EnemyStatus enemy, int faith)
     {
         if (EnemyDied != null)
         {
-            EnemyDied(enemy, xp);
+            EnemyDied(enemy, faith);
         }
     }
 }

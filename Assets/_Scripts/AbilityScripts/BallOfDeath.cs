@@ -12,6 +12,10 @@ public class BallOfDeath : MonoBehaviour
 {
     [Tooltip("How much the Ball of Death's damage is multiplied by.")]
     public float damageMultiplier = 1f;
+    [Tooltip("The audio source to use.")]
+    public AudioSource audioSource;
+    [Tooltip("Audio clip to play when the ball collides with something.")]
+    public AudioClip soundCollide;
 
     // Component references.
     private Rigidbody rb;
@@ -36,6 +40,7 @@ public class BallOfDeath : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        audioSource.PlayOneShot(soundCollide);
         //Debug.Log("Ball of Death collided with " + collision.gameObject.name);
         if (collision.gameObject.tag == "NPC")
         {

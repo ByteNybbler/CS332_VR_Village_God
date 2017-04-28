@@ -12,8 +12,8 @@ public class EnemyStatus : MonoBehaviour
 {
     [Tooltip("Reference to the village class instance.")]
     public Village village;
-    [Tooltip("How much XP is rewarded when the enemy is killed.")]
-    public int xpOnKill = 5;
+    [Tooltip("How much faith is rewarded when the enemy is killed.")]
+    public int faithOnKill = 1;
 
     public delegate void DiedHandler(EnemyStatus victim, int xp);
     public event DiedHandler Died;
@@ -68,7 +68,7 @@ public class EnemyStatus : MonoBehaviour
     private void NPCHealth_Died()
     {
         // Invoke this enemy's death event.
-        OnDied(this, xpOnKill);
+        OnDied(this, faithOnKill);
     }
 
     // Event payload for when a villager dies.

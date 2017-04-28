@@ -24,9 +24,21 @@ public class Shrine : MonoBehaviour
     public RisingTextCreator rtcSpentPoints;
     [Tooltip("The string that is the icon for faith.")]
     public string faithString = "faith";
+    [Tooltip("Reference to the enemy controller.")]
+    public EnemyController enemyController;
 
     public delegate void PointsUpdatedHandler(int amount);
     public event PointsUpdatedHandler PointsUpdated;
+
+    private void Start()
+    {
+        enemyController.EnemyDied += EnemyController_EnemyDied;
+    }
+
+    private void OnDestroy()
+    {
+        //
+    }
 
     // Use this public function to add points to the shrine.
     // rootPosition is the spawn position of the +1.
@@ -75,5 +87,10 @@ public class Shrine : MonoBehaviour
         {
             PointsUpdated(amountOfPoints);
         }
+    }
+
+    private void EnemyController_EnemyDied(EnemyStatus enemy, int faith)
+    {
+        IncreasePoints(faith, enemy.transform.position);
     }
 }

@@ -27,15 +27,12 @@ public class NPCHealth : MonoBehaviour
     private void Awake()
     {
         compHealth = GetComponent<Health>();
-    }
-
-    private void OnEnable()
-    {
         compHealth.Damaged += Health_Damaged;
         compHealth.Healed += Health_Healed;
         compHealth.Died += Health_Died;
     }
-    private void OnDisable()
+
+    private void OnDestroy()
     {
         compHealth.Damaged -= Health_Damaged;
         compHealth.Healed -= Health_Healed;
@@ -57,7 +54,6 @@ public class NPCHealth : MonoBehaviour
             rtcDamaged.CreateRisingText(transform.position);
             if (type == Health.Type.Liquid)
             {
-                //Debug.Log("Splash!");
                 audioSource.PlayOneShot(soundWaterImpact);
             }
         }

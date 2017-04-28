@@ -56,10 +56,10 @@ public class Health : MonoBehaviour
             healthCurrent -= amount;
             OnDamaged(amount, type);
             OnCurrentHealthChanged(healthCurrent, type);
-        }
-        if (IsDead())
-        {
-            OnDied(type);
+            if (IsDead())
+            {
+                OnDied(type);
+            }
         }
     }
 

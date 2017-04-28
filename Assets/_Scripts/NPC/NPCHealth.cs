@@ -57,6 +57,7 @@ public class NPCHealth : MonoBehaviour
             rtcDamaged.CreateRisingText(transform.position);
             if (type == Health.Type.Liquid)
             {
+                Debug.Log("Splash!");
                 audioSource.PlayOneShot(soundWaterImpact);
             }
         }

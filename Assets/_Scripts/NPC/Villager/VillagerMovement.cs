@@ -56,16 +56,6 @@ public class VillagerMovement : MonoBehaviour
         compHealth = GetComponent<Health>();
         compVillagerStatus = GetComponent<VillagerStatus>();
         ts = GetComponent<TimeScale>();
-
-        // Snap the agent to the navmesh.
-        /*
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(transform.position, out hit, 2f, NavMesh.AllAreas))
-        {
-            Debug.Log("Successud9sifhgjsfiuoghdsfoug");
-            transform.position = hit.position;
-        }
-        */
     }
 
     private void Start()

@@ -31,7 +31,7 @@ public class BallOfDeath : MonoBehaviour
     // Calculate the damage that the ball does based on its speed.
     private int CalculateDamage()
     {
-        return (int)(rb.velocity.magnitude * damageMultiplier);
+        return Mathf.CeilToInt(rb.velocity.magnitude * damageMultiplier);
     }
 
     private void OnCollisionEnter(Collision collision)

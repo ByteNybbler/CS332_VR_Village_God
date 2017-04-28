@@ -50,7 +50,7 @@ public class Health : MonoBehaviour
 
     public void Damage(int amount, Type type)
     {
-        if (!IsDead())
+        if (!IsDead() && amount != 0)
         {
             amount = Mathf.Min(amount, healthCurrent);
             healthCurrent -= amount;
@@ -65,7 +65,7 @@ public class Health : MonoBehaviour
 
     public void Heal(int amount, Type type)
     {
-        if (!IsHealthFull())
+        if (!IsHealthFull() && amount != 0)
         {
             amount = Mathf.Min(amount, healthMax - healthCurrent);
             healthCurrent += amount;

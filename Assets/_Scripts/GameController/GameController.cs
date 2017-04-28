@@ -15,41 +15,16 @@ public class GameController : MonoBehaviour
     public WaveController waveController;
     [Tooltip("Reference to the village.")]
     public Village village;
-    [Tooltip("Reference to the stats GameObject.")]
-    public GameObject stats;
-    [Tooltip("Reference to the waves text.")]
-    public Text textWaves;
-    [Tooltip("Reference to the enemies killed text.")]
-    public Text textEnemiesKilled;
-    [Tooltip("Reference to the ImageFade component that takes the player back to the main scene.")]
-    public ImageFade imageFade;
 
+    // The number of enemies that have been killed so far.
     private int enemiesKilled = 0;
-
-    /*
-    [Tooltip("The string that is the icon for XP.")]
-    public string xpString = "XP";
-
-    // Component references.
-    private XPLevels compLevels;
-    private RisingTextCreator compRisingTextCreatorXP;
-    */
-
-    //private void Awake()
-    //{
-        /*
-        compLevels = GetComponent<XPLevels>();
-        compRisingTextCreatorXP = GetComponent<RisingTextCreator>();
-        */
-    //}
+    // Reference to the stats screen's ImageFade component.
+    private ImageFade imageFade;
 
     private void Start()
     {
-        stats.SetActive(false);
-
         village.AllVillagersDied += Village_AllVillagersDied;
         enemyController.EnemyDied += EnemyController_EnemyDied;
-        imageFade.AlphaHitMax += ImageFade_AlphaHitMax;
 
         SceneManager.activeSceneChanged += SceneManager_ActiveSceneChanged;
     }
@@ -74,11 +49,6 @@ public class GameController : MonoBehaviour
     private void GameOver()
     {
         //Debug.Log("Game over, baby.");
-
-        // Set the stats text values appropriately.
-        textWaves.text = "You made it to wave " + waveController.GetCurrentWave() + ".";
-        textEnemiesKilled.text = "You defeated " + enemiesKilled + " attackers.";
-
         // Preserve this object for the statistics in the game over scene.
         DontDestroyOnLoad(gameObject);
         // Go to the new scene.
@@ -94,8 +64,16 @@ public class GameController : MonoBehaviour
 
     private void SceneManager_ActiveSceneChanged(Scene a, Scene b)
     {
-        // Enable the stats.
-        stats.SetActive(true);
+        // Get the stats screen.
+        GameObject stats = GameObject.Find("StatsScreen");
+        // Get the game over input component.
+        GameOverInput goi = stats.GetComponent<GameOverInput>();
+        // Get the image fade and subscribe to it.
+        imageFade = goi.imageFade;
+        imageFade.AlphaHitMax += ImageFade_AlphaHitMax;
+        // Set the stats text values appropriately.
+        goi.textWaves.text = "You made it to wave " + waveController.GetCurrentWave() + ".";
+        goi.textEnemiesKilled.text = "You defeated " + enemiesKilled + " attackers.";
     }
 
     // Enemy death event callback.

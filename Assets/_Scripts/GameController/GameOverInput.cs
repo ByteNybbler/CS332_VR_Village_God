@@ -7,26 +7,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameOverInput : MonoBehaviour
 {
     [Tooltip("Reference to the image fade.")]
     public ImageFade imageFade;
-    [Tooltip("Reference to the controller events component to detect controller inputs.")]
-    public VRTK.VRTK_ControllerEvents controllerEvents;
+    [Tooltip("Reference to the controller events component of the left controller.")]
+    public VRTK.VRTK_ControllerEvents leftControllerEvents;
+    [Tooltip("Reference to the controller events component of the right controller.")]
+    public VRTK.VRTK_ControllerEvents rightControllerEvents;
+    [Tooltip("Reference to the waves text.")]
+    public Text textWaves;
+    [Tooltip("Reference to the enemies killed text.")]
+    public Text textEnemiesKilled;
 
     private void Start()
     {
-        controllerEvents.TriggerPressed += ControllerEvents_TriggerPressed;
-        controllerEvents.TriggerReleased += ControllerEvents_TriggerReleased;
+        leftControllerEvents.TriggerPressed += ControllerEvents_TriggerPressed;
+        leftControllerEvents.TriggerReleased += ControllerEvents_TriggerReleased;
+        rightControllerEvents.TriggerPressed += ControllerEvents_TriggerPressed;
+        rightControllerEvents.TriggerReleased += ControllerEvents_TriggerReleased;
     }
 
     private void OnDestroy()
     {
-        if (controllerEvents != null)
+        if (leftControllerEvents != null)
         {
-            controllerEvents.TriggerPressed -= ControllerEvents_TriggerPressed;
-            controllerEvents.TriggerReleased -= ControllerEvents_TriggerReleased;
+            leftControllerEvents.TriggerPressed -= ControllerEvents_TriggerPressed;
+            leftControllerEvents.TriggerReleased -= ControllerEvents_TriggerReleased;
+        }
+        if (rightControllerEvents != null)
+        {
+            rightControllerEvents.TriggerPressed -= ControllerEvents_TriggerPressed;
+            rightControllerEvents.TriggerReleased -= ControllerEvents_TriggerReleased;
         }
     }
 

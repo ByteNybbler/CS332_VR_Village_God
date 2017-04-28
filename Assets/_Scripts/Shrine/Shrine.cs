@@ -13,8 +13,7 @@ public class Shrine : MonoBehaviour
     [Tooltip("How many charge seconds it takes to gain 1 point.\n" +
     "One villager idling at the shrine for one second = one charge second.")]
     public float chargeSecondsPerPoint;
-    [Tooltip("How many points the shrine currently has.\n" +
-    "Change this quantity in the inspector to change how many points the shrine starts off with.")]
+    [Tooltip("How many points the shrine currently has.")]
     public int points = 0;
     [Tooltip("Reference to the +x faith rising text creator component.")]
     public RisingTextCreator rtcPlusPoints;
@@ -37,7 +36,10 @@ public class Shrine : MonoBehaviour
 
     private void OnDestroy()
     {
-        //
+        if (enemyController != null)
+        {
+            enemyController.EnemyDied -= EnemyController_EnemyDied;
+        }
     }
 
     // Use this public function to add points to the shrine.

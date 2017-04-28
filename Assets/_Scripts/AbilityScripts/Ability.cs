@@ -11,6 +11,8 @@ public abstract class Ability : MonoBehaviour
     public int cost;
     [Tooltip("If true, the ability is on the right controller. If not, the ability is on the left controller.")]
     public bool isOnRightController;
+    [Tooltip("If true, the controller must be pointing at the ground to use this ability.")]
+    public bool mustHitEnvironment;
 
     // Reference to references... so meta.
     protected AbilityReferences car;
@@ -40,7 +42,17 @@ public abstract class Ability : MonoBehaviour
     public void UseAbilityAtPointerLocation()
     {
         Vector3 location;
-        if (controller.Cast(out location) && AdditionalPointerChecks(location))
+        float maxDistance;
+        if (mustHitEnvironment)
+        {
+            maxDistance = Mathf.Infinity;
+        }
+        else
+        {
+            maxDistance = 25f;
+        }
+        bool castDidHit = controller.Cast(out location, maxDistance);
+        if ((castDidHit || !mustHitEnvironment) && AdditionalPointerChecks(location))
         {
             if (car.shrine.SpendPoints(cost, location))
             {

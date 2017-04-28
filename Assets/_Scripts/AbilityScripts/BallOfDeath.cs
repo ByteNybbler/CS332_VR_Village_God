@@ -40,7 +40,10 @@ public class BallOfDeath : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        audioSource.PlayOneShot(soundCollide);
+        if (rb.velocity.magnitude > 1f)
+        {
+            audioSource.PlayOneShot(soundCollide);
+        }
         //Debug.Log("Ball of Death collided with " + collision.gameObject.name);
         if (collision.gameObject.tag == "NPC")
         {

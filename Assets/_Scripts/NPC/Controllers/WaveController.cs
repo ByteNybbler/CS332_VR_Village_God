@@ -46,6 +46,8 @@ public class WaveController : MonoBehaviour
     private Transform currentSpawnPoint;
     // How many enemies have been spawned so far in this wave.
     private int enemiesSpawnedThisWave = 0;
+    // The amount of faith each enemy gives.
+    private int faithAmount = 0;
 
     // Component references.
     private KeyPoints kp;
@@ -86,11 +88,11 @@ public class WaveController : MonoBehaviour
                 {
                     timerBetweenEnemies += timeBetweenEnemies;
                     SpawnEnemy();
-                }
-                // Once all of the enemies have been spawned, end the wave.
-                if (enemiesSpawnedThisWave == enemiesPerWave)
-                {
-                    EndWave();
+                    // Once all of the enemies have been spawned, end the wave.
+                    if (enemiesSpawnedThisWave == enemiesPerWave)
+                    {
+                        EndWave();
+                    }
                 }
             }
         }
@@ -101,7 +103,6 @@ public class WaveController : MonoBehaviour
         // Choose a spawn point at which to spawn an enemy.
         ChooseRandomSpawnPoint();
         // Spawn the actual enemy.
-        int faithAmount = Mathf.CeilToInt(Mathf.Sqrt(wave));
         enemyController.SpawnEnemy(currentSpawnPoint, enemyHealth, enemySpeedMultiplier, faithAmount);
         // Increment the number of enemies spawned this wave.
         enemiesSpawnedThisWave += 1;
@@ -119,9 +120,9 @@ public class WaveController : MonoBehaviour
         currentSpawnPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
     }
 
-    // Start the timer for the next wave.
     private void StartNextWaveTimer()
     {
+        // Start the timer for the next wave.
         timerBetweenWaves = timeBetweenWaves;
     }
 
@@ -134,7 +135,8 @@ public class WaveController : MonoBehaviour
 #endif
         // Invoke the wave started event.
         OnWaveStarted(wave);
-
+        // Calculate the amount of faith that each enemy will give during this wave.
+        faithAmount = Mathf.CeilToInt(Mathf.Sqrt(wave));
         // Begin spawning the enemies.
         timerBetweenEnemies = 0f;
     }
@@ -151,6 +153,8 @@ public class WaveController : MonoBehaviour
         // Reset various counter variables.
         enemiesSpawnedThisWave = 0;
 
+        // Force enemy spawns to stop if they haven't already.
+        timerBetweenEnemies = 1f;
         // Prepare for the next wave.
         StartNextWaveTimer();
     }

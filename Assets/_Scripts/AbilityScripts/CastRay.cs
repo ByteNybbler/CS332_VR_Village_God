@@ -1,7 +1,7 @@
 ﻿// Author(s): Hunter Golden, Paul Calande
-// Raycast script for VR Mountain God.
+// Controller raycast script for VR Mountain God.
 
-// Comment out the following line to prevent CastRay.cs debug messages.
+// Comment out the following line to prevent CastRay debugging.
 //#define CASTRAY_DEBUG
 
 using System.Collections;
@@ -16,24 +16,30 @@ public class CastRay : MonoBehaviour
 
     // Cast a ray. Returns true if the raycast hits.
     // Also takes a hit location as an out parameter.
-    public bool Cast(out Vector3 location)
+    public bool Cast(out Vector3 location, float maxDistance)
     {
 #if CASTRAY_DEBUG
         Debug.DrawRay(transform.position, transform.forward, Color.green);
 #endif
-        RaycastHit rayCastData;
-        if (Physics.Raycast(transform.position, transform.forward, out rayCastData, Mathf.Infinity, layerMasks))
+        RaycastHit hit;
+        bool raycastDidHit = Physics.Raycast(transform.position, transform.forward, out hit, maxDistance, layerMasks);
+        if (raycastDidHit)
         {
-#if CASTRAY_DEBUG
-            Debug.Log("CastRay: Hit at point: " + rayCastData.point);
-#endif
-            location = rayCastData.point;
-            return true;
+            location = hit.point;
         }
         else
         {
-            location = Vector3.zero;
-            return false;
+            location = transform.position + transform.forward * maxDistance;
         }
+        return raycastDidHit;
 	}
+
+#if CASTRAY_DEBUG
+    private void Update()
+    {
+        Vector3 location;
+        Cast(out location, 100f);
+        Debug.Log("CastRay debug Update hit location: " + location);
+    }
+#endif
 }
